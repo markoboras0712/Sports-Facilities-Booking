@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
 } from 'firebase/auth';
-import { auth } from './firebase';
+import { auth, facebookProvider, googleProvider } from './firebase';
 
 export const signUpWithEmailPassword = async (
   email1: string,
@@ -17,8 +20,8 @@ export const signUpWithEmailPassword = async (
     );
     console.log({ response });
 
-    const { email, metadata, uid } = response.user;
-    console.log({ email, metadata, uid });
+    const { email, metadata, uid, photoURL } = response.user;
+    console.log({ email, metadata, uid, photoURL });
 
     // dispatch(
     //   addUserToFirestore({
@@ -44,6 +47,69 @@ export const signInWithEmailPassword = async (
   } catch (error) {
     alert(error);
     throw new Error('Didnt sign in');
+  }
+};
+
+export const sendPasswordReset = async (email: string) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+  } catch (error) {
+    alert(error);
+    throw new Error('didnt send password reset');
+  }
+};
+
+export const signInWithGoogle = async () => {
+  try {
+    const { user } = await signInWithPopup(auth, googleProvider);
+    console.log({ user });
+
+    // const q = query(collection(db, 'users'), where('id', '==', user.uid));
+    // const querySnapshot = await getDocs(q);
+    // const authUser: AuthData = {
+    //   email: user.email,
+    //   id: user.uid,
+    //   photoUrl: user.photoURL,
+    //   activeChats: [],
+    //   displayName: user.displayName,
+    // };
+    // if (!querySnapshot.docs.length) {
+    //   //   dispatch(addUserToFirestore(authUser));
+    // }
+  } catch (err) {
+    alert(err);
+    throw new Error('Didnt sign in');
+  }
+};
+
+export const signInWithFacebook = async () => {
+  try {
+    const { user } = await signInWithPopup(auth, facebookProvider);
+    console.log({ user });
+
+    // const q = query(collection(db, 'users'), where('id', '==', user.uid));
+    // const querySnapshot = await getDocs(q);
+    // const authUser: AuthData = {
+    //   email: user.email,
+    //   id: user.uid,
+    //   photoUrl: user.photoURL,
+    //   activeChats: [],
+    //   displayName: user.displayName,
+    // };
+    // if (!querySnapshot.docs.length) {
+    //   //   dispatch(addUserToFirestore(authUser));
+    // }
+  } catch (err) {
+    alert(err);
+    throw new Error('Didnt sign in');
+  }
+};
+
+export const logout = async () => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    throw new Error('didnt logout');
   }
 };
 
@@ -92,44 +158,6 @@ export const signInWithEmailPassword = async (
 //   } catch (err) {
 //     alert(err);
 //     throw new Error('Didnt add user to firestore');
-//   }
-// };
-
-// export const signInWithGoogle = async () => {
-//   try {
-//     const { user } = await signInWithPopup(auth, provider);
-//     const q = query(collection(db, 'users'), where('id', '==', user.uid));
-//     const querySnapshot = await getDocs(q);
-//     const authUser: AuthData = {
-//       email: user.email,
-//       id: user.uid,
-//       photoUrl: user.photoURL,
-//       activeChats: [],
-//       displayName: user.displayName,
-//     };
-//     if (!querySnapshot.docs.length) {
-//       //   dispatch(addUserToFirestore(authUser));
-//     }
-//   } catch (err) {
-//     alert(err);
-//     throw new Error('Didnt sign in');
-//   }
-// };
-
-// export const logout = async () => {
-//   try {
-//     await signOut(auth);
-//   } catch (error) {
-//     throw new Error('didnt logout');
-//   }
-// };
-
-// export const sendPasswordReset = async (email: string) => {
-//   try {
-//     await sendPasswordResetEmail(auth, email);
-//   } catch (error) {
-//     alert(error);
-//     throw new Error('didnt send password reset');
 //   }
 // };
 

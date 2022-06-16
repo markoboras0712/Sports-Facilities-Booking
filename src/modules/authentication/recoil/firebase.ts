@@ -1,7 +1,11 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, enableIndexedDbPersistence } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import {
+  FacebookAuthProvider,
+  getAuth,
+  GoogleAuthProvider,
+} from 'firebase/auth';
 
 export const firebaseApp = initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -15,8 +19,10 @@ export const firebaseApp = initializeApp({
 export const db = getFirestore();
 export const storage = getStorage(firebaseApp);
 export const auth = getAuth(firebaseApp);
-export const provider = new GoogleAuthProvider();
-provider.setCustomParameters({ prompt: 'select_account' });
+export const googleProvider = new GoogleAuthProvider();
+export const facebookProvider = new FacebookAuthProvider();
+
+googleProvider.setCustomParameters({ prompt: 'select_account' });
 
 enableIndexedDbPersistence(db).catch((err) => {
   if (err.code == 'failed-precondition') {
