@@ -4,12 +4,13 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Link } from '@reach/router';
+import { Routes } from 'modules/routing';
 
 function Copyright(props: any) {
   return (
@@ -20,9 +21,6 @@ function Copyright(props: any) {
       {...props}
     >
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -31,7 +29,7 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
-export const Login: React.FC = () => {
+export const ForgotPassword: React.FC = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -54,7 +52,7 @@ export const Login: React.FC = () => {
           }}
         >
           <Typography component="h1" variant="h5">
-            Sign in
+            Forgot Password
           </Typography>
           <Box
             component="form"
@@ -72,16 +70,6 @@ export const Login: React.FC = () => {
               autoComplete="email"
               autoFocus
             />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
@@ -95,15 +83,8 @@ export const Login: React.FC = () => {
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
+                <Link to={Routes.Login}> Back to login</Link>
               </Grid>
             </Grid>
           </Box>
