@@ -1,5 +1,5 @@
 import { Router, RouteComponentProps } from '@reach/router';
-import { AvailableFacilities } from 'pages';
+import { AvailableFacilities, Onboarding } from 'pages';
 import { ForgotPassword } from 'pages/Public/ForgotPassword';
 import { Login } from 'pages/Public/Login';
 import { SignUp } from 'pages/Public/SignUp';
@@ -23,6 +23,7 @@ export const Routing: React.FC = () => {
         path={Routes.AvailableObjects}
         pageComponent={<AvailableFacilities />}
       />
+      <RouterPage path={Routes.Onboarding} pageComponent={<Onboarding />} />
     </Router>
   );
 };
