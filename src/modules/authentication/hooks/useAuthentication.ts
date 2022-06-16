@@ -1,32 +1,17 @@
+import { navigate } from '@reach/router';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../recoil';
+import { Routes } from 'modules/routing';
+import {
+  auth,
+  logout,
+  sendPasswordReset,
+  signInWithEmailPassword,
+  signInWithFacebook,
+  signInWithGoogle,
+  signUpWithEmailPassword,
+} from '../recoil';
 
 export const useAuthentication = () => {
-  // const dispatch = useDispatch();
-
-  // const loginWithGoogle = () => {
-  //   dispatch(signInWithGoogle());
-  // };
-
-  // const loginWithEmailPassword = (data: Login) => {
-  //   dispatch(signInWithEmailPassword(data));
-  // };
-
-  // const resetPassword = (email: string) => {
-  //   dispatch(sendPasswordReset(email));
-  //   navigate(Routes.Login);
-  // };
-
-  // const registerWithEmailPassword = (data: Register) => {
-  //   dispatch(signUpWithEmailPassword(data));
-  // };
-
-  // const logoutUser = () => {
-  //   dispatch(logout());
-  //   dispatch(clearUser());
-  //   navigate(Routes.Login);
-  // };
-
   const autoLogin = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -39,7 +24,38 @@ export const useAuthentication = () => {
     });
   };
 
+  const registerWithEmailPassword = (email: string, password: string) => {
+    return signUpWithEmailPassword(email, password);
+  };
+
+  const loginWithEmailPassword = (email: string, password: string) => {
+    return signInWithEmailPassword(email, password);
+  };
+
+  const loginWithGoogle = () => {
+    signInWithGoogle();
+  };
+
+  const loginWithFacebook = () => {
+    signInWithFacebook();
+  };
+
+  const resetPassword = (email: string) => {
+    sendPasswordReset(email);
+  };
+
+  const logoutUser = () => {
+    logout();
+    navigate(Routes.Login);
+  };
+
   return {
     autoLogin,
+    registerWithEmailPassword,
+    loginWithEmailPassword,
+    resetPassword,
+    loginWithGoogle,
+    loginWithFacebook,
+    logoutUser,
   };
 };

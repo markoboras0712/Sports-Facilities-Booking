@@ -13,6 +13,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Routes } from 'modules/routing';
+import { useAuthentication } from 'modules/authentication';
 
 function Copyright(props: any) {
   return (
@@ -33,6 +34,7 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export const SignUp: React.FC = () => {
+  const { registerWithEmailPassword } = useAuthentication();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -40,6 +42,10 @@ export const SignUp: React.FC = () => {
       email: data.get('email'),
       password: data.get('password'),
     });
+    registerWithEmailPassword(
+      data.get('email') as string,
+      data.get('password') as string,
+    );
   };
 
   return (

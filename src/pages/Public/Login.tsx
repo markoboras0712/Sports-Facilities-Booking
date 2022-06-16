@@ -13,6 +13,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import { Routes } from 'modules/routing';
 import { Link } from '@reach/router';
+import { useAuthentication } from 'modules/authentication';
 
 function Copyright(props: any) {
   return (
@@ -33,13 +34,20 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export const Login: React.FC = () => {
+  const { loginWithEmailPassword, loginWithGoogle, loginWithFacebook } =
+    useAuthentication();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    console.log('ovo');
     console.log({
       email: data.get('email'),
       password: data.get('password'),
     });
+    loginWithEmailPassword(
+      data.get('email') as string,
+      data.get('password') as string,
+    );
   };
 
   return (
@@ -117,6 +125,7 @@ export const Login: React.FC = () => {
                 type="submit"
                 fullWidth
                 variant="contained"
+                onClick={() => loginWithGoogle()}
                 sx={{ mt: 3, mb: 2 }}
               >
                 <GoogleIcon />
@@ -124,6 +133,7 @@ export const Login: React.FC = () => {
               <Button
                 type="submit"
                 fullWidth
+                onClick={() => loginWithFacebook()}
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >

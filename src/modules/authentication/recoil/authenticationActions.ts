@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { navigate } from '@reach/router';
 import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -6,6 +7,7 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
+import { Routes } from 'modules/routing';
 import { auth, facebookProvider, googleProvider } from './firebase';
 
 export const signUpWithEmailPassword = async (
@@ -22,6 +24,7 @@ export const signUpWithEmailPassword = async (
 
     const { email, metadata, uid, photoURL } = response.user;
     console.log({ email, metadata, uid, photoURL });
+    navigate(Routes.Onboarding);
 
     // dispatch(
     //   addUserToFirestore({
@@ -44,6 +47,7 @@ export const signInWithEmailPassword = async (
 ) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
+    navigate(Routes.AvailableObjects);
   } catch (error) {
     alert(error);
     throw new Error('Didnt sign in');
@@ -53,6 +57,7 @@ export const signInWithEmailPassword = async (
 export const sendPasswordReset = async (email: string) => {
   try {
     await sendPasswordResetEmail(auth, email);
+    navigate(Routes.Login);
   } catch (error) {
     alert(error);
     throw new Error('didnt send password reset');
@@ -63,6 +68,7 @@ export const signInWithGoogle = async () => {
   try {
     const { user } = await signInWithPopup(auth, googleProvider);
     console.log({ user });
+    navigate(Routes.AvailableObjects);
 
     // const q = query(collection(db, 'users'), where('id', '==', user.uid));
     // const querySnapshot = await getDocs(q);
@@ -86,6 +92,7 @@ export const signInWithFacebook = async () => {
   try {
     const { user } = await signInWithPopup(auth, facebookProvider);
     console.log({ user });
+    navigate(Routes.AvailableObjects);
 
     // const q = query(collection(db, 'users'), where('id', '==', user.uid));
     // const querySnapshot = await getDocs(q);
@@ -108,6 +115,7 @@ export const signInWithFacebook = async () => {
 export const logout = async () => {
   try {
     await signOut(auth);
+    navigate(Routes.Login);
   } catch (error) {
     throw new Error('didnt logout');
   }
