@@ -1,8 +1,6 @@
-import { navigate } from '@reach/router';
 import { onAuthStateChanged } from 'firebase/auth';
-import { Routes } from 'modules/routing';
+import { auth } from 'modules/firebase';
 import {
-  auth,
   logout,
   sendPasswordReset,
   signInWithEmailPassword,
@@ -46,7 +44,6 @@ export const useAuthentication = () => {
 
   const logoutUser = () => {
     logout();
-    navigate(Routes.Login);
   };
 
   return {

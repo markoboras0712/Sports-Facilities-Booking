@@ -1,11 +1,14 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { Container, TextField } from '@mui/material';
+import {
+  Button,
+  StepLabel,
+  Step,
+  Stepper,
+  Box,
+  Typography,
+  Container,
+  TextField,
+} from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
 
 const steps = ['PersonalData', 'Address'];

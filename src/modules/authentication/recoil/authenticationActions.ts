@@ -8,7 +8,11 @@ import {
   signOut,
 } from 'firebase/auth';
 import { Routes } from 'modules/routing';
-import { auth, facebookProvider, googleProvider } from './firebase';
+import {
+  auth,
+  facebookProvider,
+  googleProvider,
+} from '../../firebase/recoil/firebase';
 
 export const signUpWithEmailPassword = async (
   email1: string,
