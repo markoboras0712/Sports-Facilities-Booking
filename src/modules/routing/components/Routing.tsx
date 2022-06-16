@@ -1,5 +1,5 @@
 import { Router, RouteComponentProps } from '@reach/router';
-import App from 'App';
+import { App } from 'App';
 import React from 'react';
 import { Routes } from '../routes';
 
