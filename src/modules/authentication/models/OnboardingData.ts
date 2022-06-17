@@ -1,4 +1,7 @@
 export interface Onboarding {
+  firstName: string;
+  lastName: string;
+  photoUrl?: string;
   address: string;
   country?: string;
   city?: string;

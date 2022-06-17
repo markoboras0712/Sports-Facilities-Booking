@@ -4,22 +4,17 @@ import HowToRegIcon from '@mui/icons-material/HowToReg';
 import { PhotoCamera } from '@mui/icons-material';
 import React from 'react';
 import { PersonalData } from 'modules/authentication';
-import { useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
-interface Props {
-  firstName: string;
-  setFirstName: React.Dispatch<React.SetStateAction<string>>;
-}
-
-export const UserInfo: React.FC<Props> = ({ firstName, setFirstName }) => {
+export const UserInfo: React.FC = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<PersonalData>();
+  } = useFormContext<PersonalData>();
 
   const onSubmit = handleSubmit((data: PersonalData) => {
-    // if (errors.email || errors.password) return;
+    if (errors.firstName || errors.lastName) return;
     // const { email, password } = data;
     // pathname === Routes.Login
     //   ? loginWithEmailPassword(email, password)
@@ -40,15 +35,13 @@ export const UserInfo: React.FC<Props> = ({ firstName, setFirstName }) => {
         Personal data
       </Typography>
       <HowToRegIcon />
-      <Box onSubmit={onSubmit} component="form" noValidate sx={{ mt: 1 }}>
+      <Box onClick={onSubmit} sx={{ mt: 1 }}>
         <TextField
           margin="normal"
           {...register('firstName', {
             required: 'First name is required.',
           })}
           fullWidth
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
           error={errors.firstName !== undefined}
           id="firstName"
           helperText={errors.firstName?.message}
@@ -57,12 +50,15 @@ export const UserInfo: React.FC<Props> = ({ firstName, setFirstName }) => {
         />
         <TextField
           margin="normal"
-          required
+          {...register('lastName', {
+            required: 'Last name is required.',
+          })}
           fullWidth
+          error={errors.lastName !== undefined}
           id="lastName"
+          helperText={errors.lastName?.message}
           label="Last Name"
           name="lastName"
-          autoComplete="lastName"
           autoFocus
         />
 

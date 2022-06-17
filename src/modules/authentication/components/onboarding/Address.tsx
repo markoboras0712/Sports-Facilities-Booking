@@ -16,7 +16,7 @@ export const Address: React.FC = () => {
         Address
       </Typography>
       <HomeIcon />
-      <Box component="form" noValidate sx={{ mt: 1 }}>
+      <Box sx={{ mt: 1 }}>
         <TextField
           margin="normal"
           required
