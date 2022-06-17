@@ -1,50 +1,38 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {
+  Paper,
+  Box,
+  Grid,
+  Typography,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Button,
+} from '@mui/material';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { Link } from '@reach/router';
 import { Routes } from 'modules/routing';
-import { useAuthentication } from 'modules/authentication';
-
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {'Copyright © '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-const theme = createTheme();
+import { AuthenticationLayout } from 'modules/authentication';
+import { Copyright } from 'shared/components';
 
 export const ForgotPassword: React.FC = () => {
-  const { resetPassword } = useAuthentication();
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-    });
-    resetPassword(data.get('email') as string);
+  const forgotPasswordHandler = () => {
+    console.log('xxx');
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
+    <AuthenticationLayout>
+      <Grid
+        container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        item
+        xs={12}
+        sm={10}
+        md={12}
+        component={Paper}
+      >
         <Box
           sx={{
             marginTop: 8,
@@ -56,12 +44,8 @@ export const ForgotPassword: React.FC = () => {
           <Typography component="h1" variant="h5">
             Forgot Password
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
+          <LockOpenIcon />
+          <Box component="form" noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -79,6 +63,7 @@ export const ForgotPassword: React.FC = () => {
             <Button
               type="submit"
               fullWidth
+              onClick={forgotPasswordHandler}
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
@@ -91,8 +76,8 @@ export const ForgotPassword: React.FC = () => {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
-      </Container>
-    </ThemeProvider>
+        <Copyright mt={8} />
+      </Grid>
+    </AuthenticationLayout>
   );
 };
