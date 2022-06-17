@@ -8,6 +8,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link } from '@reach/router';
 import { Routes } from 'modules/routing';
@@ -43,7 +44,7 @@ export const ForgotPassword: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Box
           sx={{
@@ -56,6 +57,7 @@ export const ForgotPassword: React.FC = () => {
           <Typography component="h1" variant="h5">
             Forgot Password
           </Typography>
+          <LockOpenIcon />
           <Box
             component="form"
             onSubmit={handleSubmit}

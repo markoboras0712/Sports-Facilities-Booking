@@ -10,6 +10,8 @@ import {
   TextField,
 } from '@mui/material';
 import { PhotoCamera } from '@mui/icons-material';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import HomeIcon from '@mui/icons-material/Home';
 
 const steps = ['PersonalData', 'Address'];
 
@@ -41,7 +43,7 @@ export const Onboarding: React.FC = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" sx={{ height: '100vh' }}>
       <Box sx={{ width: '100%', height: '100%' }}>
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map((label, index) => {
@@ -73,6 +75,7 @@ export const Onboarding: React.FC = () => {
               <Typography component="h1" variant="h5">
                 Personal data
               </Typography>
+              <HowToRegIcon />
               <Box component="form" noValidate sx={{ mt: 1 }}>
                 <TextField
                   margin="normal"
@@ -119,6 +122,7 @@ export const Onboarding: React.FC = () => {
               <Typography component="h1" variant="h5">
                 Address
               </Typography>
+              <HomeIcon />
               <Box component="form" noValidate sx={{ mt: 1 }}>
                 <TextField
                   margin="normal"
@@ -165,7 +169,7 @@ export const Onboarding: React.FC = () => {
         </Container>
         {activeStep === steps.length ? (
           <React.Fragment>
-            <Typography sx={{ mt: 30, mb: 1 }}>
+            <Typography sx={{ mt: 20, mb: 1 }}>
               All steps completed - you&apos;re finished
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
@@ -176,7 +180,7 @@ export const Onboarding: React.FC = () => {
           </React.Fragment>
         ) : (
           <React.Fragment>
-            <Typography sx={{ mt: '30%', mb: 1 }}>
+            <Typography sx={{ mt: '10%', mb: 1 }}>
               Step {activeStep + 1}
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>

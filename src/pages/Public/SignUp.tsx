@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Routes } from 'modules/routing';
 import { useAuthentication } from 'modules/authentication';
@@ -50,7 +51,7 @@ export const SignUp: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Box
           sx={{
@@ -63,6 +64,7 @@ export const SignUp: React.FC = () => {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
+          <PersonAddIcon />
           <Box
             component="form"
             onSubmit={handleSubmit}
