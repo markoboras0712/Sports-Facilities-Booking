@@ -4,14 +4,17 @@ import {
   FormControlLabel,
   Grid,
   TextField,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
 import { Link } from '@reach/router';
 import { Routes } from 'modules/routing';
-import React from 'react';
+import React, { useState } from 'react';
 import { Copyright } from './Copyright';
 import { useForm } from 'react-hook-form';
 import { AuthenticationButtons } from './AuthenticationButtons';
 import { AuthenticationData } from 'modules/authentication';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 interface Props {
   authenticationTitle: string;
@@ -26,7 +29,15 @@ export const Form: React.FC<Props> = ({
   backToLogin,
   backToSignup,
 }) => {
-  const { register, handleSubmit } = useForm<AuthenticationData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, dirtyFields, isDirty },
+  } = useForm<AuthenticationData>();
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+
+  console.log({ errors, dirtyFields, isDirty });
   const onSubmit = handleSubmit((data) => {
     const loginData = {
       email: data.email,
@@ -44,28 +55,54 @@ export const Form: React.FC<Props> = ({
     >
       <TextField
         margin="normal"
-        {...register('email', { required: true })}
+        {...register('email', {
+          required: 'Email Address is required.',
+          pattern: {
+            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+            message: 'Invalid email address.',
+          },
+        })}
         required
         fullWidth
+        error={errors.email !== undefined}
         id={'email'}
+        helperText={errors.email?.message}
         label={'Email Address'}
-        name={'email'}
-        autoComplete={'email'}
-        type={'email'}
         autoFocus
       />
       <TextField
         margin="normal"
-        {...register('password', { required: true })}
+        {...register('password', {
+          required: 'Password is required.',
+          minLength: {
+            message: 'Password must be at least 6 characters.',
+            value: 6,
+          },
+        })}
+        helperText={errors.password?.message}
+        error={errors.password !== undefined}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                edge="end"
+              >
+                {showPassword ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
         required
         fullWidth
         id={'password'}
         label={'Password'}
-        name={'password'}
-        autoComplete={'password'}
-        type={'password'}
+        type={showPassword ? 'text' : 'password'}
         autoFocus
       />
+
+      <br />
       <FormControlLabel
         control={<Checkbox value="remember" color="primary" />}
         label="Remember me"
