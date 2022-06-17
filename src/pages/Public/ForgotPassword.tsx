@@ -14,7 +14,6 @@ import { Link } from '@reach/router';
 import { Routes } from 'modules/routing';
 import {
   AuthenticationLayout,
-  ForgotPasswordData,
   useAuthentication,
 } from 'modules/authentication';
 import { Copyright } from 'shared/components';
@@ -25,7 +24,7 @@ export const ForgotPassword: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ForgotPasswordData>();
+  } = useForm<{ email: string }>();
   const { resetPassword } = useAuthentication();
   const onSubmit = handleSubmit(({ email }) => {
     resetPassword(email);

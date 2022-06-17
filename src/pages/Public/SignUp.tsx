@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { Paper, Box, Grid, Typography } from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { AuthenticationLayout } from 'modules/authentication';
-import { Form } from 'shared/components';
+import {
+  AuthenticationForm,
+  AuthenticationLayout,
+} from 'modules/authentication';
 
 export const SignUp: React.FC = () => {
   // const { registerWithEmailPassword } = useAuthentication();
@@ -44,7 +46,11 @@ export const SignUp: React.FC = () => {
             Sign up
           </Typography>
           <PersonAddIcon />
-          <Form authenticationTitle="Sign Up" forgotPassword backToLogin />
+          <AuthenticationForm
+            authenticationTitle="Sign Up"
+            forgotPassword
+            backToLogin
+          />
         </Box>
       </Grid>
     </AuthenticationLayout>

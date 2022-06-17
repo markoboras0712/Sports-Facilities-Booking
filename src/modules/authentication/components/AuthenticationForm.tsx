@@ -10,11 +10,14 @@ import {
 import { Link, useLocation } from '@reach/router';
 import { Routes } from 'modules/routing';
 import React, { useState } from 'react';
-import { Copyright } from './Copyright';
 import { useForm } from 'react-hook-form';
-import { AuthenticationButtons } from './AuthenticationButtons';
-import { AuthenticationData, useAuthentication } from 'modules/authentication';
+import {
+  Authentication,
+  useAuthentication,
+  AuthenticationButtons,
+} from 'modules/authentication';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Copyright } from 'shared/components';
 
 interface Props {
   authenticationTitle: string;
@@ -23,7 +26,7 @@ interface Props {
   backToSignup?: boolean;
 }
 
-export const Form: React.FC<Props> = ({
+export const AuthenticationForm: React.FC<Props> = ({
   authenticationTitle,
   forgotPassword,
   backToLogin,
@@ -33,7 +36,7 @@ export const Form: React.FC<Props> = ({
     register,
     handleSubmit,
     formState: { errors, dirtyFields, isDirty },
-  } = useForm<AuthenticationData>();
+  } = useForm<Authentication>();
   const { registerWithEmailPassword, loginWithEmailPassword } =
     useAuthentication();
   const [showPassword, setShowPassword] = useState(false);

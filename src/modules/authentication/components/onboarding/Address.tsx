@@ -2,7 +2,7 @@ import { Box, TextField, Typography } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import React from 'react';
 
-export const Address: React.FC = ({}) => {
+export const Address: React.FC = () => {
   return (
     <Box
       sx={{
