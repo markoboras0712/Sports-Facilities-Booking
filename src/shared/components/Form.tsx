@@ -7,13 +7,13 @@ import {
   InputAdornment,
   IconButton,
 } from '@mui/material';
-import { Link } from '@reach/router';
+import { Link, useLocation } from '@reach/router';
 import { Routes } from 'modules/routing';
 import React, { useState } from 'react';
 import { Copyright } from './Copyright';
 import { useForm } from 'react-hook-form';
 import { AuthenticationButtons } from './AuthenticationButtons';
-import { AuthenticationData } from 'modules/authentication';
+import { AuthenticationData, useAuthentication } from 'modules/authentication';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 interface Props {
@@ -34,16 +34,20 @@ export const Form: React.FC<Props> = ({
     handleSubmit,
     formState: { errors, dirtyFields, isDirty },
   } = useForm<AuthenticationData>();
+  const { registerWithEmailPassword, loginWithEmailPassword } =
+    useAuthentication();
   const [showPassword, setShowPassword] = useState(false);
+  const { pathname } = useLocation();
   const handleClickShowPassword = () => setShowPassword(!showPassword);
-
+  console.log(pathname);
   console.log({ errors, dirtyFields, isDirty });
   const onSubmit = handleSubmit((data) => {
-    const loginData = {
-      email: data.email,
-      password: data.password,
-    };
-    console.log(loginData);
+    if (errors.email || errors.password) return;
+    const { email, password } = data;
+    pathname === Routes.Login
+      ? loginWithEmailPassword(email, password)
+      : registerWithEmailPassword(email, password);
+    console.log('Succes', email, password);
   });
   return (
     <Box

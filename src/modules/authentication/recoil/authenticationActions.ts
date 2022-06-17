@@ -7,9 +7,11 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import { Routes } from 'modules/routing';
 import {
   auth,
+  db,
   facebookProvider,
   googleProvider,
 } from '../../firebase/recoil/firebase';
@@ -24,23 +26,14 @@ export const signUpWithEmailPassword = async (
       email1,
       password,
     );
-    console.log({ response });
-
     const { email, metadata, uid, photoURL } = response.user;
+    const { creationTime } = metadata;
     console.log({ email, metadata, uid, photoURL });
+    const newUserRef = doc(db, uid, 'settings');
+    await setDoc(newUserRef, { email, creationTime, photoURL });
     navigate(Routes.Onboarding);
-
-    // dispatch(
-    //   addUserToFirestore({
-    //     displayName: `${firstName} ${lastName}`,
-    //     email,
-    //     id: response.user.uid,
-    //     activeChats: [],
-    //     photoUrl: photoUrl as string,
-    //   }),
-    // );
   } catch (error) {
-    alert(error);
+    console.log('SIGN-UP ERROR', { error });
     throw new Error('Didng signup');
   }
 };
