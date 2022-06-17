@@ -54,7 +54,7 @@ export const ForgotPassword: React.FC = () => {
             Forgot Password
           </Typography>
           <LockOpenIcon />
-          <Box component="form" noValidate sx={{ mt: 1 }}>
+          <Box sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               {...register('email', {

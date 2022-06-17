@@ -5,9 +5,19 @@ import {
   OnboardingNavigation,
   OnboardingStepper,
   PersonalData,
+  UserInfo,
 } from 'modules/authentication';
+import { FormProvider, useForm } from 'react-hook-form';
 
 export const Onboarding: React.FC = () => {
+  const form = useForm<PersonalData>();
+  const {
+    getValues,
+    formState: { errors },
+  } = form;
+
+  console.log(getValues());
+
   const steps = ['PersonalData', 'Address'];
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
@@ -17,6 +27,9 @@ export const Onboarding: React.FC = () => {
   };
 
   const handleNext = () => {
+    if (errors.firstName || errors.lastName) return;
+    console.log('ode dalje');
+
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -34,6 +47,8 @@ export const Onboarding: React.FC = () => {
   const handleReset = () => {
     setActiveStep(0);
   };
+
+  const onSubmit = (data: any) => console.log(data);
 
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
@@ -56,22 +71,26 @@ export const Onboarding: React.FC = () => {
             alignItems: 'center',
           }}
         >
-          <OnboardingStepper
-            activeStep={activeStep}
-            skipped={skipped}
-            steps={steps}
-          />
-          <Container component="main" maxWidth="xs">
-            {activeStep === 0 && <PersonalData />}
-            {activeStep === 1 && <Address />}
-          </Container>
-          <OnboardingNavigation
-            activeStep={activeStep}
-            steps={steps}
-            handleBack={handleBack}
-            handleNext={handleNext}
-            handleReset={handleReset}
-          />
+          <FormProvider {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <OnboardingStepper
+                activeStep={activeStep}
+                skipped={skipped}
+                steps={steps}
+              />
+              <Container component="main" maxWidth="xs">
+                {activeStep === 0 && <UserInfo />}
+                {activeStep === 1 && <Address />}
+              </Container>
+              <OnboardingNavigation
+                activeStep={activeStep}
+                steps={steps}
+                handleBack={handleBack}
+                handleNext={handleNext}
+                handleReset={handleReset}
+              />
+            </form>
+          </FormProvider>
         </Box>
       </Grid>
     </Grid>
