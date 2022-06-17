@@ -1,10 +1,4 @@
-export const loginInputs = [
-  {
-    name: 'email',
-    label: 'Email Address',
-  },
-  {
-    name: 'password',
-    label: 'Password',
-  },
-];
+export type FormValues = {
+  firstName: string;
+  lastName: string;
+};

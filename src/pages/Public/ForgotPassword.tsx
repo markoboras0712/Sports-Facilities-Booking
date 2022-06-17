@@ -16,10 +16,6 @@ import { AuthenticationLayout } from 'modules/authentication';
 import { Copyright } from 'shared/components';
 
 export const ForgotPassword: React.FC = () => {
-  const forgotPasswordHandler = () => {
-    console.log('xxx');
-  };
-
   return (
     <AuthenticationLayout>
       <Grid
@@ -63,7 +59,6 @@ export const ForgotPassword: React.FC = () => {
             <Button
               type="submit"
               fullWidth
-              onClick={forgotPasswordHandler}
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >

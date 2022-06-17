@@ -2,14 +2,9 @@ import * as React from 'react';
 import { Paper, Box, Grid, Typography } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 import { AuthenticationLayout } from 'modules/authentication';
-import { loginInputs } from 'shared/const';
 import { Form, SideRandomImage } from 'shared/components';
 
 export const Login: React.FC = () => {
-  const loginHandler = () => {
-    console.log('ovo');
-  };
-
   return (
     <AuthenticationLayout>
       <SideRandomImage />
@@ -37,13 +32,7 @@ export const Login: React.FC = () => {
             Sign in
           </Typography>
           <LoginIcon />
-          <Form
-            authenticationAction={loginHandler}
-            authenticationTitle="Sign In"
-            components={loginInputs}
-            forgotPassword
-            backToSignup
-          />
+          <Form authenticationTitle="Sign In" forgotPassword backToSignup />
         </Box>
       </Grid>
     </AuthenticationLayout>
