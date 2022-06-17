@@ -14,14 +14,21 @@ import { AuthenticationButtons } from './AuthenticationButtons';
 
 interface Props {
   components: LoginInput[];
+  authenticationAction: () => void;
+  authenticationTitle: string;
+  forgotPassword?: boolean;
+  backToLogin?: boolean;
+  backToSignup?: boolean;
 }
 
-export const Form: React.FC<Props> = ({ components }) => {
-  console.log({ components });
-
-  const loginWithEmailHandler = () => {
-    console.log('ddd');
-  };
+export const Form: React.FC<Props> = ({
+  components,
+  authenticationAction,
+  authenticationTitle,
+  forgotPassword,
+  backToLogin,
+  backToSignup,
+}) => {
   return (
     <Box
       component="form"
@@ -51,18 +58,27 @@ export const Form: React.FC<Props> = ({ components }) => {
         label="Remember me"
       />
       <AuthenticationButtons
-        authenticationAction={loginWithEmailHandler}
-        title="Sign In"
+        authenticationHandler={authenticationAction}
+        title={authenticationTitle}
         googleLogin
         facebookLogin
       />
       <Grid container>
         <Grid item xs>
-          <Link to={Routes.ForgotPassword}> Forgot password?</Link>
+          <Link to={Routes.ForgotPassword}>
+            {forgotPassword ? 'Forgot password?' : 'Back to login'}{' '}
+          </Link>
         </Grid>
-        <Grid item>
-          <Link to={Routes.SignUp}>{"Don't have an account? Sign Up"}</Link>
-        </Grid>
+        {backToSignup && (
+          <Grid item>
+            <Link to={Routes.SignUp}>{"Don't have an account? Sign Up"}</Link>
+          </Grid>
+        )}
+        {backToLogin && (
+          <Grid item>
+            <Link to={Routes.Login}>{'Already have an account? Sign In'}</Link>
+          </Grid>
+        )}
       </Grid>
       <Copyright mt={10} />
     </Box>

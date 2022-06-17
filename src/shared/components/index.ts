@@ -5,3 +5,7 @@ export * from './SideRandomImage';
 export * from './Form';
 export * from './Copyright';
 export * from './AuthenticationButtons';
+export * from './OnboardingStepper';
+export * from './PersonalData';
+export * from './Address';
+export * from './OnboardingNavigation';

@@ -6,20 +6,9 @@ import { loginInputs } from 'shared/const';
 import { Form, SideRandomImage } from 'shared/components';
 
 export const Login: React.FC = () => {
-  // const { loginWithEmailPassword } = useAuthentication();
-  // const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   const data = new FormData(event.currentTarget);
-  //   console.log('ovo');
-  //   console.log({
-  //     email: data.get('email'),
-  //     password: data.get('password'),
-  //   });
-  //   loginWithEmailPassword(
-  //     data.get('email') as string,
-  //     data.get('password') as string,
-  //   );
-  // };
+  const loginHandler = () => {
+    console.log('ovo');
+  };
 
   return (
     <AuthenticationLayout>
@@ -48,7 +37,13 @@ export const Login: React.FC = () => {
             Sign in
           </Typography>
           <LoginIcon />
-          <Form components={loginInputs} />
+          <Form
+            authenticationAction={loginHandler}
+            authenticationTitle="Sign In"
+            components={loginInputs}
+            forgotPassword
+            backToSignup
+          />
         </Box>
       </Grid>
     </AuthenticationLayout>

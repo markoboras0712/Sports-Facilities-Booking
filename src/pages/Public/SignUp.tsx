@@ -1,58 +1,42 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import { Link } from '@reach/router';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import GoogleIcon from '@mui/icons-material/Google';
-import FacebookIcon from '@mui/icons-material/Facebook';
+import { Paper, Box, Grid, Typography } from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Routes } from 'modules/routing';
-import { useAuthentication } from 'modules/authentication';
-
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {'Copyright © '}
-
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-const theme = createTheme();
+import { AuthenticationLayout } from 'modules/authentication';
+import { Form } from 'shared/components';
+import { loginInputs } from 'shared/const';
 
 export const SignUp: React.FC = () => {
-  const { registerWithEmailPassword } = useAuthentication();
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-    registerWithEmailPassword(
-      data.get('email') as string,
-      data.get('password') as string,
-    );
+  // const { registerWithEmailPassword } = useAuthentication();
+  // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //   const data = new FormData(event.currentTarget);
+  //   console.log({
+  //     email: data.get('email'),
+  //     password: data.get('password'),
+  //   });
+  //   registerWithEmailPassword(
+  //     data.get('email') as string,
+  //     data.get('password') as string,
+  //   );
+  // };
+
+  const signUpHandler = () => {
+    console.log('ovo');
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" sx={{ height: '100vh' }}>
-        <CssBaseline />
+    <AuthenticationLayout>
+      <Grid
+        container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        item
+        xs={12}
+        sm={10}
+        md={12}
+        component={Paper}
+      >
         <Box
           sx={{
             marginTop: 8,
@@ -65,72 +49,15 @@ export const SignUp: React.FC = () => {
             Sign up
           </Typography>
           <PersonAddIcon />
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ mt: 1 }}
-          >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign Up
-            </Button>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              <GoogleIcon />
-            </Button>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              <FacebookIcon />
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link to={Routes.ForgotPassword}> Forgot password?</Link>
-              </Grid>
-              <Grid item>
-                <Link to={Routes.Login}> Back to login</Link>
-              </Grid>
-            </Grid>
-          </Box>
+          <Form
+            authenticationAction={signUpHandler}
+            authenticationTitle="Sign Up"
+            components={loginInputs}
+            forgotPassword
+            backToLogin
+          />
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
-      </Container>
-    </ThemeProvider>
+      </Grid>
+    </AuthenticationLayout>
   );
 };

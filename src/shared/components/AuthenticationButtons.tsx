@@ -8,21 +8,21 @@ interface Props {
   googleLogin?: boolean;
   facebookLogin?: boolean;
   title: string;
-  authenticationAction: () => void;
+  authenticationHandler: () => void;
 }
 
 export const AuthenticationButtons: React.FC<Props> = ({
   googleLogin,
   facebookLogin,
   title,
-  authenticationAction,
+  authenticationHandler,
 }) => {
   const { loginWithGoogle, loginWithFacebook } = useAuthentication();
 
   return (
     <>
       <Button
-        onClick={authenticationAction}
+        onClick={authenticationHandler}
         type="submit"
         fullWidth
         variant="contained"
