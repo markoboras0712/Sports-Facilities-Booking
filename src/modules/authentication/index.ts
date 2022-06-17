@@ -1,4 +1,4 @@
 export * from './recoil';
 export * from './hooks';
 export * from './components';
-export * from './/models';
+export * from './models';

@@ -1,22 +1,32 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
 import { Box, Container, Grid, Paper } from '@mui/material';
 import {
   Address,
   OnboardingNavigation,
   OnboardingStepper,
-  PersonalData,
+  // PersonalData,
+  UserInfo,
 } from 'modules/authentication';
 
 export const Onboarding: React.FC = () => {
   const steps = ['PersonalData', 'Address'];
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
+  const [firstName, setFirstName] = React.useState('');
 
+  // const [userInfoData, setUserInfoData] = React.useState<PersonalData>(); // the lifted state
+  // console.log(userInfoData);
   const isStepSkipped = (step: number) => {
     return skipped.has(step);
   };
 
+  // const sendDataToParent = (data: PersonalData) => {
+  //   setUserInfoData(data);
+  // };
+
   const handleNext = () => {
+    console.log('handleNext', firstName);
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -62,7 +72,7 @@ export const Onboarding: React.FC = () => {
             steps={steps}
           />
           <Container component="main" maxWidth="xs">
-            {activeStep === 0 && <PersonalData />}
+            {activeStep === 0 && <UserInfo {...{ firstName, setFirstName }} />}
             {activeStep === 1 && <Address />}
           </Container>
           <OnboardingNavigation
