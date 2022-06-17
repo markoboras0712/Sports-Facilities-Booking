@@ -7,8 +7,8 @@ export const SideRandomImage: React.FC = () => {
       <Grid
         item
         xs={false}
-        sm={4}
-        md={7}
+        sm={2}
+        md={6}
         sx={{
           backgroundImage: 'url(https://source.unsplash.com/random)',
           backgroundRepeat: 'no-repeat',

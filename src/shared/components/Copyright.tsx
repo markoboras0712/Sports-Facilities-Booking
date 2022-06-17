@@ -13,7 +13,7 @@ export const Copyright: React.FC<Props> = ({ mt }) => {
       align="center"
       sx={{ mt }}
     >
-      {'Copyright © '}
+      {'Sport Facilities Booking © '}
 
       {new Date().getFullYear()}
       {'.'}
