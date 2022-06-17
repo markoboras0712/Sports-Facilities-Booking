@@ -16,7 +16,7 @@ export const firebaseApp = initializeApp({
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
 });
 
-export const db = getFirestore();
+export const db = getFirestore(firebaseApp);
 export const storage = getStorage(firebaseApp);
 export const auth = getAuth(firebaseApp);
 export const googleProvider = new GoogleAuthProvider();

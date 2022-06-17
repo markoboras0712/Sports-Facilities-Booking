@@ -5,7 +5,7 @@ import {
   OnboardingNavigation,
   OnboardingStepper,
   PersonalData,
-} from 'shared/components';
+} from 'modules/authentication';
 
 export const Onboarding: React.FC = () => {
   const steps = ['PersonalData', 'Address'];

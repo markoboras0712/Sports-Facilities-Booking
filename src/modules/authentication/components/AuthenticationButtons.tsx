@@ -8,7 +8,9 @@ interface Props {
   googleLogin?: boolean;
   facebookLogin?: boolean;
   title: string;
-  authenticationHandler: () => void;
+  authenticationHandler: (
+    e?: React.BaseSyntheticEvent<object, any, any> | undefined,
+  ) => Promise<void>;
 }
 
 export const AuthenticationButtons: React.FC<Props> = ({

@@ -12,14 +12,23 @@ import {
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import { Link } from '@reach/router';
 import { Routes } from 'modules/routing';
-import { AuthenticationLayout } from 'modules/authentication';
+import {
+  AuthenticationLayout,
+  useAuthentication,
+} from 'modules/authentication';
 import { Copyright } from 'shared/components';
+import { useForm } from 'react-hook-form';
 
 export const ForgotPassword: React.FC = () => {
-  const forgotPasswordHandler = () => {
-    console.log('xxx');
-  };
-
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{ email: string }>();
+  const { resetPassword } = useAuthentication();
+  const onSubmit = handleSubmit(({ email }) => {
+    resetPassword(email);
+  });
   return (
     <AuthenticationLayout>
       <Grid
@@ -48,12 +57,19 @@ export const ForgotPassword: React.FC = () => {
           <Box component="form" noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
+              {...register('email', {
+                required: 'Email Address is required.',
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: 'Invalid email address.',
+                },
+              })}
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              error={errors.email !== undefined}
+              id={'email'}
+              helperText={errors.email?.message}
+              label={'Email Address'}
               autoFocus
             />
             <FormControlLabel
@@ -63,7 +79,7 @@ export const ForgotPassword: React.FC = () => {
             <Button
               type="submit"
               fullWidth
-              onClick={forgotPasswordHandler}
+              onClick={onSubmit}
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >

@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { Paper, Box, Grid, Typography } from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import { AuthenticationLayout } from 'modules/authentication';
-import { Form } from 'shared/components';
-import { loginInputs } from 'shared/const';
+import {
+  AuthenticationForm,
+  AuthenticationLayout,
+} from 'modules/authentication';
 
 export const SignUp: React.FC = () => {
   // const { registerWithEmailPassword } = useAuthentication();
@@ -19,10 +20,6 @@ export const SignUp: React.FC = () => {
   //     data.get('password') as string,
   //   );
   // };
-
-  const signUpHandler = () => {
-    console.log('ovo');
-  };
 
   return (
     <AuthenticationLayout>
@@ -49,10 +46,8 @@ export const SignUp: React.FC = () => {
             Sign up
           </Typography>
           <PersonAddIcon />
-          <Form
-            authenticationAction={signUpHandler}
+          <AuthenticationForm
             authenticationTitle="Sign Up"
-            components={loginInputs}
             forgotPassword
             backToLogin
           />
