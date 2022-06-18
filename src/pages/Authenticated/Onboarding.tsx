@@ -7,6 +7,7 @@ import {
   OnboardingStepper,
   OnboardingData,
   UserInfo,
+  OnboardingPreview,
 } from 'modules/authentication';
 import { FormProvider, useForm } from 'react-hook-form';
 import { getRandomOptions } from 'modules/authentication/components/onboarding/getRandomOptions';
@@ -18,7 +19,6 @@ export const Onboarding: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = form;
-  console.log('error');
   const steps = ['PersonalData', 'Address'];
   const userAvatar = React.useMemo<AvatarData>(() => getRandomOptions(), []);
   const [activeStep, setActiveStep] = React.useState(0);
@@ -29,7 +29,6 @@ export const Onboarding: React.FC = () => {
   };
 
   const handleNext = handleSubmit((data: OnboardingData) => {
-    console.log('ode dalje');
     console.log(getValues(), { errors }, data);
 
     let newSkipped = skipped;
@@ -50,9 +49,9 @@ export const Onboarding: React.FC = () => {
     setActiveStep(0);
   };
 
-  const onSubmit = (data: any) => {
+  const onSubmit = handleSubmit((data: OnboardingData) => {
     console.log('submit', data, userAvatar);
-  };
+  });
 
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
@@ -76,7 +75,7 @@ export const Onboarding: React.FC = () => {
           }}
         >
           <FormProvider {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
+            <form>
               <OnboardingStepper
                 activeStep={activeStep}
                 skipped={skipped}
@@ -85,10 +84,14 @@ export const Onboarding: React.FC = () => {
               <Container component="main" maxWidth="xl">
                 {activeStep === 0 && <UserInfo avatarPhoto={userAvatar} />}
                 {activeStep === 1 && <Address />}
+                {activeStep === steps.length && (
+                  <OnboardingPreview avatarPhoto={userAvatar} />
+                )}
               </Container>
               <OnboardingNavigation
                 activeStep={activeStep}
                 steps={steps}
+                onSubmit={onSubmit}
                 handleBack={handleBack}
                 handleNext={handleNext}
                 handleReset={handleReset}

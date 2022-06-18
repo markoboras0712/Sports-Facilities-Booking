@@ -1,4 +1,5 @@
 import { Box, Button, Typography } from '@mui/material';
+import { useSubmitOnEnter } from 'modules/authentication/hooks/useSubmitOnEnter';
 import React from 'react';
 
 interface Props {
@@ -7,6 +8,9 @@ interface Props {
   handleNext: () => void;
   handleBack: () => void;
   handleReset: () => void;
+  onSubmit: (
+    e?: React.BaseSyntheticEvent<object, any, any> | undefined,
+  ) => Promise<void>;
 }
 
 export const OnboardingNavigation: React.FC<Props> = ({
@@ -15,7 +19,10 @@ export const OnboardingNavigation: React.FC<Props> = ({
   handleBack,
   handleNext,
   handleReset,
+  onSubmit,
 }) => {
+  const submitButtonRef = useSubmitOnEnter();
+
   return (
     <>
       {activeStep === steps.length ? (
@@ -26,7 +33,9 @@ export const OnboardingNavigation: React.FC<Props> = ({
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Box sx={{ flex: '1 1 auto' }} />
             <Button onClick={handleReset}>Reset</Button>
-            <Button>Submit</Button>
+            <Button ref={submitButtonRef} onClick={onSubmit}>
+              Submit
+            </Button>
           </Box>
         </>
       ) : (
@@ -45,7 +54,7 @@ export const OnboardingNavigation: React.FC<Props> = ({
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />
 
-            <Button onClick={handleNext}>
+            <Button ref={submitButtonRef} onClick={handleNext}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
           </Box>

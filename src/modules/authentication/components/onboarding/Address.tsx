@@ -38,6 +38,7 @@ export const Address: React.FC = () => {
         <Autocomplete
           id="country"
           options={countries}
+          limitTags={1}
           autoHighlight
           getOptionLabel={(option) => option.label}
           renderOption={(props, option) => (
@@ -56,25 +57,22 @@ export const Address: React.FC = () => {
               {option.label} ({option.code}) +{option.phone}
             </Box>
           )}
-          renderInput={(params) => {
-            console.log(params.inputProps.value);
-            return (
-              <TextField
-                {...params}
-                {...register('country', {
-                  required: 'Country is required.',
-                })}
-                required
-                error={errors.country !== undefined}
-                helperText={errors.country?.message}
-                label="Choose a country"
-                inputProps={{
-                  ...params.inputProps,
-                  autoComplete: 'new-password', // disable autocomplete and autofill
-                }}
-              />
-            );
-          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              {...register('country', {
+                required: 'Country is required.',
+              })}
+              required
+              error={errors.country !== undefined}
+              helperText={errors.country?.message}
+              label="Choose a country"
+              inputProps={{
+                ...params.inputProps,
+                autoComplete: 'new-password', // disable autocomplete and autofill
+              }}
+            />
+          )}
         />
         <TextField
           margin="normal"
