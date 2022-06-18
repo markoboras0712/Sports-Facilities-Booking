@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { navigate } from '@reach/router';
 import {
   createUserWithEmailAndPassword,
@@ -8,13 +7,9 @@ import {
   signOut,
 } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
+import { auth, db, facebookProvider, googleProvider } from 'modules/firebase';
 import { Routes } from 'modules/routing';
-import {
-  auth,
-  db,
-  facebookProvider,
-  googleProvider,
-} from '../../firebase/recoil/firebase';
+import { createNewUser } from './authenticationUtils';
 
 export const signUpWithEmailPassword = async (
   email1: string,
@@ -26,11 +21,13 @@ export const signUpWithEmailPassword = async (
       email1,
       password,
     );
-    const { email, metadata, uid, photoURL } = response.user;
-    const { creationTime } = metadata;
-    console.log({ email, metadata, uid, photoURL });
+    const {
+      email,
+      metadata: { creationTime },
+      uid,
+    } = response.user;
     const newUserRef = doc(db, uid, 'settings');
-    await setDoc(newUserRef, { email, creationTime, photoURL });
+    await setDoc(newUserRef, { email, creationTime });
     navigate(Routes.Onboarding);
   } catch (error) {
     console.log('SIGN-UP ERROR', { error });
@@ -44,6 +41,7 @@ export const signInWithEmailPassword = async (
 ) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
+
     navigate(Routes.AvailableObjects);
   } catch (error) {
     alert(error);
@@ -64,21 +62,7 @@ export const sendPasswordReset = async (email: string) => {
 export const signInWithGoogle = async () => {
   try {
     const { user } = await signInWithPopup(auth, googleProvider);
-    console.log({ user });
-    navigate(Routes.AvailableObjects);
-
-    // const q = query(collection(db, 'users'), where('id', '==', user.uid));
-    // const querySnapshot = await getDocs(q);
-    // const authUser: AuthData = {
-    //   email: user.email,
-    //   id: user.uid,
-    //   photoUrl: user.photoURL,
-    //   activeChats: [],
-    //   displayName: user.displayName,
-    // };
-    // if (!querySnapshot.docs.length) {
-    //   //   dispatch(addUserToFirestore(authUser));
-    // }
+    await createNewUser(user);
   } catch (err) {
     alert(err);
     throw new Error('Didnt sign in');
@@ -88,21 +72,7 @@ export const signInWithGoogle = async () => {
 export const signInWithFacebook = async () => {
   try {
     const { user } = await signInWithPopup(auth, facebookProvider);
-    console.log({ user });
-    navigate(Routes.AvailableObjects);
-
-    // const q = query(collection(db, 'users'), where('id', '==', user.uid));
-    // const querySnapshot = await getDocs(q);
-    // const authUser: AuthData = {
-    //   email: user.email,
-    //   id: user.uid,
-    //   photoUrl: user.photoURL,
-    //   activeChats: [],
-    //   displayName: user.displayName,
-    // };
-    // if (!querySnapshot.docs.length) {
-    //   //   dispatch(addUserToFirestore(authUser));
-    // }
+    await createNewUser(user);
   } catch (err) {
     alert(err);
     throw new Error('Didnt sign in');

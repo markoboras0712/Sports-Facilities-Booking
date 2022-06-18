@@ -1,5 +1,6 @@
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from 'modules/firebase';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   logout,
   sendPasswordReset,
@@ -7,16 +8,26 @@ import {
   signInWithFacebook,
   signInWithGoogle,
   signUpWithEmailPassword,
+  userAtoms,
 } from '../recoil';
 
 export const useAuthentication = () => {
+  const userCleanup = useSetRecoilState(userAtoms.userCleanup);
+  const setUser = useSetRecoilState(userAtoms.user);
+  const user = useRecoilValue(userAtoms.user);
+  console.log('recoil user', user);
+
   const autoLogin = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        console.log({ user });
+        setUser({
+          email: user.email,
+          userUid: user.uid,
+          creationTime: user.metadata.creationTime,
+        });
       }
       if (!user) {
-        console.log('no user');
+        userCleanup(null);
       }
       return unsubscribe;
     });
@@ -31,6 +42,8 @@ export const useAuthentication = () => {
   };
 
   const loginWithGoogle = () => {
+    console.log('login with google');
+
     signInWithGoogle();
   };
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AvatarData, OnboardingData } from 'modules/authentication';
+import { AvatarData, OnboardingData } from 'modules/authorization';
 import { BigHead } from '@bigheads/core';
 import { Box, Grid, TextField } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
