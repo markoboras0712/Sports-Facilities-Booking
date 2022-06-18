@@ -32,6 +32,10 @@ export const AuthenticationForm: React.FC<Props> = ({
   backToLogin,
   backToSignup,
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const { pathname } = useLocation();
+
   const {
     register,
     handleSubmit,
@@ -40,20 +44,12 @@ export const AuthenticationForm: React.FC<Props> = ({
   const { loginWithEmailPassword, registerWithEmailPassword } =
     useAuthentication();
 
-  const { pathname } = useLocation();
-
   const onSubmit = handleSubmit((data: Authentication) => {
-    console.log(data);
-    if (errors.email || errors.password) return;
     const { email, password } = data;
     pathname === Routes.Login
       ? loginWithEmailPassword(email, password)
       : registerWithEmailPassword(email, password);
-    console.log('Succes', email, password);
   });
-
-  const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   return (
     <Box

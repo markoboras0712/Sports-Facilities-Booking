@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { onAuthStateChanged } from 'firebase/auth';
 import { settingsAtoms } from 'modules/authorization';
 import { auth } from 'modules/firebase';
@@ -16,53 +15,39 @@ import {
 
 export const useAuthentication = () => {
   const userCleanup = useSetRecoilState(userAtoms.userCleanup);
+  const settingsCleanup = useSetRecoilState(settingsAtoms.userSettingsCleanup);
   const setUser = useSetRecoilState(userAtoms.user);
   const setSettings = useSetRecoilState(settingsAtoms.userSettings);
 
   const autoLogin = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        const settings = await getSettings(user.uid);
+        if (settings) setSettings(settings);
         setUser({
           email: user.email,
           userUid: user.uid,
           creationTime: user.metadata.creationTime,
         });
-        const settings = await getSettings(user.uid);
-        console.log('test', settings);
-        setSettings(settings);
       }
       if (!user) {
         userCleanup(null);
+        settingsCleanup(null);
       }
       return unsubscribe;
     });
   };
 
-  const registerWithEmailPassword = (email: string, password: string) => {
-    return signUpWithEmailPassword(email, password);
-  };
+  const registerWithEmailPassword = (email: string, password: string) =>
+    signUpWithEmailPassword(email, password);
 
-  const loginWithEmailPassword = (email: string, password: string) => {
-    return signInWithEmailPassword(email, password);
-  };
+  const loginWithEmailPassword = (email: string, password: string) =>
+    signInWithEmailPassword(email, password);
+  const loginWithGoogle = () => signInWithGoogle();
+  const loginWithFacebook = () => signInWithFacebook();
 
-  const loginWithGoogle = () => {
-    console.log('login with google');
-
-    signInWithGoogle();
-  };
-
-  const loginWithFacebook = () => {
-    signInWithFacebook();
-  };
-
-  const resetPassword = (email: string) => {
-    sendPasswordReset(email);
-  };
-
-  const logoutUser = () => {
-    logout();
-  };
+  const resetPassword = (email: string) => sendPasswordReset(email);
+  const logoutUser = () => logout();
 
   return {
     autoLogin,

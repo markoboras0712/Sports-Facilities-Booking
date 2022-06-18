@@ -63,6 +63,21 @@ const userSettings = selector<OnboardingData | null>({
   },
 });
 
+const userSettingsCleanup = selector({
+  key: 'authentication.cleanup',
+  get: () => null,
+  set: ({ reset }) => {
+    reset(firstName);
+    reset(lastName);
+    reset(avatar);
+    reset(address);
+    reset(country);
+    reset(city);
+    reset(postalCode);
+  },
+});
+
 export const settingsAtoms = {
   userSettings,
+  userSettingsCleanup,
 };

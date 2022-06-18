@@ -1,1 +1,1 @@
-export * from './AuthenticationData';
+export * from './AuthenticationModel';

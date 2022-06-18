@@ -30,8 +30,15 @@ export const updateUser = async (
   navigate(Routes.AvailableObjects);
 };
 
+const isOnboardingData = (data: OnboardingData): data is OnboardingData => {
+  return (data as OnboardingData).firstName !== undefined;
+};
+
 export const getSettings = async (userUid: string) => {
   const settingsDocument = doc(db, userUid, 'settings');
   const settingsSnapshot = await getDoc(settingsDocument);
-  return settingsSnapshot.data() as OnboardingData;
+  if (isOnboardingData(settingsSnapshot.data() as OnboardingData)) {
+    return settingsSnapshot.data() as OnboardingData;
+  }
+  return;
 };
