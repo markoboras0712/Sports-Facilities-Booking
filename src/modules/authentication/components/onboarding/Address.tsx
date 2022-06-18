@@ -1,8 +1,9 @@
-import { Box, Grid, TextField, Typography } from '@mui/material';
+import { Autocomplete, Box, Grid, TextField, Typography } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { OnboardingData } from 'modules/authentication';
+import { countries } from './countries';
 
 export const Address: React.FC = () => {
   const {
@@ -34,18 +35,46 @@ export const Address: React.FC = () => {
           label="Address"
           autoFocus
         />
-        <TextField
-          margin="normal"
-          {...register('country', {
-            required: 'Country is required.',
-          })}
-          required
-          fullWidth
-          error={errors.country !== undefined}
+        <Autocomplete
           id="country"
-          helperText={errors.country?.message}
-          label="Country"
-          autoFocus
+          options={countries}
+          autoHighlight
+          getOptionLabel={(option) => option.label}
+          renderOption={(props, option) => (
+            <Box
+              component="li"
+              sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
+              {...props}
+            >
+              <img
+                loading="lazy"
+                width="20"
+                src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
+                srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+                alt=""
+              />
+              {option.label} ({option.code}) +{option.phone}
+            </Box>
+          )}
+          renderInput={(params) => {
+            console.log(params.inputProps.value);
+            return (
+              <TextField
+                {...params}
+                {...register('country', {
+                  required: 'Country is required.',
+                })}
+                required
+                error={errors.country !== undefined}
+                helperText={errors.country?.message}
+                label="Choose a country"
+                inputProps={{
+                  ...params.inputProps,
+                  autoComplete: 'new-password', // disable autocomplete and autofill
+                }}
+              />
+            );
+          }}
         />
         <TextField
           margin="normal"
