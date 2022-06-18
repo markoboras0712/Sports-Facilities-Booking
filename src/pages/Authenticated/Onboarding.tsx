@@ -5,14 +5,14 @@ import {
   AvatarData,
   OnboardingNavigation,
   OnboardingStepper,
-  PersonalData,
+  OnboardingData,
   UserInfo,
 } from 'modules/authentication';
 import { FormProvider, useForm } from 'react-hook-form';
 import { getRandomOptions } from 'modules/authentication/components/onboarding/getRandomOptions';
 
 export const Onboarding: React.FC = () => {
-  const form = useForm<PersonalData>();
+  const form = useForm<OnboardingData>();
   const {
     getValues,
     handleSubmit,
@@ -28,7 +28,7 @@ export const Onboarding: React.FC = () => {
     return skipped.has(step);
   };
 
-  const handleNext = handleSubmit((data: PersonalData) => {
+  const handleNext = handleSubmit((data: OnboardingData) => {
     console.log('ode dalje');
     console.log(getValues(), { errors }, data);
 

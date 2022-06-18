@@ -1,7 +1,8 @@
-export interface Onboarding {
+export interface OnboardingData {
   firstName: string;
   lastName: string;
   photoUrl?: string;
+  avatar?: AvatarData;
   address: string;
   country?: string;
   city?: string;
@@ -30,11 +31,4 @@ export interface AvatarData {
   mask: boolean;
   faceMask: boolean;
   lashes: boolean;
-}
-
-export interface PersonalData {
-  firstName: string;
-  lastName: string;
-  photoUrl?: string;
-  avatar?: AvatarData;
 }

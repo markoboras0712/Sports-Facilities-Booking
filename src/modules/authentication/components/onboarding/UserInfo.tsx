@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Box, Grid, TextField } from '@mui/material';
 import React from 'react';
-import { PersonalData } from 'modules/authentication';
 import { useFormContext } from 'react-hook-form';
 import { BigHead } from '@bigheads/core';
-import { AvatarData } from 'modules/authentication/models';
+import { AvatarData, OnboardingData } from 'modules/authentication/models';
 
 interface Props {
   avatarPhoto?: AvatarData;
@@ -14,7 +13,7 @@ export const UserInfo: React.FC<Props> = ({ avatarPhoto }) => {
   const {
     register,
     formState: { errors },
-  } = useFormContext<PersonalData>();
+  } = useFormContext<OnboardingData>();
 
   return (
     <Grid
