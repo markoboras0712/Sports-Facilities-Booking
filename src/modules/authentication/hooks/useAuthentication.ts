@@ -15,9 +15,9 @@ import {
 
 export const useAuthentication = () => {
   const userCleanup = useSetRecoilState(userAtoms.userCleanup);
-  const settingsCleanup = useSetRecoilState(settingsAtoms.userSettingsCleanup);
+  const settingsCleanup = useSetRecoilState(settingsAtoms.settingsCleanup);
   const setUser = useSetRecoilState(userAtoms.user);
-  const setSettings = useSetRecoilState(settingsAtoms.userSettings);
+  const setSettings = useSetRecoilState(settingsAtoms.settings);
 
   const autoLogin = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {

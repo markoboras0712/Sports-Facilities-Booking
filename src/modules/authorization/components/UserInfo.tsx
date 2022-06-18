@@ -14,6 +14,8 @@ export const UserInfo: React.FC<Props> = ({ avatarPhoto }) => {
     formState: { errors },
   } = useFormContext<OnboardingData>();
 
+  console.log('ADD PHONE NUMBER INPUT');
+
   return (
     <Grid
       container

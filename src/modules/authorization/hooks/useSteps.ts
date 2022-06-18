@@ -8,7 +8,7 @@ export const useSteps = () => {
   const { handleSubmit } = useForm<OnboardingData>();
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
-  const setSettings = useSetRecoilState(settingsAtoms.userSettings);
+  const setSettings = useSetRecoilState(settingsAtoms.settings);
 
   const isStepSkipped = (step: number) => skipped.has(step);
   const handleNext = handleSubmit((data: OnboardingData) => {

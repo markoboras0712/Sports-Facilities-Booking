@@ -22,7 +22,7 @@ export const OnboardingBuilder: React.FC = () => {
   const { handleSubmit } = form;
   const userAvatar = React.useMemo<AvatarData>(() => getRandomOptions(), []);
   const user = useRecoilValue(userAtoms.user);
-  const settings = useRecoilValue(settingsAtoms.userSettings);
+  const settings = useRecoilValue(settingsAtoms.settings);
   const { activeStep, skipped, handleBack, handleNext, handleReset } =
     useSteps();
 

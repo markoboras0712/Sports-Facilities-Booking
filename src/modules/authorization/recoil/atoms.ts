@@ -36,10 +36,10 @@ const postalCode = atom<string | undefined>({
   default: undefined,
 });
 
-const userSettings = selector<OnboardingData | null>({
+const settings = selector<OnboardingData | null>({
   key: 'authorization.user',
   get: ({ get }) => {
-    const userSettings: OnboardingData = {
+    const settings: OnboardingData = {
       avatar: get(avatar),
       firstName: get(firstName),
       lastName: get(lastName),
@@ -48,7 +48,7 @@ const userSettings = selector<OnboardingData | null>({
       city: get(city),
       postalCode: get(postalCode),
     };
-    return userSettings;
+    return settings;
   },
   set: ({ set }, onboardingData) => {
     if (onboardingData && !(onboardingData instanceof DefaultValue)) {
@@ -63,7 +63,7 @@ const userSettings = selector<OnboardingData | null>({
   },
 });
 
-const userSettingsCleanup = selector({
+const settingsCleanup = selector({
   key: 'authentication.cleanup',
   get: () => null,
   set: ({ reset }) => {
@@ -78,6 +78,6 @@ const userSettingsCleanup = selector({
 });
 
 export const settingsAtoms = {
-  userSettings,
-  userSettingsCleanup,
+  settings,
+  settingsCleanup,
 };

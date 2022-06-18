@@ -26,6 +26,7 @@ export const ForgotPassword: React.FC = () => {
     formState: { errors },
   } = useForm<{ email: string }>();
   const { resetPassword } = useAuthentication();
+
   const onSubmit = handleSubmit(({ email }) => {
     resetPassword(email);
   });
