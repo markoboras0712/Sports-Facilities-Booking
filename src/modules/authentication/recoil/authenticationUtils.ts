@@ -1,6 +1,6 @@
 import { navigate } from '@reach/router';
 import { User } from 'firebase/auth';
-import { collection, doc, getDocs, setDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import { OnboardingData } from 'modules/authorization';
 import { db } from 'modules/firebase';
 import { Routes } from 'modules/routing';
@@ -28,4 +28,10 @@ export const updateUser = async (
   const newUserRef = doc(db, userUid, 'settings');
   await setDoc(newUserRef, onboardingData, { merge: true });
   navigate(Routes.AvailableObjects);
+};
+
+export const getSettings = async (userUid: string) => {
+  const settingsDocument = doc(db, userUid, 'settings');
+  const settingsSnapshot = await getDoc(settingsDocument);
+  return settingsSnapshot.data() as OnboardingData;
 };

@@ -1,5 +1,10 @@
 import { atom, DefaultValue, selector } from 'recoil';
-import { OnboardingData } from '../models';
+import { AvatarData, OnboardingData } from '../models';
+
+const avatar = atom<AvatarData | undefined>({
+  key: 'authorization.user.avatar',
+  default: undefined,
+});
 
 const firstName = atom<string | null>({
   key: 'authorization.user.firstName',
@@ -35,6 +40,7 @@ const userSettings = selector<OnboardingData | null>({
   key: 'authorization.user',
   get: ({ get }) => {
     const userSettings: OnboardingData = {
+      avatar: get(avatar),
       firstName: get(firstName),
       lastName: get(lastName),
       address: get(address),
@@ -46,6 +52,7 @@ const userSettings = selector<OnboardingData | null>({
   },
   set: ({ set }, onboardingData) => {
     if (onboardingData && !(onboardingData instanceof DefaultValue)) {
+      set(avatar, onboardingData.avatar);
       set(firstName, onboardingData.firstName);
       set(lastName, onboardingData.lastName);
       set(address, onboardingData.address);

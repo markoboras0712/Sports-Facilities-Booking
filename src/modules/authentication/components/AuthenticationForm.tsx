@@ -7,11 +7,15 @@ import {
   InputAdornment,
   IconButton,
 } from '@mui/material';
-import { Link } from '@reach/router';
+import { Link, useLocation } from '@reach/router';
 import { Routes } from 'modules/routing';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Authentication, AuthenticationButtons } from 'modules/authentication';
+import {
+  Authentication,
+  AuthenticationButtons,
+  useAuthentication,
+} from 'modules/authentication';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Copyright } from 'shared/components';
 
@@ -30,8 +34,23 @@ export const AuthenticationForm: React.FC<Props> = ({
 }) => {
   const {
     register,
+    handleSubmit,
     formState: { errors },
   } = useForm<Authentication>();
+  const { loginWithEmailPassword, registerWithEmailPassword } =
+    useAuthentication();
+
+  const { pathname } = useLocation();
+
+  const onSubmit = handleSubmit((data: Authentication) => {
+    console.log(data);
+    if (errors.email || errors.password) return;
+    const { email, password } = data;
+    pathname === Routes.Login
+      ? loginWithEmailPassword(email, password)
+      : registerWithEmailPassword(email, password);
+    console.log('Succes', email, password);
+  });
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -99,6 +118,7 @@ export const AuthenticationForm: React.FC<Props> = ({
         label="Remember me"
       />
       <AuthenticationButtons
+        onSubmit={onSubmit}
         title={authenticationTitle}
         googleLogin
         facebookLogin

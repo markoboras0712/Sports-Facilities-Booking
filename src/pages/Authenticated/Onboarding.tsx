@@ -44,10 +44,8 @@ export const Onboarding: React.FC = () => {
   const handleReset = () => setActiveStep(0);
 
   const onSubmit = handleSubmit((data: OnboardingData) => {
-    console.log('submit', { ...data, avatar: userAvatar });
     const onboardingData: OnboardingData = { ...data, avatar: userAvatar };
-    setSettings(onboardingData);
-    if (user?.userUid && settings) updateUser(user.userUid, settings);
+    if (user?.userUid && settings) updateUser(user.userUid, onboardingData);
   });
 
   return (

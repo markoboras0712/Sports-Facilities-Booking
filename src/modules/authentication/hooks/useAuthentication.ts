@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { onAuthStateChanged } from 'firebase/auth';
+import { settingsAtoms } from 'modules/authorization';
 import { auth } from 'modules/firebase';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import {
+  getSettings,
   logout,
   sendPasswordReset,
   signInWithEmailPassword,
@@ -14,8 +17,7 @@ import {
 export const useAuthentication = () => {
   const userCleanup = useSetRecoilState(userAtoms.userCleanup);
   const setUser = useSetRecoilState(userAtoms.user);
-  const user = useRecoilValue(userAtoms.user);
-  console.log('recoil user', user);
+  const setSettings = useSetRecoilState(settingsAtoms.userSettings);
 
   const autoLogin = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -25,6 +27,9 @@ export const useAuthentication = () => {
           userUid: user.uid,
           creationTime: user.metadata.creationTime,
         });
+        const settings = await getSettings(user.uid);
+        console.log('test', settings);
+        setSettings(settings);
       }
       if (!user) {
         userCleanup(null);

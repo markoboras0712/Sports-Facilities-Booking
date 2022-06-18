@@ -16,11 +16,14 @@ export const signUpWithEmailPassword = async (
   password: string,
 ) => {
   try {
+    console.log('start');
+
     const response = await createUserWithEmailAndPassword(
       auth,
       email1,
       password,
     );
+    console.log({ response });
     const {
       email,
       metadata: { creationTime },
