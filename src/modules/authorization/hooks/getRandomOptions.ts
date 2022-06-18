@@ -1,4 +1,3 @@
-// thanks to official https://github.com/RobertBroersma/bigheads/blob/main/site/src/utils/getRandomOptions.ts
 import {
   theme,
   eyesMap,
@@ -19,7 +18,7 @@ function selectRandomKey(object: any) {
   ];
 }
 
-export function getRandomOptions() {
+export const getRandomOptions = () => {
   const skinTone = selectRandomKey(theme.colors.skin);
   const eyes = selectRandomKey(eyesMap);
   const eyebrows = selectRandomKey(eyebrowsMap);
@@ -65,4 +64,4 @@ export function getRandomOptions() {
     faceMask,
     lashes,
   };
-}
+};

@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { Box, Container, Grid, Paper } from '@mui/material';
-import {
-  Address,
-  AvatarData,
-  OnboardingNavigation,
-  OnboardingStepper,
-  OnboardingData,
-  UserInfo,
-  OnboardingPreview,
-} from 'modules/authentication';
 import { FormProvider, useForm } from 'react-hook-form';
-import { getRandomOptions } from 'modules/authentication/components/onboarding/getRandomOptions';
+import {
+  AvatarData,
+  OnboardingData,
+  getRandomOptions,
+  OnboardingStepper,
+  UserInfo,
+  Address,
+  OnboardingPreview,
+  OnboardingNavigation,
+} from 'modules/authorization';
 
 export const Onboarding: React.FC = () => {
   const form = useForm<OnboardingData>();

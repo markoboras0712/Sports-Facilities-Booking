@@ -3,7 +3,7 @@ import { Box, Grid, TextField } from '@mui/material';
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { BigHead } from '@bigheads/core';
-import { AvatarData, OnboardingData } from 'modules/authentication/models';
+import { AvatarData, OnboardingData } from 'modules/authorization';
 
 interface Props {
   avatarPhoto?: AvatarData;

@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from '@mui/material';
-import { useSubmitOnEnter } from 'modules/authentication/hooks/useSubmitOnEnter';
+import { useSubmitOnEnter } from 'shared/hooks';
 import React from 'react';
 
 interface Props {
