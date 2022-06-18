@@ -2,23 +2,25 @@ import * as React from 'react';
 import { Box, Container, Grid, Paper } from '@mui/material';
 import {
   Address,
+  AvatarData,
   OnboardingNavigation,
   OnboardingStepper,
   PersonalData,
   UserInfo,
 } from 'modules/authentication';
 import { FormProvider, useForm } from 'react-hook-form';
+import { getRandomOptions } from 'modules/authentication/components/onboarding/getRandomOptions';
 
 export const Onboarding: React.FC = () => {
   const form = useForm<PersonalData>();
   const {
     getValues,
+    handleSubmit,
     formState: { errors },
   } = form;
-
-  console.log(getValues(), { errors });
-
+  console.log('error');
   const steps = ['PersonalData', 'Address'];
+  const userAvatar = React.useMemo<AvatarData>(() => getRandomOptions(), []);
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
 
@@ -26,8 +28,9 @@ export const Onboarding: React.FC = () => {
     return skipped.has(step);
   };
 
-  const handleNext = () => {
+  const handleNext = handleSubmit((data: PersonalData) => {
     console.log('ode dalje');
+    console.log(getValues(), { errors }, data);
 
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
@@ -37,7 +40,7 @@ export const Onboarding: React.FC = () => {
 
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
-  };
+  });
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -47,7 +50,9 @@ export const Onboarding: React.FC = () => {
     setActiveStep(0);
   };
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (data: any) => {
+    console.log('submit', data, userAvatar);
+  };
 
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
@@ -77,8 +82,8 @@ export const Onboarding: React.FC = () => {
                 skipped={skipped}
                 steps={steps}
               />
-              <Container component="main" maxWidth="xs">
-                {activeStep === 0 && <UserInfo />}
+              <Container component="main" maxWidth="xl">
+                {activeStep === 0 && <UserInfo avatarPhoto={userAvatar} />}
                 {activeStep === 1 && <Address />}
               </Container>
               <OnboardingNavigation

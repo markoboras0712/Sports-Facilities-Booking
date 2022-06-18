@@ -4,9 +4,13 @@ import React from 'react';
 import { PersonalData } from 'modules/authentication';
 import { useFormContext } from 'react-hook-form';
 import { BigHead } from '@bigheads/core';
-import { getRandomOptions } from './getRandomOptions';
+import { AvatarData } from 'modules/authentication/models';
 
-export const UserInfo: React.FC = () => {
+interface Props {
+  avatarPhoto?: AvatarData;
+}
+
+export const UserInfo: React.FC<Props> = ({ avatarPhoto }) => {
   const {
     register,
     formState: { errors },
@@ -20,7 +24,7 @@ export const UserInfo: React.FC = () => {
       alignItems="center"
     >
       <Box height={200} width={250} sx={{ mb: 10 }}>
-        <BigHead {...(getRandomOptions() as any)} />
+        <BigHead {...(avatarPhoto as any)} />
       </Box>
 
       <Box sx={{ mt: 1 }}>
@@ -29,6 +33,7 @@ export const UserInfo: React.FC = () => {
           {...register('firstName', {
             required: 'First name is required.',
           })}
+          required
           fullWidth
           error={errors.firstName !== undefined}
           id="firstName"
@@ -41,6 +46,7 @@ export const UserInfo: React.FC = () => {
           {...register('lastName', {
             required: 'Last name is required.',
           })}
+          required
           fullWidth
           error={errors.lastName !== undefined}
           id="lastName"
