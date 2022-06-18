@@ -14,24 +14,19 @@ import {
 export const useAuthentication = () => {
   const userCleanup = useSetRecoilState(userAtoms.userCleanup);
   const setUser = useSetRecoilState(userAtoms.user);
-  const email = useRecoilValue(userAtoms.email);
   const user = useRecoilValue(userAtoms.user);
-  console.log({ user });
-
-  console.log({ email });
+  console.log('recoil user', user);
 
   const autoLogin = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        console.log({ user });
-
         setUser({
           email: user.email,
           userUid: user.uid,
+          creationTime: user.metadata.creationTime,
         });
       }
       if (!user) {
-        console.log('no user');
         userCleanup(null);
       }
       return unsubscribe;
@@ -47,6 +42,8 @@ export const useAuthentication = () => {
   };
 
   const loginWithGoogle = () => {
+    console.log('login with google');
+
     signInWithGoogle();
   };
 

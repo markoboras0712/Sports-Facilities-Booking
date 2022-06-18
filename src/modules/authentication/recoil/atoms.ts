@@ -11,20 +11,26 @@ const userUid = atom<string | null>({
   default: null,
 });
 
+const creationTime = atom<string | undefined>({
+  key: 'authentication.user.creationTime',
+  default: undefined,
+});
+
 const user = selector<User | null>({
   key: 'authentication.user',
   get: ({ get }) => {
     const userData: User = {
       userUid: get(userUid),
       email: get(email),
+      creationTime: get(creationTime),
     };
-
     return userData;
   },
   set: ({ set }, user) => {
     if (user && !(user instanceof DefaultValue)) {
       set(email, user.email);
       set(userUid, user.userUid);
+      set(creationTime, user.creationTime);
     }
   },
 });
@@ -35,19 +41,15 @@ const userCleanup = selector({
   set: ({ reset }) => {
     reset(email);
     reset(userUid);
+    reset(creationTime);
   },
 });
 
 const isLoggedIn = selector({
   key: 'authentication.isLoggedIn',
   get: ({ get }) => {
-    if (get(email)) {
-      return true;
-    }
-
-    if (get(email) === null) {
-      return false;
-    }
+    if (get(email)) return true;
+    if (get(email) === null) return false;
 
     return get(email);
   },
@@ -64,11 +66,9 @@ const registerError = atom<string | undefined>({
 });
 
 export const userAtoms = {
-  email,
-  userUid,
-  isLoggedIn,
-  userCleanup,
   user,
+  userCleanup,
+  isLoggedIn,
   loginError,
   registerError,
 };

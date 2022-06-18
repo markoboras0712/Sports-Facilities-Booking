@@ -10,47 +10,44 @@ import {
   Address,
   OnboardingPreview,
   OnboardingNavigation,
+  settingsAtoms,
 } from 'modules/authorization';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { updateUser, userAtoms } from 'modules/authentication';
 
 export const Onboarding: React.FC = () => {
   const form = useForm<OnboardingData>();
-  const {
-    getValues,
-    handleSubmit,
-    formState: { errors },
-  } = form;
+  const { handleSubmit } = form;
   const steps = ['PersonalData', 'Address'];
   const userAvatar = React.useMemo<AvatarData>(() => getRandomOptions(), []);
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
+  const user = useRecoilValue(userAtoms.user);
+  const settings = useRecoilValue(settingsAtoms.userSettings);
+  const setSettings = useSetRecoilState(settingsAtoms.userSettings);
 
-  const isStepSkipped = (step: number) => {
-    return skipped.has(step);
-  };
-
+  const isStepSkipped = (step: number) => skipped.has(step);
   const handleNext = handleSubmit((data: OnboardingData) => {
-    console.log(getValues(), { errors }, data);
-
+    setSettings(data);
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
-
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
   });
 
-  const handleBack = () => {
+  const handleBack = () =>
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
 
-  const handleReset = () => {
-    setActiveStep(0);
-  };
+  const handleReset = () => setActiveStep(0);
 
   const onSubmit = handleSubmit((data: OnboardingData) => {
     console.log('submit', { ...data, avatar: userAvatar });
+    const onboardingData: OnboardingData = { ...data, avatar: userAvatar };
+    setSettings(onboardingData);
+    if (user?.userUid && settings) updateUser(user.userUid, settings);
   });
 
   return (

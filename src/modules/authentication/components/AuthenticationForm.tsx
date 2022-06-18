@@ -7,15 +7,11 @@ import {
   InputAdornment,
   IconButton,
 } from '@mui/material';
-import { Link, useLocation } from '@reach/router';
+import { Link } from '@reach/router';
 import { Routes } from 'modules/routing';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import {
-  Authentication,
-  useAuthentication,
-  AuthenticationButtons,
-} from 'modules/authentication';
+import { Authentication, AuthenticationButtons } from 'modules/authentication';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Copyright } from 'shared/components';
 
@@ -34,24 +30,12 @@ export const AuthenticationForm: React.FC<Props> = ({
 }) => {
   const {
     register,
-    handleSubmit,
-    formState: { errors, dirtyFields, isDirty },
+    formState: { errors },
   } = useForm<Authentication>();
-  const { registerWithEmailPassword, loginWithEmailPassword } =
-    useAuthentication();
+
   const [showPassword, setShowPassword] = useState(false);
-  const { pathname } = useLocation();
   const handleClickShowPassword = () => setShowPassword(!showPassword);
-  console.log(pathname);
-  console.log({ errors, dirtyFields, isDirty });
-  const onSubmit = handleSubmit((data) => {
-    if (errors.email || errors.password) return;
-    const { email, password } = data;
-    pathname === Routes.Login
-      ? loginWithEmailPassword(email, password)
-      : registerWithEmailPassword(email, password);
-    console.log('Succes', email, password);
-  });
+
   return (
     <Box
       component="form"
@@ -115,7 +99,6 @@ export const AuthenticationForm: React.FC<Props> = ({
         label="Remember me"
       />
       <AuthenticationButtons
-        authenticationHandler={onSubmit}
         title={authenticationTitle}
         googleLogin
         facebookLogin
