@@ -50,7 +50,7 @@ export const Onboarding: React.FC = () => {
   };
 
   const onSubmit = handleSubmit((data: OnboardingData) => {
-    console.log('submit', data, userAvatar);
+    console.log('submit', { ...data, avatar: userAvatar });
   });
 
   return (
