@@ -16,7 +16,7 @@ export const Onboarding: React.FC = () => {
     formState: { errors },
   } = form;
 
-  console.log(getValues());
+  console.log(getValues(), { errors });
 
   const steps = ['PersonalData', 'Address'];
   const [activeStep, setActiveStep] = React.useState(0);
@@ -27,7 +27,6 @@ export const Onboarding: React.FC = () => {
   };
 
   const handleNext = () => {
-    if (errors.firstName || errors.lastName) return;
     console.log('ode dalje');
 
     let newSkipped = skipped;
