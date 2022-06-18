@@ -27,7 +27,7 @@ export const OnboardingNavigation: React.FC<Props> = ({
     <>
       {activeStep === steps.length ? (
         <>
-          <Typography sx={{ mt: 20, mb: 1 }}>
+          <Typography sx={{ mt: 2, mb: 1 }}>
             All steps completed - you&apos;re finished
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>

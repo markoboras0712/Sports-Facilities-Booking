@@ -18,7 +18,7 @@ export const OnboardingPreview: React.FC<Props> = ({ avatarPhoto }) => {
       justifyContent="center"
       alignItems="center"
     >
-      <Box height={200} width={250} sx={{ mb: 10 }}>
+      <Box height={100} width={150} sx={{ mb: 10 }}>
         <BigHead {...(avatarPhoto as any)} />
       </Box>
 
