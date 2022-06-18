@@ -12,9 +12,7 @@ export const OnboardingStepper: React.FC<Props> = ({
   steps,
   skipped,
 }) => {
-  const isStepSkipped = (step: number) => {
-    return skipped.has(step);
-  };
+  const isStepSkipped = (step: number) => skipped.has(step);
   return (
     <Stepper activeStep={activeStep} alternativeLabel>
       {steps.map((label, index) => {
@@ -22,10 +20,8 @@ export const OnboardingStepper: React.FC<Props> = ({
         const labelProps: {
           optional?: React.ReactNode;
         } = {};
+        if (isStepSkipped(index)) stepProps.completed = false;
 
-        if (isStepSkipped(index)) {
-          stepProps.completed = false;
-        }
         return (
           <Step key={label} {...stepProps}>
             <StepLabel {...labelProps}>{label}</StepLabel>

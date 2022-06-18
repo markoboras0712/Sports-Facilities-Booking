@@ -1,7 +1,6 @@
 export interface OnboardingData {
   firstName: string | null;
   lastName: string | null;
-  photoUrl?: string;
   avatar?: AvatarData;
   address: string | null;
   country?: string;

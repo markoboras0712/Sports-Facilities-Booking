@@ -28,11 +28,11 @@ export const OnboardingNavigation: React.FC<Props> = ({
       {activeStep === steps.length ? (
         <>
           <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&apos;re finished
+            Onboarding completed. Congratulations.
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Box sx={{ flex: '1 1 auto' }} />
-            <Button onClick={handleReset}>Reset</Button>
+            <Button onClick={handleReset}>Edit</Button>
             <Button ref={submitButtonRef} onClick={onSubmit}>
               Submit
             </Button>
