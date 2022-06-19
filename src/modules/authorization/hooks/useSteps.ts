@@ -1,11 +1,10 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { UseFormHandleSubmit } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
 import { OnboardingData } from '../models';
 import { settingsAtoms } from '../recoil';
 
-export const useSteps = () => {
-  const { handleSubmit } = useForm<OnboardingData>();
+export const useSteps = (handleSubmit: UseFormHandleSubmit<OnboardingData>) => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
   const setSettings = useSetRecoilState(settingsAtoms.settings);
