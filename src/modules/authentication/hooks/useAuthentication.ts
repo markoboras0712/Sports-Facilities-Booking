@@ -12,7 +12,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { settingsAtoms } from 'modules/authorization';
 import { auth, db, facebookProvider, googleProvider } from 'modules/firebase';
 import { Routes } from 'modules/routing';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { createNewUser, getSettings, userAtoms } from '../recoil';
 
 export const useAuthentication = () => {
@@ -22,10 +22,9 @@ export const useAuthentication = () => {
   const setSettings = useSetRecoilState(settingsAtoms.settings);
   const setRegisterError = useSetRecoilState(userAtoms.setRegisterError);
   const setLoginError = useSetRecoilState(userAtoms.setLoginError);
-  const registerError = useRecoilValue(userAtoms.registerError);
-  const loginError = useRecoilValue(userAtoms.loginError);
-
-  console.log({ registerError }, { loginError });
+  const setForgotPasswordError = useSetRecoilState(
+    userAtoms.setForgotPasswordError,
+  );
 
   const autoLogin = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -101,7 +100,7 @@ export const useAuthentication = () => {
       await sendPasswordResetEmail(auth, email);
       navigate(Routes.Login);
     } catch (error) {
-      if (error instanceof FirebaseError) setRegisterError(error.code);
+      if (error instanceof FirebaseError) setForgotPasswordError(error.code);
     }
   };
   const logout = async () => {

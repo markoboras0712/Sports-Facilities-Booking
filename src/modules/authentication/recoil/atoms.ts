@@ -83,6 +83,14 @@ const setLoginError = selector<FirebaseError['code'] | undefined>({
   },
 });
 
+const loginErrorCleanup = selector({
+  key: 'authentication.loginErrorCleanup',
+  get: () => null,
+  set: ({ reset }) => {
+    reset(loginError);
+  },
+});
+
 const registerError = atom<string | undefined>({
   key: 'authentication.registerError',
   default: undefined,
@@ -93,11 +101,41 @@ const setRegisterError = selector<FirebaseError['code'] | undefined>({
   get: () => undefined,
   set: ({ set }, errorType) => {
     if (errorType && !(errorType instanceof DefaultValue)) {
-      console.log({ errorType });
-
       if (errorType === 'auth/email-already-in-use')
         set(registerError, 'Email is already in use');
     }
+  },
+});
+
+const registerErrorCleanup = selector({
+  key: 'authentication.registerErrorCleanup',
+  get: () => null,
+  set: ({ reset }) => {
+    reset(registerError);
+  },
+});
+
+const forgotPasswordError = atom<string | undefined>({
+  key: 'authentication.forgotPasswordError',
+  default: undefined,
+});
+
+const setForgotPasswordError = selector<FirebaseError['code'] | undefined>({
+  key: 'authentication.setForgotPasswordError',
+  get: () => undefined,
+  set: ({ set }, errorType) => {
+    if (errorType && !(errorType instanceof DefaultValue)) {
+      if (errorType === 'auth/user-not-found')
+        set(forgotPasswordError, 'User not found');
+    }
+  },
+});
+
+const forgotPasswordErrorCleanup = selector({
+  key: 'authentication.forgotPasswordErrorCleanup',
+  get: () => null,
+  set: ({ reset }) => {
+    reset(forgotPasswordError);
   },
 });
 
@@ -109,4 +147,9 @@ export const userAtoms = {
   registerError,
   setRegisterError,
   setLoginError,
+  loginErrorCleanup,
+  forgotPasswordError,
+  setForgotPasswordError,
+  forgotPasswordErrorCleanup,
+  registerErrorCleanup,
 };

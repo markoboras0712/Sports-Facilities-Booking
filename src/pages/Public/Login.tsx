@@ -5,9 +5,15 @@ import {
   AuthenticationForm,
   AuthenticationLayout,
   SideRandomImage,
+  userAtoms,
 } from 'modules/authentication';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { CustomizedSnackbars } from 'shared/components';
 
 export const Login: React.FC = () => {
+  const loginError = useRecoilValue(userAtoms.loginError);
+  const errorCleanup = useSetRecoilState(userAtoms.loginErrorCleanup);
+
   return (
     <AuthenticationLayout>
       <SideRandomImage />
@@ -39,6 +45,11 @@ export const Login: React.FC = () => {
             authenticationTitle="Sign In"
             forgotPassword
             backToSignup
+          />
+          <CustomizedSnackbars
+            errorCleanup={errorCleanup}
+            snackbarMessage={loginError}
+            snackbarOpen={Boolean(loginError)}
           />
         </Box>
       </Grid>

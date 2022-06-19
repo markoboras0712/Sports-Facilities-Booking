@@ -4,9 +4,15 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import {
   AuthenticationForm,
   AuthenticationLayout,
+  userAtoms,
 } from 'modules/authentication';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { CustomizedSnackbars } from 'shared/components';
 
 export const SignUp: React.FC = () => {
+  const registerError = useRecoilValue(userAtoms.registerError);
+  const errorCleanup = useSetRecoilState(userAtoms.registerErrorCleanup);
+
   return (
     <AuthenticationLayout>
       <Grid
@@ -36,6 +42,11 @@ export const SignUp: React.FC = () => {
             authenticationTitle="Sign Up"
             forgotPassword
             backToLogin
+          />
+          <CustomizedSnackbars
+            errorCleanup={errorCleanup}
+            snackbarMessage={registerError}
+            snackbarOpen={Boolean(registerError)}
           />
         </Box>
       </Grid>

@@ -15,9 +15,11 @@ import { Routes } from 'modules/routing';
 import {
   AuthenticationLayout,
   useAuthentication,
+  userAtoms,
 } from 'modules/authentication';
-import { Copyright } from 'shared/components';
+import { Copyright, CustomizedSnackbars } from 'shared/components';
 import { useForm } from 'react-hook-form';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 export const ForgotPassword: React.FC = () => {
   const {
@@ -26,6 +28,8 @@ export const ForgotPassword: React.FC = () => {
     formState: { errors },
   } = useForm<{ email: string }>();
   const { resetPassword } = useAuthentication();
+  const forgotPasswordError = useRecoilValue(userAtoms.forgotPasswordError);
+  const errorCleanup = useSetRecoilState(userAtoms.forgotPasswordErrorCleanup);
 
   const onSubmit = handleSubmit(({ email }) => {
     resetPassword(email);
@@ -94,6 +98,11 @@ export const ForgotPassword: React.FC = () => {
           </Box>
         </Box>
         <Copyright mt={8} />
+        <CustomizedSnackbars
+          errorCleanup={errorCleanup}
+          snackbarMessage={forgotPasswordError}
+          snackbarOpen={Boolean(forgotPasswordError)}
+        />
       </Grid>
     </AuthenticationLayout>
   );
