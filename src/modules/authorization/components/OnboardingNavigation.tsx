@@ -1,6 +1,8 @@
 import { Box, Button, Typography } from '@mui/material';
 import { useSubmitOnEnter } from 'shared/hooks';
 import React from 'react';
+import { useForm } from 'react-hook-form';
+import { OnboardingData } from '../models';
 
 interface Props {
   steps: string[];
@@ -22,6 +24,9 @@ export const OnboardingNavigation: React.FC<Props> = ({
   onSubmit,
 }) => {
   const submitButtonRef = useSubmitOnEnter();
+  const form = useForm<OnboardingData>();
+  console.log(form.formState.errors);
+  console.log(form.getValues());
 
   return (
     <>
@@ -33,7 +38,7 @@ export const OnboardingNavigation: React.FC<Props> = ({
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Box sx={{ flex: '1 1 auto' }} />
             <Button onClick={handleReset}>Edit</Button>
-            <Button ref={submitButtonRef} onClick={onSubmit}>
+            <Button ref={submitButtonRef} onSubmit={onSubmit}>
               Submit
             </Button>
           </Box>

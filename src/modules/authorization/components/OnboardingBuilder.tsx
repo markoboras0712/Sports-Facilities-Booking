@@ -13,18 +13,41 @@ import {
   settingsAtoms,
   steps,
 } from 'modules/authorization';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { updateUser, userAtoms } from 'modules/authentication';
-import { useSteps } from '../hooks';
 
 export const OnboardingBuilder: React.FC = () => {
   const form = useForm<OnboardingData>();
-  const { handleSubmit } = form;
+  const {
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = form;
   const userAvatar = React.useMemo<AvatarData>(() => getRandomOptions(), []);
   const user = useRecoilValue(userAtoms.user);
   const settings = useRecoilValue(settingsAtoms.settings);
-  const { activeStep, skipped, handleBack, handleNext, handleReset } =
-    useSteps();
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [skipped, setSkipped] = React.useState(new Set<number>());
+  const setSettings = useSetRecoilState(settingsAtoms.settings);
+
+  const isStepSkipped = (step: number) => skipped.has(step);
+  const handleNext = handleSubmit((data: OnboardingData) => {
+    console.log('clicked', { errors }, getValues());
+
+    setSettings(data);
+    let newSkipped = skipped;
+    if (isStepSkipped(activeStep)) {
+      newSkipped = new Set(newSkipped.values());
+      newSkipped.delete(activeStep);
+    }
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setSkipped(newSkipped);
+  });
+
+  const handleBack = () =>
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+
+  const handleReset = () => setActiveStep(0);
 
   const onSubmit = handleSubmit((data: OnboardingData) => {
     const onboardingData: OnboardingData = { ...data, avatar: userAvatar };

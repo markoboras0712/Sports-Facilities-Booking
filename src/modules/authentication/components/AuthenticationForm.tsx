@@ -39,10 +39,13 @@ export const AuthenticationForm: React.FC<Props> = ({
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<Authentication>();
   const { loginWithEmailPassword, registerWithEmailPassword } =
     useAuthentication();
+  console.log('form values', getValues());
+  console.log('form errors', errors);
 
   const onSubmit = handleSubmit((data: Authentication) => {
     const { email, password } = data;
