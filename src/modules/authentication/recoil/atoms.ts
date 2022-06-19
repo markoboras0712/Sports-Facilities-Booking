@@ -1,3 +1,4 @@
+import { FirebaseError } from 'firebase/app';
 import { atom, DefaultValue, selector } from 'recoil';
 import { User } from '../models';
 
@@ -60,9 +61,44 @@ const loginError = atom<string | undefined>({
   default: undefined,
 });
 
+const setLoginError = selector<FirebaseError['code'] | undefined>({
+  key: 'authentication.setLoginError',
+  get: () => undefined,
+  set: ({ set }, errorType) => {
+    if (errorType && !(errorType instanceof DefaultValue)) {
+      console.log({ errorType });
+
+      if (errorType === 'auth/wrong-password')
+        set(loginError, 'Wrong password');
+
+      if (errorType === 'auth/cancelled-popup-request')
+        set(loginError, 'Login cancelled');
+
+      if (errorType === 'auth/account-exists-with-different-credential')
+        set(loginError, 'Account exists with different credential');
+
+      if (errorType === 'auth/user-not-found')
+        set(loginError, 'User not found');
+    }
+  },
+});
+
 const registerError = atom<string | undefined>({
   key: 'authentication.registerError',
   default: undefined,
+});
+
+const setRegisterError = selector<FirebaseError['code'] | undefined>({
+  key: 'authentication.setRegisterError',
+  get: () => undefined,
+  set: ({ set }, errorType) => {
+    if (errorType && !(errorType instanceof DefaultValue)) {
+      console.log({ errorType });
+
+      if (errorType === 'auth/email-already-in-use')
+        set(registerError, 'Email is already in use');
+    }
+  },
 });
 
 export const userAtoms = {
@@ -71,4 +107,6 @@ export const userAtoms = {
   isLoggedIn,
   loginError,
   registerError,
+  setRegisterError,
+  setLoginError,
 };

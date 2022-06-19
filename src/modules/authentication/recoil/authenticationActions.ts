@@ -1,4 +1,5 @@
 import { navigate } from '@reach/router';
+import { FirebaseError } from 'firebase/app';
 import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -29,7 +30,10 @@ export const signUpWithEmailPassword = async (
     const newUserRef = doc(db, uid, 'settings');
     await setDoc(newUserRef, { email, creationTime });
     navigate(Routes.Onboarding);
-  } catch (error) {
+  } catch (error: unknown) {
+    if (error instanceof FirebaseError) {
+      console.log('firebaseError', { error });
+    }
     console.log('SIGN-UP ERROR', { error });
     throw new Error('Didng signup');
   }

@@ -1,23 +1,31 @@
-import { onAuthStateChanged } from 'firebase/auth';
-import { settingsAtoms } from 'modules/authorization';
-import { auth } from 'modules/firebase';
-import { useSetRecoilState } from 'recoil';
+import { navigate } from '@reach/router';
+import { FirebaseError } from 'firebase/app';
 import {
-  getSettings,
-  logout,
-  sendPasswordReset,
-  signInWithEmailPassword,
-  signInWithFacebook,
-  signInWithGoogle,
-  signUpWithEmailPassword,
-  userAtoms,
-} from '../recoil';
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+} from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { settingsAtoms } from 'modules/authorization';
+import { auth, db, facebookProvider, googleProvider } from 'modules/firebase';
+import { Routes } from 'modules/routing';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { createNewUser, getSettings, userAtoms } from '../recoil';
 
 export const useAuthentication = () => {
   const userCleanup = useSetRecoilState(userAtoms.userCleanup);
   const settingsCleanup = useSetRecoilState(settingsAtoms.settingsCleanup);
   const setUser = useSetRecoilState(userAtoms.user);
   const setSettings = useSetRecoilState(settingsAtoms.settings);
+  const setRegisterError = useSetRecoilState(userAtoms.setRegisterError);
+  const setLoginError = useSetRecoilState(userAtoms.setLoginError);
+  const registerError = useRecoilValue(userAtoms.registerError);
+  const loginError = useRecoilValue(userAtoms.loginError);
+
+  console.log({ registerError }, { loginError });
 
   const autoLogin = () => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -38,16 +46,72 @@ export const useAuthentication = () => {
     });
   };
 
-  const registerWithEmailPassword = (email: string, password: string) =>
-    signUpWithEmailPassword(email, password);
+  const registerWithEmailPassword = async (
+    email1: string,
+    password: string,
+  ) => {
+    try {
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        email1,
+        password,
+      );
+      const {
+        email,
+        metadata: { creationTime },
+        uid,
+      } = response.user;
+      const newUserRef = doc(db, uid, 'settings');
+      await setDoc(newUserRef, { email, creationTime });
+      navigate(Routes.Onboarding);
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) setRegisterError(error.code);
+    }
+  };
 
-  const loginWithEmailPassword = (email: string, password: string) =>
-    signInWithEmailPassword(email, password);
-  const loginWithGoogle = () => signInWithGoogle();
-  const loginWithFacebook = () => signInWithFacebook();
+  const loginWithEmailPassword = async (email: string, password: string) => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate(Routes.AvailableObjects);
+    } catch (error) {
+      if (error instanceof FirebaseError) setLoginError(error.code);
+    }
+  };
 
-  const resetPassword = (email: string) => sendPasswordReset(email);
-  const logoutUser = () => logout();
+  const loginWithGoogle = async () => {
+    try {
+      const { user } = await signInWithPopup(auth, googleProvider);
+      await createNewUser(user);
+    } catch (error) {
+      if (error instanceof FirebaseError) setLoginError(error.code);
+    }
+  };
+
+  const loginWithFacebook = async () => {
+    try {
+      const { user } = await signInWithPopup(auth, facebookProvider);
+      await createNewUser(user);
+    } catch (error) {
+      if (error instanceof FirebaseError) setLoginError(error.code);
+    }
+  };
+
+  const resetPassword = async (email: string) => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+      navigate(Routes.Login);
+    } catch (error) {
+      if (error instanceof FirebaseError) setRegisterError(error.code);
+    }
+  };
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      navigate(Routes.Login);
+    } catch (error) {
+      if (error instanceof FirebaseError) setRegisterError(error.code);
+    }
+  };
 
   return {
     autoLogin,
@@ -56,6 +120,6 @@ export const useAuthentication = () => {
     resetPassword,
     loginWithGoogle,
     loginWithFacebook,
-    logoutUser,
+    logout,
   };
 };

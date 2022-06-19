@@ -3,12 +3,12 @@ import { useAuthentication } from 'modules/authentication';
 import React from 'react';
 
 export const AvailableFacilities: React.FC = () => {
-  const { logoutUser } = useAuthentication();
+  const { logout } = useAuthentication();
   return (
     <>
       Available Facilities
       <Button
-        onClick={() => logoutUser()}
+        onClick={() => logout()}
         type="submit"
         fullWidth
         variant="contained"

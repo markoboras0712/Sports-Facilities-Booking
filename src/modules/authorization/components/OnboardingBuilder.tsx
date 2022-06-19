@@ -20,11 +20,11 @@ import { useSteps } from '../hooks';
 export const OnboardingBuilder: React.FC = () => {
   const form = useForm<OnboardingData>();
   const { handleSubmit } = form;
+  const { activeStep, skipped, handleBack, handleNext, handleReset } =
+    useSteps(handleSubmit);
   const userAvatar = React.useMemo<AvatarData>(() => getRandomOptions(), []);
   const user = useRecoilValue(userAtoms.user);
   const settings = useRecoilValue(settingsAtoms.settings);
-  const { activeStep, skipped, handleBack, handleNext, handleReset } =
-    useSteps(handleSubmit);
 
   const onSubmit = handleSubmit((data: OnboardingData) => {
     const onboardingData: OnboardingData = { ...data, avatar: userAvatar };

@@ -11,8 +11,6 @@ export const useSteps = (handleSubmit: UseFormHandleSubmit<OnboardingData>) => {
 
   const isStepSkipped = (step: number) => skipped.has(step);
   const handleNext = handleSubmit((data: OnboardingData) => {
-    console.log('clicked');
-
     setSettings(data);
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
