@@ -10,7 +10,7 @@ interface Props {
   facebookLogin?: boolean;
   title: string;
   onSubmit: (
-    e?: React.BaseSyntheticEvent<object, any, any> | undefined,
+    e?: React.BaseSyntheticEvent<object, unknown, unknown> | undefined,
   ) => Promise<void>;
 }
 
@@ -22,7 +22,6 @@ export const AuthenticationButtons: React.FC<Props> = ({
 }) => {
   const { handleSubmit } = useForm<Authentication>();
   const { loginWithFacebook, loginWithGoogle } = useAuthentication();
-
   const googleHandler = handleSubmit(() => loginWithGoogle());
   const facebookHandler = handleSubmit(() => loginWithFacebook());
 

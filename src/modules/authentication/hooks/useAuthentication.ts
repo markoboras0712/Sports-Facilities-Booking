@@ -10,24 +10,31 @@ import {
 } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { settingsAtoms } from 'modules/authorization';
-import { auth, db, facebookProvider, googleProvider } from 'modules/firebase';
+import {
+  auth,
+  db,
+  facebookProvider,
+  googleProvider,
+  useFirestore,
+} from 'modules/firebase';
 import { Routes } from 'modules/routing';
 import { useSetRecoilState } from 'recoil';
-import { createNewUser, getSettings, userAtoms } from '../recoil';
+import { userSelectors } from '../store';
 
 export const useAuthentication = () => {
-  const userCleanup = useSetRecoilState(userAtoms.userCleanup);
+  const { createNewUser, getSettings } = useFirestore();
+  const userCleanup = useSetRecoilState(userSelectors.userCleanup);
   const settingsCleanup = useSetRecoilState(settingsAtoms.settingsCleanup);
-  const setUser = useSetRecoilState(userAtoms.user);
+  const setUser = useSetRecoilState(userSelectors.user);
   const setSettings = useSetRecoilState(settingsAtoms.settings);
-  const setRegisterError = useSetRecoilState(userAtoms.setRegisterError);
-  const setLoginError = useSetRecoilState(userAtoms.setLoginError);
+  const setRegisterError = useSetRecoilState(userSelectors.setRegisterError);
+  const setLoginError = useSetRecoilState(userSelectors.setLoginError);
   const setForgotPasswordError = useSetRecoilState(
-    userAtoms.setForgotPasswordError,
+    userSelectors.setForgotPasswordError,
   );
 
   const autoLogin = () => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async user => {
       if (user) {
         const settings = await getSettings(user.uid);
         if (settings) setSettings(settings);
@@ -103,6 +110,7 @@ export const useAuthentication = () => {
       if (error instanceof FirebaseError) setForgotPasswordError(error.code);
     }
   };
+
   const logout = async () => {
     try {
       await signOut(auth);

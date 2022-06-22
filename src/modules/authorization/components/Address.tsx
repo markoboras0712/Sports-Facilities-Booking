@@ -2,13 +2,15 @@ import { Autocomplete, Box, Grid, TextField, Typography } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { countries, OnboardingData } from 'modules/authorization';
+import { OnboardingData } from 'modules/authorization';
+import { countries } from 'const';
 
 export const Address: React.FC = () => {
   const {
     register,
     formState: { errors },
   } = useFormContext<OnboardingData>();
+
   return (
     <Grid
       container
@@ -39,7 +41,7 @@ export const Address: React.FC = () => {
           options={countries}
           limitTags={1}
           autoHighlight
-          getOptionLabel={(option) => option.label}
+          getOptionLabel={option => option.label}
           renderOption={(props, option) => (
             <Box
               component="li"
@@ -56,7 +58,7 @@ export const Address: React.FC = () => {
               {option.label} ({option.code}) +{option.phone}
             </Box>
           )}
-          renderInput={(params) => (
+          renderInput={params => (
             <TextField
               {...params}
               {...register('country', {

@@ -15,7 +15,7 @@ import { Routes } from 'modules/routing';
 import {
   AuthenticationLayout,
   useAuthentication,
-  userAtoms,
+  userSelectors,
 } from 'modules/authentication';
 import { Copyright, CustomizedSnackbars } from 'shared/components';
 import { useForm } from 'react-hook-form';
@@ -28,8 +28,10 @@ export const ForgotPassword: React.FC = () => {
     formState: { errors },
   } = useForm<{ email: string }>();
   const { resetPassword } = useAuthentication();
-  const forgotPasswordError = useRecoilValue(userAtoms.forgotPasswordError);
-  const errorCleanup = useSetRecoilState(userAtoms.forgotPasswordErrorCleanup);
+  const forgotPasswordError = useRecoilValue(userSelectors.forgotPasswordError);
+  const errorCleanup = useSetRecoilState(
+    userSelectors.forgotPasswordErrorCleanup,
+  );
 
   const onSubmit = handleSubmit(({ email }) => {
     resetPassword(email);

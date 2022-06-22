@@ -1,37 +1,30 @@
 import { FirebaseError } from 'firebase/app';
-import { atom, DefaultValue, selector } from 'recoil';
+import { DefaultValue, selector } from 'recoil';
 import { User } from '../models';
-
-const email = atom<string | null>({
-  key: 'authentication.user.email',
-  default: null,
-});
-
-const userUid = atom<string | null>({
-  key: 'authentication.user.uid',
-  default: null,
-});
-
-const creationTime = atom<string | undefined>({
-  key: 'authentication.user.creationTime',
-  default: undefined,
-});
+import {
+  creationTimeAtom,
+  emailAtom,
+  forgotPasswordError,
+  loginError,
+  registerError,
+  userUidAtom,
+} from './atoms';
 
 const user = selector<User | null>({
   key: 'authentication.user',
   get: ({ get }) => {
     const userData: User = {
-      userUid: get(userUid),
-      email: get(email),
-      creationTime: get(creationTime),
+      userUid: get(userUidAtom),
+      email: get(emailAtom),
+      creationTime: get(creationTimeAtom),
     };
     return userData;
   },
   set: ({ set }, user) => {
     if (user && !(user instanceof DefaultValue)) {
-      set(email, user.email);
-      set(userUid, user.userUid);
-      set(creationTime, user.creationTime);
+      set(emailAtom, user.email);
+      set(userUidAtom, user.userUid);
+      set(creationTimeAtom, user.creationTime);
     }
   },
 });
@@ -40,25 +33,20 @@ const userCleanup = selector({
   key: 'authentication.logout',
   get: () => null,
   set: ({ reset }) => {
-    reset(email);
-    reset(userUid);
-    reset(creationTime);
+    reset(emailAtom);
+    reset(userUidAtom);
+    reset(creationTimeAtom);
   },
 });
 
 const isLoggedIn = selector({
   key: 'authentication.isLoggedIn',
   get: ({ get }) => {
-    if (get(email)) return true;
-    if (get(email) === null) return false;
+    if (get(emailAtom)) return true;
+    if (get(emailAtom) === null) return false;
 
-    return get(email);
+    return get(emailAtom);
   },
-});
-
-const loginError = atom<string | undefined>({
-  key: 'authentication.loginError',
-  default: undefined,
 });
 
 const setLoginError = selector<FirebaseError['code'] | undefined>({
@@ -91,11 +79,6 @@ const loginErrorCleanup = selector({
   },
 });
 
-const registerError = atom<string | undefined>({
-  key: 'authentication.registerError',
-  default: undefined,
-});
-
 const setRegisterError = selector<FirebaseError['code'] | undefined>({
   key: 'authentication.setRegisterError',
   get: () => undefined,
@@ -113,11 +96,6 @@ const registerErrorCleanup = selector({
   set: ({ reset }) => {
     reset(registerError);
   },
-});
-
-const forgotPasswordError = atom<string | undefined>({
-  key: 'authentication.forgotPasswordError',
-  default: undefined,
 });
 
 const setForgotPasswordError = selector<FirebaseError['code'] | undefined>({
@@ -139,7 +117,7 @@ const forgotPasswordErrorCleanup = selector({
   },
 });
 
-export const userAtoms = {
+export const userSelectors = {
   user,
   userCleanup,
   isLoggedIn,

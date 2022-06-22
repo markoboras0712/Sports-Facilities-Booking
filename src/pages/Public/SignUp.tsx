@@ -4,14 +4,14 @@ import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import {
   AuthenticationForm,
   AuthenticationLayout,
-  userAtoms,
+  userSelectors,
 } from 'modules/authentication';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { CustomizedSnackbars } from 'shared/components';
 
 export const SignUp: React.FC = () => {
-  const registerError = useRecoilValue(userAtoms.registerError);
-  const errorCleanup = useSetRecoilState(userAtoms.registerErrorCleanup);
+  const registerError = useRecoilValue(userSelectors.registerError);
+  const errorCleanup = useSetRecoilState(userSelectors.registerErrorCleanup);
 
   return (
     <AuthenticationLayout>
