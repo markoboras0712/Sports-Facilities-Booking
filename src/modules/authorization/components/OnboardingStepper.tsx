@@ -13,6 +13,7 @@ export const OnboardingStepper: React.FC<Props> = ({
   skipped,
 }) => {
   const isStepSkipped = (step: number) => skipped.has(step);
+
   return (
     <Stepper activeStep={activeStep} alternativeLabel>
       {steps.map((label, index) => {

@@ -5,14 +5,14 @@ import {
   AuthenticationForm,
   AuthenticationLayout,
   SideRandomImage,
-  userAtoms,
+  userSelectors,
 } from 'modules/authentication';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { CustomizedSnackbars } from 'shared/components';
 
 export const Login: React.FC = () => {
-  const loginError = useRecoilValue(userAtoms.loginError);
-  const errorCleanup = useSetRecoilState(userAtoms.loginErrorCleanup);
+  const loginError = useRecoilValue(userSelectors.loginError);
+  const errorCleanup = useSetRecoilState(userSelectors.loginErrorCleanup);
 
   return (
     <AuthenticationLayout>

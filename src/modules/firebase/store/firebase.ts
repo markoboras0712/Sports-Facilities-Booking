@@ -24,7 +24,7 @@ export const facebookProvider = new FacebookAuthProvider();
 
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 
-enableIndexedDbPersistence(db).catch((err) => {
+enableIndexedDbPersistence(db).catch(err => {
   if (err.code == 'failed-precondition') {
     console.log('error code', err);
   } else if (err.code == 'unimplemented') {

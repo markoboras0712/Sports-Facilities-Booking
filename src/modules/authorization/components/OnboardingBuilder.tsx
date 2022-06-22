@@ -11,19 +11,21 @@ import {
   OnboardingPreview,
   OnboardingNavigation,
   settingsAtoms,
-  steps,
 } from 'modules/authorization';
+import { steps } from 'const';
 import { useRecoilValue } from 'recoil';
-import { updateUser, userAtoms } from 'modules/authentication';
+import { userSelectors } from 'modules/authentication';
 import { useSteps } from '../hooks';
+import { useFirestore } from 'modules/firebase';
 
 export const OnboardingBuilder: React.FC = () => {
+  const { updateUser } = useFirestore();
   const form = useForm<OnboardingData>();
   const { handleSubmit } = form;
   const { activeStep, skipped, handleBack, handleNext, handleReset } =
     useSteps(handleSubmit);
   const userAvatar = React.useMemo<AvatarData>(() => getRandomOptions(), []);
-  const user = useRecoilValue(userAtoms.user);
+  const user = useRecoilValue(userSelectors.user);
   const settings = useRecoilValue(settingsAtoms.settings);
 
   const onSubmit = handleSubmit((data: OnboardingData) => {
