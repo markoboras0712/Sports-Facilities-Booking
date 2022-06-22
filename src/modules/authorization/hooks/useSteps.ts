@@ -1,10 +1,14 @@
+import { userSelectors } from 'modules/authentication';
+import { useFirestore } from 'modules/firebase';
 import React from 'react';
 import { UseFormHandleSubmit } from 'react-hook-form';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { OnboardingData } from '../models';
 import { settingsAtoms } from '../store';
 
 export const useSteps = (handleSubmit: UseFormHandleSubmit<OnboardingData>) => {
+  const { updateUser } = useFirestore();
+  const user = useRecoilValue(userSelectors.user);
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
   const setSettings = useSetRecoilState(settingsAtoms.settings);
@@ -18,6 +22,7 @@ export const useSteps = (handleSubmit: UseFormHandleSubmit<OnboardingData>) => {
       newSkipped.delete(activeStep);
     }
     setActiveStep(prevActiveStep => prevActiveStep + 1);
+    if (user?.userUid) updateUser(user.userUid, data);
     setSkipped(newSkipped);
   });
 

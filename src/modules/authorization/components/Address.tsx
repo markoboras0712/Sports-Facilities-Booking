@@ -30,6 +30,7 @@ export const Address: React.FC = () => {
             required: 'Address is required.',
           })}
           required
+          InputLabelProps={{ shrink: true }}
           fullWidth
           error={errors.address !== undefined}
           id="address"
@@ -69,6 +70,7 @@ export const Address: React.FC = () => {
                 required: 'Country is required.',
               })}
               required
+              InputLabelProps={{ shrink: true }}
               error={errors.country !== undefined}
               helperText={errors.country?.message}
               label="Choose a country"
@@ -85,6 +87,7 @@ export const Address: React.FC = () => {
           })}
           required
           fullWidth
+          InputLabelProps={{ shrink: true }}
           error={errors.city !== undefined}
           id="city"
           helperText={errors.city?.message}
@@ -95,6 +98,7 @@ export const Address: React.FC = () => {
           margin="normal"
           {...register('postalCode')}
           fullWidth
+          InputLabelProps={{ shrink: true }}
           id="postalCode"
           label="Postal Code"
           autoFocus

@@ -1,10 +1,8 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { Container } from '@mui/material';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
-  AvatarData,
   OnboardingData,
-  getRandomOptions,
   OnboardingStepper,
   UserInfo,
   Address,
@@ -17,23 +15,28 @@ import { useRecoilValue } from 'recoil';
 import { userSelectors } from 'modules/authentication';
 import { useSteps } from '../hooks';
 import { useFirestore } from 'modules/firebase';
+import { navigate } from '@reach/router';
+import { Routes } from 'modules/routing';
 
 export const OnboardingBuilder: React.FC = () => {
+  const user = useRecoilValue(userSelectors.user);
+  const settings = useRecoilValue(settingsAtoms.settings);
   const { updateUser } = useFirestore();
   const form = useForm<OnboardingData>();
   const { handleSubmit } = form;
   const { activeStep, skipped, handleBack, handleNext, handleReset } =
     useSteps(handleSubmit);
-  const userAvatar = React.useMemo<AvatarData>(() => getRandomOptions(), []);
-  const user = useRecoilValue(userSelectors.user);
-  const settings = useRecoilValue(settingsAtoms.settings);
 
   const onSubmit = handleSubmit((data: OnboardingData) => {
-    const onboardingData: OnboardingData = { ...data, avatar: userAvatar };
     if (user?.userUid && settings) {
-      updateUser(user.userUid, onboardingData);
+      updateUser(user.userUid, data);
+      navigate(Routes.AvailableObjects);
     }
   });
+
+  useEffect(() => {
+    if (settings) form.reset(settings);
+  }, [user]);
 
   return (
     <FormProvider {...form}>
@@ -44,10 +47,10 @@ export const OnboardingBuilder: React.FC = () => {
           steps={steps}
         />
         <Container component="main" maxWidth="xl">
-          {activeStep === 0 && <UserInfo avatarPhoto={userAvatar} />}
+          {activeStep === 0 && <UserInfo avatarPhoto={settings?.avatar} />}
           {activeStep === 1 && <Address />}
           {activeStep === steps.length && (
-            <OnboardingPreview avatarPhoto={userAvatar} />
+            <OnboardingPreview avatarPhoto={settings?.avatar} />
           )}
         </Container>
         <OnboardingNavigation

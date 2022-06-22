@@ -16,7 +16,7 @@ export const useFirestoreUtilities = <T>() => {
     doc(db, uid, documentName);
   const getCollectionSnapshot = (uid: string) => getDocs(collection(db, uid));
 
-  const writeToDocument = async (
+  const setUserCollection = async (
     documentReference: DocumentReference<DocumentData>,
     data: Omit<T, 'id'>,
     merge?: boolean,
@@ -35,7 +35,7 @@ export const useFirestoreUtilities = <T>() => {
   return {
     getCollectionReference,
     getDocumentReference,
-    writeToDocument,
+    setUserCollection,
     getCollectionSnapshot,
     collectionAlreadyExists,
     isOnboardingData,

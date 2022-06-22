@@ -35,6 +35,7 @@ export const UserInfo: React.FC<Props> = ({ avatarPhoto }) => {
           })}
           required
           fullWidth
+          InputLabelProps={{ shrink: true }}
           error={errors.firstName !== undefined}
           id="firstName"
           helperText={errors.firstName?.message}
@@ -48,6 +49,7 @@ export const UserInfo: React.FC<Props> = ({ avatarPhoto }) => {
           })}
           required
           fullWidth
+          InputLabelProps={{ shrink: true }}
           error={errors.lastName !== undefined}
           id="lastName"
           helperText={errors.lastName?.message}

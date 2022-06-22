@@ -54,8 +54,6 @@ const setLoginError = selector<FirebaseError['code'] | undefined>({
   get: () => undefined,
   set: ({ set }, errorType) => {
     if (errorType && !(errorType instanceof DefaultValue)) {
-      console.log({ errorType });
-
       if (errorType === 'auth/wrong-password')
         set(loginError, 'Wrong password');
 

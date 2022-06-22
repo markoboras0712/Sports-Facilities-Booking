@@ -1,9 +1,10 @@
 import { atom } from 'recoil';
+import { getRandomOptions } from '../hooks';
 import { AvatarData } from '../models';
 
 export const avatarAtom = atom<AvatarData | undefined>({
   key: 'authorization.user.avatar',
-  default: undefined,
+  default: getRandomOptions(),
 });
 
 export const firstNameAtom = atom<string | null>({

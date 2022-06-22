@@ -21,7 +21,7 @@ import { useSetRecoilState } from 'recoil';
 import { userSelectors } from '../store';
 
 export const useAuthentication = () => {
-  const { getDocumentReference, writeToDocument } = useFirestoreUtilities();
+  const { getDocumentReference, setUserCollection } = useFirestoreUtilities();
   const { createUserWithSocialMedia, getSettings } = useFirestore();
   const userCleanup = useSetRecoilState(userSelectors.userCleanup);
   const settingsCleanup = useSetRecoilState(settingsAtoms.settingsCleanup);
@@ -37,6 +37,7 @@ export const useAuthentication = () => {
     const unsubscribe = onAuthStateChanged(auth, async user => {
       if (user) {
         const settings = await getSettings(user.uid);
+        console.log(settings?.avatar);
         if (settings) setSettings(settings);
         setUser({
           email: user.email,
@@ -68,7 +69,10 @@ export const useAuthentication = () => {
         uid,
       } = response.user;
       const settingsDocumentReference = getDocumentReference(uid, 'settings');
-      await writeToDocument(settingsDocumentReference, { email, creationTime });
+      await setUserCollection(settingsDocumentReference, {
+        email,
+        creationTime,
+      });
       navigate(Routes.Onboarding);
     } catch (error: unknown) {
       if (error instanceof FirebaseError) setRegisterError(error.code);

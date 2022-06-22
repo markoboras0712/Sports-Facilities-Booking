@@ -11,7 +11,7 @@ export const useFirestore = () => {
     getCollectionSnapshot,
     collectionAlreadyExists,
     getDocumentReference,
-    writeToDocument,
+    setUserCollection,
     isOnboardingData,
   } = useFirestoreUtilities();
 
@@ -27,7 +27,7 @@ export const useFirestore = () => {
     }
     try {
       const documentReference = getDocumentReference(user.uid, 'settings');
-      await writeToDocument(documentReference, { email, creationTime });
+      await setUserCollection(documentReference, { email, creationTime });
       navigate(Routes.Onboarding);
     } catch (error) {
       console.log(error);
@@ -40,8 +40,7 @@ export const useFirestore = () => {
   ) => {
     try {
       const documentReference = getDocumentReference(userUid, 'settings');
-      await writeToDocument(documentReference, onboardingData, true);
-      navigate(Routes.AvailableObjects);
+      await setUserCollection(documentReference, onboardingData, true);
     } catch (error) {
       console.log(error);
     }
