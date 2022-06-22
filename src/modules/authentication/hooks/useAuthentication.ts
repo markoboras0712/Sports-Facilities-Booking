@@ -8,21 +8,21 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
 import { settingsAtoms } from 'modules/authorization';
 import {
   auth,
-  db,
   facebookProvider,
   googleProvider,
   useFirestore,
+  useFirestoreUtilities,
 } from 'modules/firebase';
 import { Routes } from 'modules/routing';
 import { useSetRecoilState } from 'recoil';
 import { userSelectors } from '../store';
 
 export const useAuthentication = () => {
-  const { createNewUser, getSettings } = useFirestore();
+  const { getDocumentReference, writeToDocument } = useFirestoreUtilities();
+  const { createUserWithSocialMedia, getSettings } = useFirestore();
   const userCleanup = useSetRecoilState(userSelectors.userCleanup);
   const settingsCleanup = useSetRecoilState(settingsAtoms.settingsCleanup);
   const setUser = useSetRecoilState(userSelectors.user);
@@ -67,8 +67,8 @@ export const useAuthentication = () => {
         metadata: { creationTime },
         uid,
       } = response.user;
-      const newUserRef = doc(db, uid, 'settings');
-      await setDoc(newUserRef, { email, creationTime });
+      const settingsDocumentReference = getDocumentReference(uid, 'settings');
+      await writeToDocument(settingsDocumentReference, { email, creationTime });
       navigate(Routes.Onboarding);
     } catch (error: unknown) {
       if (error instanceof FirebaseError) setRegisterError(error.code);
@@ -87,7 +87,7 @@ export const useAuthentication = () => {
   const loginWithGoogle = async () => {
     try {
       const { user } = await signInWithPopup(auth, googleProvider);
-      await createNewUser(user);
+      await createUserWithSocialMedia(user);
     } catch (error) {
       if (error instanceof FirebaseError) setLoginError(error.code);
     }
@@ -96,7 +96,7 @@ export const useAuthentication = () => {
   const loginWithFacebook = async () => {
     try {
       const { user } = await signInWithPopup(auth, facebookProvider);
-      await createNewUser(user);
+      await createUserWithSocialMedia(user);
     } catch (error) {
       if (error instanceof FirebaseError) setLoginError(error.code);
     }

@@ -30,7 +30,9 @@ export const OnboardingBuilder: React.FC = () => {
 
   const onSubmit = handleSubmit((data: OnboardingData) => {
     const onboardingData: OnboardingData = { ...data, avatar: userAvatar };
-    if (user?.userUid && settings) updateUser(user.userUid, onboardingData);
+    if (user?.userUid && settings) {
+      updateUser(user.userUid, onboardingData);
+    }
   });
 
   return (
