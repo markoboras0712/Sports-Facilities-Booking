@@ -9,6 +9,7 @@ export const Address: React.FC = () => {
   const {
     register,
     formState: { errors },
+    getValues,
   } = useFormContext<OnboardingData>();
 
   return (
@@ -42,6 +43,9 @@ export const Address: React.FC = () => {
           limitTags={1}
           autoHighlight
           getOptionLabel={option => option.label}
+          defaultValue={countries.find(
+            country => country.label === getValues().country,
+          )}
           renderOption={(props, option) => (
             <Box
               component="li"
@@ -70,7 +74,6 @@ export const Address: React.FC = () => {
               label="Choose a country"
               inputProps={{
                 ...params.inputProps,
-                autoComplete: 'new-password', // disable autocomplete and autofill
               }}
             />
           )}

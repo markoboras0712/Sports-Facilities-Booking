@@ -38,7 +38,7 @@ export const OnboardingNavigation: React.FC<Props> = ({
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Box sx={{ flex: '1 1 auto' }} />
             <Button onClick={handleReset}>Edit</Button>
-            <Button ref={submitButtonRef} onSubmit={onSubmit}>
+            <Button ref={submitButtonRef} onClick={onSubmit}>
               Submit
             </Button>
           </Box>
