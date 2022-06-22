@@ -4,14 +4,14 @@ import React from 'react';
 import { UseFormHandleSubmit } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { OnboardingData } from '../models';
-import { settingsAtoms } from '../store';
+import { settingsSelector } from '../store';
 
 export const useSteps = (handleSubmit: UseFormHandleSubmit<OnboardingData>) => {
   const { updateUser } = useFirestore();
   const user = useRecoilValue(userSelectors.user);
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
-  const setSettings = useSetRecoilState(settingsAtoms.settings);
+  const setSettings = useSetRecoilState(settingsSelector.settings);
   const isStepSkipped = (step: number) => skipped.has(step);
 
   const handleNext = handleSubmit((data: OnboardingData) => {

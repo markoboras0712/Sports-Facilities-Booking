@@ -3,6 +3,7 @@ import { User } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { OnboardingData } from 'modules/authorization';
 import { Routes } from 'modules/routing';
+import { removeEmptyProperties } from 'shared/utils';
 import { db } from '../store';
 import { useFirestoreUtilities } from './useFirestoreUtilities';
 
@@ -40,6 +41,7 @@ export const useFirestore = () => {
   ) => {
     try {
       const documentReference = getDocumentReference(userUid, 'settings');
+      removeEmptyProperties(onboardingData);
       await setUserCollection(documentReference, onboardingData, true);
     } catch (error) {
       console.log(error);

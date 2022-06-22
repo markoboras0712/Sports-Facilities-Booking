@@ -5,6 +5,6 @@ export interface Authentication {
 
 export interface User {
   email: string | null;
-  userUid: string | null;
+  userUid: string | null | undefined;
   creationTime: string | undefined;
 }

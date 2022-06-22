@@ -7,6 +7,7 @@ export interface OnboardingData {
   city?: string;
   postalCode?: string;
   phone?: string;
+  isOnboardingInProgress: boolean;
 }
 
 export interface AvatarData {

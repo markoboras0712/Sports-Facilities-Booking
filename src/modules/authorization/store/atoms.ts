@@ -36,3 +36,8 @@ export const postalCodeAtom = atom<string | undefined>({
   key: 'authorization.user.postalCode',
   default: undefined,
 });
+
+export const isOnboardingInProgressAtom = atom<boolean>({
+  key: 'authorization.user.isOnboardingInProgress',
+  default: true,
+});

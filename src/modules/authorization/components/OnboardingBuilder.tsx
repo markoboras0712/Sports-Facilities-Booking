@@ -8,7 +8,7 @@ import {
   Address,
   OnboardingPreview,
   OnboardingNavigation,
-  settingsAtoms,
+  settingsSelector,
 } from 'modules/authorization';
 import { steps } from 'const';
 import { useRecoilValue } from 'recoil';
@@ -20,7 +20,7 @@ import { Routes } from 'modules/routing';
 
 export const OnboardingBuilder: React.FC = () => {
   const user = useRecoilValue(userSelectors.user);
-  const settings = useRecoilValue(settingsAtoms.settings);
+  const settings = useRecoilValue(settingsSelector.settings);
   const { updateUser } = useFirestore();
   const form = useForm<OnboardingData>();
   const { handleSubmit } = form;
@@ -29,13 +29,17 @@ export const OnboardingBuilder: React.FC = () => {
 
   const onSubmit = handleSubmit((data: OnboardingData) => {
     if (user?.userUid && settings) {
-      updateUser(user.userUid, data);
+      updateUser(user.userUid, { ...data, isOnboardingInProgress: false });
       navigate(Routes.AvailableObjects);
     }
   });
 
   useEffect(() => {
-    if (settings) form.reset(settings);
+    console.log({ settings }, { user });
+    if (settings) {
+      form.reset(settings);
+      return;
+    }
   }, [user]);
 
   return (

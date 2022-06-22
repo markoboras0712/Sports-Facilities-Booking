@@ -8,6 +8,7 @@ import {
   firstNameAtom,
   lastNameAtom,
   postalCodeAtom,
+  isOnboardingInProgressAtom,
 } from './atoms';
 
 const settings = selector<OnboardingData | null>({
@@ -21,6 +22,7 @@ const settings = selector<OnboardingData | null>({
       country: get(countryAtom),
       city: get(cityAtom),
       postalCode: get(postalCodeAtom),
+      isOnboardingInProgress: get(isOnboardingInProgressAtom),
     };
     return settings;
   },
@@ -33,6 +35,7 @@ const settings = selector<OnboardingData | null>({
       set(countryAtom, onboardingData.country);
       set(cityAtom, onboardingData.city);
       set(postalCodeAtom, onboardingData.postalCode);
+      set(isOnboardingInProgressAtom, onboardingData.isOnboardingInProgress);
     }
   },
 });
@@ -48,10 +51,11 @@ const settingsCleanup = selector({
     reset(countryAtom);
     reset(cityAtom);
     reset(postalCodeAtom);
+    reset(isOnboardingInProgressAtom);
   },
 });
 
-export const settingsAtoms = {
+export const settingsSelector = {
   settings,
   settingsCleanup,
 };

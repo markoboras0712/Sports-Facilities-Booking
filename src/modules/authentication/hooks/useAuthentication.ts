@@ -7,8 +7,9 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  User,
 } from 'firebase/auth';
-import { settingsAtoms } from 'modules/authorization';
+import { settingsSelector } from 'modules/authorization';
 import {
   auth,
   facebookProvider,
@@ -17,6 +18,7 @@ import {
   useFirestoreUtilities,
 } from 'modules/firebase';
 import { Routes } from 'modules/routing';
+import { useCallback, useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { userSelectors } from '../store';
 
@@ -24,34 +26,68 @@ export const useAuthentication = () => {
   const { getDocumentReference, setUserCollection } = useFirestoreUtilities();
   const { createUserWithSocialMedia, getSettings } = useFirestore();
   const userCleanup = useSetRecoilState(userSelectors.userCleanup);
-  const settingsCleanup = useSetRecoilState(settingsAtoms.settingsCleanup);
+  const settingsCleanup = useSetRecoilState(settingsSelector.settingsCleanup);
   const setUser = useSetRecoilState(userSelectors.user);
-  const setSettings = useSetRecoilState(settingsAtoms.settings);
+  const setSettings = useSetRecoilState(settingsSelector.settings);
   const setRegisterError = useSetRecoilState(userSelectors.setRegisterError);
   const setLoginError = useSetRecoilState(userSelectors.setLoginError);
   const setForgotPasswordError = useSetRecoilState(
     userSelectors.setForgotPasswordError,
   );
 
-  const autoLogin = () => {
-    const unsubscribe = onAuthStateChanged(auth, async user => {
-      if (user) {
-        const settings = await getSettings(user.uid);
-        console.log(settings?.avatar);
-        if (settings) setSettings(settings);
-        setUser({
-          email: user.email,
-          userUid: user.uid,
-          creationTime: user.metadata.creationTime,
-        });
-      }
+  // const autoLogin = () => {
+  //   const unsubscribe = onAuthStateChanged(auth, async user => {
+  //     console.log({ user });
+  //     if (user) {
+  //       const settings = await getSettings(user.uid);
+  //       console.log({ settings });
+  //       if (settings) setSettings(settings);
+  //       setUser({
+  //         email: user.email,
+  //         userUid: user.uid,
+  //         creationTime: user.metadata.creationTime,
+  //       });
+  //     }
+  //     if (!user) {
+  //       userCleanup(null);
+  //       settingsCleanup(null);
+  //     }
+  //     return unsubscribe;
+  //   });
+  // };
+
+  const onUserAuthStateChange = useCallback(
+    async (user: User | null) => {
       if (!user) {
         userCleanup(null);
         settingsCleanup(null);
+        setUser({
+          userUid: undefined,
+          email: null,
+          creationTime: undefined,
+        });
+        return;
       }
-      return unsubscribe;
-    });
-  };
+
+      const settings = await getSettings(user.uid);
+      console.log({ settings });
+      if (settings) setSettings(settings);
+      setUser({
+        email: user.email,
+        userUid: user.uid,
+        creationTime: user.metadata.creationTime,
+      });
+    },
+    [setUser, userCleanup],
+  );
+
+  useEffect(() => {
+    const subscription = onAuthStateChanged(auth, onUserAuthStateChange);
+
+    return () => {
+      subscription();
+    };
+  }, [auth, onUserAuthStateChange]);
 
   const registerWithEmailPassword = async (
     email1: string,
@@ -72,6 +108,7 @@ export const useAuthentication = () => {
       await setUserCollection(settingsDocumentReference, {
         email,
         creationTime,
+        isOnboardingInProgress: true,
       });
       navigate(Routes.Onboarding);
     } catch (error: unknown) {
@@ -125,7 +162,6 @@ export const useAuthentication = () => {
   };
 
   return {
-    autoLogin,
     registerWithEmailPassword,
     loginWithEmailPassword,
     resetPassword,

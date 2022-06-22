@@ -5,7 +5,7 @@ export const emailAtom = atom<string | null>({
   default: null,
 });
 
-export const userUidAtom = atom<string | null>({
+export const userUidAtom = atom<string | null | undefined>({
   key: 'authentication.user.uid',
   default: null,
 });

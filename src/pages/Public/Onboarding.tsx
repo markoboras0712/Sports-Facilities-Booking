@@ -1,8 +1,22 @@
 import * as React from 'react';
-import { Box, Grid, Paper } from '@mui/material';
-import { OnboardingBuilder } from 'modules/authorization';
+import { Box, Grid, LinearProgress, Paper } from '@mui/material';
+import {
+  OnboardingBuilder,
+  useOnboardingRedirects,
+} from 'modules/authorization';
 
 export const Onboarding: React.FC = () => {
+  const loaded = useOnboardingRedirects();
+  console.log('loaded', loaded);
+
+  if (!loaded) {
+    return (
+      <Box sx={{ width: '100%' }}>
+        <LinearProgress />
+      </Box>
+    );
+  }
+
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
       <Grid
