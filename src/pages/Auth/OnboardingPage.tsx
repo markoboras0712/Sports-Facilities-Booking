@@ -3,7 +3,7 @@ import { Box, Grid, LinearProgress, Paper } from '@mui/material';
 import { OnboardingBuilder } from 'modules/authorization';
 import { useAuthenticationRedirects } from 'modules/authentication';
 
-export const Onboarding: React.FC = () => {
+export const OnboardingPage: React.FC = () => {
   const { loading } = useAuthenticationRedirects();
 
   if (loading) {

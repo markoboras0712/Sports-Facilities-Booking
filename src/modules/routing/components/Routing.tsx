@@ -1,8 +1,13 @@
-import { Router, RouteComponentProps } from '@reach/router';
-import { AvailableFacilities, ErrorPage, Onboarding } from 'pages';
-import { ForgotPassword } from 'pages/Public/ForgotPassword';
-import { Login } from 'pages/Public/Login';
-import { SignUp } from 'pages/Public/SignUp';
+import { RouteComponentProps, Router } from '@reach/router';
+import {
+  AvailableFacilitiesPage,
+  ErrorPage,
+  ForgotPasswordPage,
+  LandingPage,
+  LoginPage,
+  OnboardingPage,
+  SignUpPage,
+} from 'pages';
 import React from 'react';
 import { Routes } from '../routes';
 
@@ -13,18 +18,19 @@ const RouterPage = (
 export const Routing: React.FC = () => {
   return (
     <Router basepath="/">
-      <RouterPage path={Routes.Login} pageComponent={<Login />} />
-      <RouterPage path={Routes.SignUp} pageComponent={<SignUp />} />
+      <RouterPage path={Routes.Landing} pageComponent={<LandingPage />} />
+      <RouterPage path={Routes.Login} pageComponent={<LoginPage />} />
+      <RouterPage path={Routes.SignUp} pageComponent={<SignUpPage />} />
       <RouterPage
         path={Routes.ForgotPassword}
-        pageComponent={<ForgotPassword />}
+        pageComponent={<ForgotPasswordPage />}
       />
       <RouterPage
         path={Routes.AvailableObjects}
-        pageComponent={<AvailableFacilities />}
+        pageComponent={<AvailableFacilitiesPage />}
       />
-      <RouterPage path={Routes.Onboarding} pageComponent={<Onboarding />} />
-      <RouterPage path={Routes.NotFoundPage} pageComponent={<ErrorPage />} />
+      <RouterPage path={Routes.Onboarding} pageComponent={<OnboardingPage />} />
+      <RouterPage path={Routes.NotFound} pageComponent={<ErrorPage />} />
     </Router>
   );
 };

@@ -1,20 +1,19 @@
-import LoginIcon from '@mui/icons-material/Login';
-import { Box, Grid, LinearProgress, Paper, Typography } from '@mui/material';
+import * as React from 'react';
+import { Paper, Box, Grid, Typography, LinearProgress } from '@mui/material';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import {
   AuthenticationForm,
   AuthenticationLayout,
-  SideRandomImage,
   useAuthenticationRedirects,
   userSelectors,
 } from 'modules/authentication';
-import * as React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { CustomizedSnackbars } from 'shared/components';
 
-export const Login: React.FC = () => {
+export const SignUpPage: React.FC = () => {
   const { loading } = useAuthenticationRedirects();
-  const loginError = useRecoilValue(userSelectors.loginError);
-  const errorCleanup = useSetRecoilState(userSelectors.loginErrorCleanup);
+  const registerError = useRecoilValue(userSelectors.registerError);
+  const errorCleanup = useSetRecoilState(userSelectors.registerErrorCleanup);
 
   if (loading) {
     return (
@@ -26,7 +25,6 @@ export const Login: React.FC = () => {
 
   return (
     <AuthenticationLayout>
-      <SideRandomImage />
       <Grid
         container
         direction="column"
@@ -35,31 +33,30 @@ export const Login: React.FC = () => {
         item
         xs={12}
         sm={10}
-        md={6}
+        md={12}
         component={Paper}
       >
         <Box
           sx={{
-            my: 8,
-            mx: 4,
+            marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
           }}
         >
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign up
           </Typography>
-          <LoginIcon />
+          <PersonAddIcon />
           <AuthenticationForm
-            authenticationTitle="Sign In"
+            authenticationTitle="Sign Up"
             forgotPassword
-            backToSignup
+            backToLogin
           />
           <CustomizedSnackbars
             errorCleanup={errorCleanup}
-            snackbarMessage={loginError}
-            snackbarOpen={Boolean(loginError)}
+            snackbarMessage={registerError}
+            snackbarOpen={Boolean(registerError)}
           />
         </Box>
       </Grid>

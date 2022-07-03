@@ -11,5 +11,5 @@ export enum Routes {
   Notifications = '/notifications',
   Chat = '/messages/:id',
   Inbox = '/inbox',
-  NotFoundPage = '*',
+  NotFound = '*',
 }
