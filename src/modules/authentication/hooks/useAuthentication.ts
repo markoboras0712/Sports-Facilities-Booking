@@ -35,42 +35,19 @@ export const useAuthentication = () => {
     userSelectors.setForgotPasswordError,
   );
 
-  // const autoLogin = () => {
-  //   const unsubscribe = onAuthStateChanged(auth, async user => {
-  //     console.log({ user });
-  //     if (user) {
-  //       const settings = await getSettings(user.uid);
-  //       console.log({ settings });
-  //       if (settings) setSettings(settings);
-  //       setUser({
-  //         email: user.email,
-  //         userUid: user.uid,
-  //         creationTime: user.metadata.creationTime,
-  //       });
-  //     }
-  //     if (!user) {
-  //       userCleanup(null);
-  //       settingsCleanup(null);
-  //     }
-  //     return unsubscribe;
-  //   });
-  // };
-
   const onUserAuthStateChange = useCallback(
     async (user: User | null) => {
       if (!user) {
-        userCleanup(null);
-        settingsCleanup(null);
         setUser({
-          userUid: undefined,
+          userUid: null,
           email: null,
           creationTime: undefined,
         });
+        settingsCleanup(null);
         return;
       }
 
       const settings = await getSettings(user.uid);
-      console.log({ settings });
       if (settings) setSettings(settings);
       setUser({
         email: user.email,

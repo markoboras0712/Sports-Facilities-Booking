@@ -1,6 +1,5 @@
-import * as React from 'react';
-import { Paper, Box, Grid, Typography } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
+import { Box, Grid, LinearProgress, Paper, Typography } from '@mui/material';
 import {
   AuthenticationForm,
   AuthenticationLayout,
@@ -8,14 +7,22 @@ import {
   useAuthenticationRedirects,
   userSelectors,
 } from 'modules/authentication';
+import * as React from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { CustomizedSnackbars } from 'shared/components';
 
 export const Login: React.FC = () => {
-  useAuthenticationRedirects();
-
+  const { loading } = useAuthenticationRedirects();
   const loginError = useRecoilValue(userSelectors.loginError);
   const errorCleanup = useSetRecoilState(userSelectors.loginErrorCleanup);
+
+  if (loading) {
+    return (
+      <Box sx={{ width: '100%' }}>
+        <LinearProgress />
+      </Box>
+    );
+  }
 
   return (
     <AuthenticationLayout>

@@ -1,25 +1,27 @@
-import * as React from 'react';
-import {
-  Paper,
-  Box,
-  Grid,
-  Typography,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Button,
-} from '@mui/material';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  LinearProgress,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { Link } from '@reach/router';
-import { Routes } from 'modules/routing';
 import {
   AuthenticationLayout,
   useAuthentication,
+  useAuthenticationRedirects,
   userSelectors,
 } from 'modules/authentication';
-import { Copyright, CustomizedSnackbars } from 'shared/components';
+import { Routes } from 'modules/routing';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { Copyright, CustomizedSnackbars } from 'shared/components';
 
 export const ForgotPassword: React.FC = () => {
   const {
@@ -27,6 +29,7 @@ export const ForgotPassword: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<{ email: string }>();
+  const { loading } = useAuthenticationRedirects();
   const { resetPassword } = useAuthentication();
   const forgotPasswordError = useRecoilValue(userSelectors.forgotPasswordError);
   const errorCleanup = useSetRecoilState(
@@ -36,6 +39,15 @@ export const ForgotPassword: React.FC = () => {
   const onSubmit = handleSubmit(({ email }) => {
     resetPassword(email);
   });
+
+  if (loading) {
+    return (
+      <Box sx={{ width: '100%' }}>
+        <LinearProgress />
+      </Box>
+    );
+  }
+
   return (
     <AuthenticationLayout>
       <Grid

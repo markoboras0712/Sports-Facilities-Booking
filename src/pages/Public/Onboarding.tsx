@@ -1,15 +1,12 @@
 import * as React from 'react';
 import { Box, Grid, LinearProgress, Paper } from '@mui/material';
-import {
-  OnboardingBuilder,
-  useOnboardingRedirects,
-} from 'modules/authorization';
+import { OnboardingBuilder } from 'modules/authorization';
+import { useAuthenticationRedirects } from 'modules/authentication';
 
 export const Onboarding: React.FC = () => {
-  const loaded = useOnboardingRedirects();
-  console.log('loaded', loaded);
+  const { loading } = useAuthenticationRedirects();
 
-  if (!loaded) {
+  if (loading) {
     return (
       <Box sx={{ width: '100%' }}>
         <LinearProgress />

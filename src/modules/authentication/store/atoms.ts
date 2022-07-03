@@ -5,9 +5,9 @@ export const emailAtom = atom<string | null>({
   default: null,
 });
 
-export const userUidAtom = atom<string | null | undefined>({
+export const userUidAtom = atom<string | null>({
   key: 'authentication.user.uid',
-  default: null,
+  default: '',
 });
 
 export const creationTimeAtom = atom<string | undefined>({

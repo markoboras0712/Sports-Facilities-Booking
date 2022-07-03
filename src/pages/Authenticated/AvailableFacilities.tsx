@@ -1,13 +1,20 @@
-import { Button } from '@mui/material';
+import { Box, Button, LinearProgress } from '@mui/material';
 import { useAuthentication } from 'modules/authentication';
-import { settingsSelector } from 'modules/authorization';
+import { useDashboardRedirects } from 'modules/dashboard';
 import React from 'react';
-import { useRecoilValue } from 'recoil';
 
 export const AvailableFacilities: React.FC = () => {
   const { logout } = useAuthentication();
-  const settings = useRecoilValue(settingsSelector.settings);
-  console.log({ settings });
+  const { loading } = useDashboardRedirects();
+
+  if (loading) {
+    return (
+      <Box sx={{ width: '100%' }}>
+        <LinearProgress />
+      </Box>
+    );
+  }
+
   return (
     <>
       Available Facilities
