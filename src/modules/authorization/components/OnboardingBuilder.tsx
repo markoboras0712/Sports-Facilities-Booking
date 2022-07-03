@@ -37,7 +37,6 @@ export const OnboardingBuilder: React.FC = () => {
   });
 
   useEffect(() => {
-    console.log({ settings }, { user });
     if (settings) {
       form.reset(settings);
       return;
