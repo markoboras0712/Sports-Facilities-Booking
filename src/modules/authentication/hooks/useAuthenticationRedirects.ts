@@ -1,4 +1,4 @@
-import { navigate } from '@reach/router';
+import { navigate, useLocation } from '@reach/router';
 import { settingsSelector } from 'modules/authorization';
 import { Routes } from 'modules/routing';
 import { useEffect, useState } from 'react';
@@ -9,11 +9,12 @@ export const useAuthenticationRedirects = () => {
   const [loading, setLoading] = useState(true);
   const user = useRecoilValue(userSelectors.user);
   const settings = useRecoilValue(settingsSelector.settings);
+  const { pathname } = useLocation();
 
   useEffect(() => {
     if (user?.userUid === null) {
       setLoading(false);
-      navigate(Routes.Login);
+      navigate(pathname);
     }
 
     if (user?.userUid && !settings?.isOnboardingInProgress) {
