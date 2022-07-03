@@ -11,7 +11,7 @@ import {
   settingsSelector,
 } from 'modules/authorization';
 import { steps } from 'const';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { userSelectors } from 'modules/authentication';
 import { useSteps } from '../hooks';
 import { useFirestore } from 'modules/firebase';
@@ -21,6 +21,7 @@ import { Routes } from 'modules/routing';
 export const OnboardingBuilder: React.FC = () => {
   const user = useRecoilValue(userSelectors.user);
   const settings = useRecoilValue(settingsSelector.settings);
+  const setSettings = useSetRecoilState(settingsSelector.settings);
   const { updateUser } = useFirestore();
   const form = useForm<OnboardingData>();
   const { handleSubmit } = form;
@@ -29,6 +30,7 @@ export const OnboardingBuilder: React.FC = () => {
 
   const onSubmit = handleSubmit((data: OnboardingData) => {
     if (user?.userUid && settings) {
+      setSettings({ ...settings, isOnboardingInProgress: false });
       updateUser(user.userUid, { ...data, isOnboardingInProgress: false });
       navigate(Routes.AvailableObjects);
     }
