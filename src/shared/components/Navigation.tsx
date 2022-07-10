@@ -1,52 +1,45 @@
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Button, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { useDeviceSizes } from 'shared/hooks';
+import { DrawerNavigation } from './DrawerNavigation';
+import { UserMenu } from './UserMenu';
 
 export const Navigation: React.FC = () => {
-  const { laptop, mobile, tablet } = useDeviceSizes();
-  console.log({ mobile, tablet, laptop });
+  const { mobile } = useDeviceSizes();
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={6}>
-        <Box
-          sx={{
-            pl: 8,
-            pt: 2,
-            pb: 2,
-            display: 'flex',
-            justifyContent: !mobile ? 'flex-start' : 'space-around',
-          }}
-        >
-          <Typography
-            sx={{
-              mr: 4,
-            }}
-          >
-            Logo
-          </Typography>
-          <Typography>My bookings</Typography>
-        </Box>
+      <Grid item xs={4} sm={3}>
+        <DrawerNavigation />
       </Grid>
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={8} sm={9}>
         <Box
           sx={{
-            pr: 8,
-            pt: 2.25,
-            pb: 2.25,
+            pr: mobile ? 4 : 8,
+            py: 2.25,
             display: 'flex',
-            justifyContent: !mobile ? 'flex-end' : 'space-around',
+            justifyContent: 'flex-end',
           }}
         >
-          <Typography
+          <Button
             sx={{
+              borderRadius: 1,
+              textTransform: 'none',
+              py: 1,
+              px: 3.5,
               mr: 5,
+              display: { xs: 'none', sm: 'block' },
             }}
+            variant="outlined"
           >
-            Host facility
+            Host Facility
+          </Button>
+          <Typography
+            sx={{ mr: 2, py: 1, display: { xs: 'none', sm: 'block' } }}
+          >
+            Peter Parker
           </Typography>
-          <Typography>Name</Typography>
-          <Typography>Photo </Typography>
+          <UserMenu />
         </Box>
       </Grid>
     </Grid>
