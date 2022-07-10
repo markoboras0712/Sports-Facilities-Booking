@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 import { LandingHero } from './LandingHero';
-import { PopularCards } from './PopularCards';
+// import { PopularCards } from './PopularCards';
 import { SearchTools } from './SearchTools';
 import { SuggestedSports } from './SuggestedSports';
 
@@ -15,36 +15,36 @@ export const SearchFacility: React.FC = () => {
     'Table tennis',
     'Volleyball',
   ];
-  const popular = [
-    {
-      image: 'Slika1',
-      name: 'Sokol Centar',
-      address: 'Adress',
-      indoor: true,
-      price: 300,
-    },
-    {
-      image: 'Slika2',
-      name: 'Sokol Centar',
-      address: 'Adress',
-      indoor: true,
-      price: 300,
-    },
-    {
-      image: 'Slika1',
-      name: 'Sokol Centar',
-      address: 'Adress',
-      indoor: true,
-      price: 300,
-    },
-    {
-      image: 'Slika2',
-      name: 'Sokol Centar',
-      address: 'Adress',
-      indoor: true,
-      price: 300,
-    },
-  ];
+  // const popular = [
+  //   {
+  //     image: 'Slika1',
+  //     name: 'Sokol Centar',
+  //     address: 'Adress',
+  //     indoor: true,
+  //     price: 300,
+  //   },
+  //   {
+  //     image: 'Slika2',
+  //     name: 'Sokol Centar',
+  //     address: 'Adress',
+  //     indoor: true,
+  //     price: 300,
+  //   },
+  //   {
+  //     image: 'Slika1',
+  //     name: 'Sokol Centar',
+  //     address: 'Adress',
+  //     indoor: true,
+  //     price: 300,
+  //   },
+  //   {
+  //     image: 'Slika2',
+  //     name: 'Sokol Centar',
+  //     address: 'Adress',
+  //     indoor: true,
+  //     price: 300,
+  //   },
+  // ];
   return (
     <>
       <Box
@@ -100,24 +100,26 @@ export const SearchFacility: React.FC = () => {
               <Typography>Icon</Typography>
             </Box>
           </Box>
-          <PopularCards facilities={popular} />
-          <Typography
-            sx={{
-              pl: 8,
-              pb: 3.5,
-            }}
-          >
-            MAP VIEW
-          </Typography>
-          <Typography
-            sx={{
-              pl: 8,
-              pr: 8,
-              pb: 27,
-            }}
-          >
-            Google maps
-          </Typography>
+          {/* <PopularCards facilities={popular} /> */}
+          <Box>
+            <Typography
+              sx={{
+                pl: 8,
+                pb: 3.5,
+              }}
+            >
+              MAP VIEW
+            </Typography>
+            <Typography
+              sx={{
+                pl: 8,
+                pr: 8,
+                pb: 27,
+              }}
+            >
+              Google maps
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </>
