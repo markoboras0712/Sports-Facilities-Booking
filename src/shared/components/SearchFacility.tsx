@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import React from 'react';
 import { LandingHero } from './LandingHero';
 // import { PopularCards } from './PopularCards';
@@ -46,7 +46,8 @@ export const SearchFacility: React.FC = () => {
   //   },
   // ];
   return (
-    <>
+    <Grid container>
+      <LandingHero />
       <Box
         sx={{
           display: 'flex',
@@ -54,7 +55,6 @@ export const SearchFacility: React.FC = () => {
           alignItems: 'center',
         }}
       >
-        <LandingHero />
         <SearchTools />
         <SuggestedSports sports={sports} />
         <Box
@@ -122,6 +122,6 @@ export const SearchFacility: React.FC = () => {
           </Box>
         </Box>
       </Box>
-    </>
+    </Grid>
   );
 };

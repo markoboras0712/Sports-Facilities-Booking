@@ -1,34 +1,34 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import React from 'react';
 
 export const LandingHero: React.FC = () => {
   return (
-    <>
+    <Grid
+      item
+      sx={{
+        display: 'flex',
+        width: '100%',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifycontent: 'center',
+      }}
+    >
       <Box
         sx={{
-          width: '100%',
-          pl: 31.625,
-          pr: 31.625,
           pt: 15,
           pb: 1,
-          display: 'flex',
-          justifyContent: 'center',
         }}
       >
-        <Typography>THE BALL IS IN YOUR COURT</Typography>
+        <Typography variant="h2">THE BALL IS IN YOUR COURT</Typography>
       </Box>
       <Box
         sx={{
-          width: '100%',
-          pl: 70.625,
-          pr: 70.625,
           pb: 1,
-          display: 'flex',
           justifyContent: 'center',
         }}
       >
-        <Typography>Book a sports facility near you!</Typography>
+        <Typography variant="h4">Book a sports facility near you!</Typography>
       </Box>
-    </>
+    </Grid>
   );
 };

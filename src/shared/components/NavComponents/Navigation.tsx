@@ -10,10 +10,10 @@ export const Navigation: React.FC = () => {
   return (
     <>
       <Grid container>
-        <Grid item xs={4} sm={3}>
+        <Grid item xs={6} sm={3}>
           <DrawerNavigation />
         </Grid>
-        <Grid item xs={8} sm={9}>
+        <Grid item xs={6} sm={9}>
           <Box
             sx={{
               pr: mobile ? 4 : 8,
@@ -36,7 +36,7 @@ export const Navigation: React.FC = () => {
               Host Facility
             </Button>
             <Typography
-              sx={{ mr: 2, py: 1, display: { xs: 'none', sm: 'block' } }}
+              sx={{ mr: 2, py: 1, display: { sm: 'none', md: 'block' } }}
             >
               Peter Parker
             </Typography>

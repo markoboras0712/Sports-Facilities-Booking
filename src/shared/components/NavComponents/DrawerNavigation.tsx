@@ -40,7 +40,7 @@ export const DrawerNavigation: React.FC = () => {
       </IconButton>
       <Typography
         sx={{
-          mr: 4,
+          mr: mobile ? 1 : 4,
           display: { xs: 'none', sm: 'block' },
           alignContent: 'center',
         }}
