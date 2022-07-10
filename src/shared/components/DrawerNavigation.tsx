@@ -52,7 +52,7 @@ export const DrawerNavigation: React.FC = () => {
           display: { xs: 'none', sm: 'block' },
         }}
       >
-        My Bookings
+        Bookings
       </Typography>
       <Box component="nav">
         <Drawer

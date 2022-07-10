@@ -7,9 +7,11 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
+import { useDeviceSizes } from 'shared/hooks';
 
 export const UserMenu: React.FC = () => {
   const settings = ['Profile', 'Logout'];
+  const { mobile } = useDeviceSizes();
   const [userMenuOpen, setUserMenuOpen] = useState<null | HTMLElement>(null);
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -44,7 +46,7 @@ export const UserMenu: React.FC = () => {
         ))}
       </Menu>
       <Tooltip title="Open user menu">
-        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+        <IconButton onClick={handleOpenUserMenu} sx={{ py: mobile ? 1 : 0 }}>
           <Avatar
             src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
             sx={{ width: 40, height: 40 }}
