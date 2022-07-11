@@ -22,6 +22,7 @@ export const LandingHero: React.FC = () => {
           sx={{
             display: 'flex',
             width: '100%',
+            backgroundColor: '#EFF4F8',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',

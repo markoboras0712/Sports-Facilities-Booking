@@ -5,7 +5,7 @@ export function useDeviceSizes() {
 
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
   const smallDeviceSize = useMediaQuery('(max-width:700px)');
-  const mediumDeviceSize = useMediaQuery('(max-width:900px)');
+  const mediumDeviceSize = useMediaQuery('(max-width:899px)');
   const tablet = useMediaQuery(theme.breakpoints.up('sm'));
   const laptop = useMediaQuery(theme.breakpoints.up('md'));
 
