@@ -36,7 +36,11 @@ export const Navigation: React.FC = () => {
               Host Facility
             </Button>
             <Typography
-              sx={{ mr: 2, py: 1, display: { sm: 'none', md: 'block' } }}
+              sx={{
+                mr: 2,
+                py: 1,
+                display: { xs: 'none', md: 'block' },
+              }}
             >
               Peter Parker
             </Typography>

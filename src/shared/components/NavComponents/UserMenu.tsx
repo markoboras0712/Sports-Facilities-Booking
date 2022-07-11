@@ -48,7 +48,7 @@ export const UserMenu: React.FC = () => {
       <Tooltip title="Open user menu">
         <IconButton onClick={handleOpenUserMenu} sx={{ py: mobile ? 1 : 0 }}>
           <Avatar
-            src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
+            src="https://wallpaper.dog/large/735939.jpg"
             sx={{ width: 40, height: 40 }}
           />
         </IconButton>
