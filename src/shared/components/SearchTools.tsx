@@ -1,4 +1,3 @@
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 import SearchIcon from '@mui/icons-material/Search';
 import {
@@ -10,13 +9,20 @@ import {
   InputBase,
   OutlinedInput,
   Paper,
+  TextField,
 } from '@mui/material';
-import React from 'react';
+import {
+  DatePicker,
+  DesktopDatePicker,
+  LocalizationProvider,
+} from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import React, { useState } from 'react';
 import { useDeviceSizes } from 'shared/hooks';
 
 export const SearchTools: React.FC = () => {
+  const [value, setValue] = useState<Date | null>(new Date());
   const { mediumDeviceSize } = useDeviceSizes();
-  console.log({ mediumDeviceSize });
 
   return (
     <Grid item>
@@ -24,7 +30,7 @@ export const SearchTools: React.FC = () => {
         sx={{
           display: 'flex',
           justifyContent: 'center',
-          backgroundColor: '#EFF4F8',
+          backgroundColor: !mediumDeviceSize ? '#EFF4F8' : 'white',
           height: 85,
           pb: 2.5,
           pt: 1,
@@ -45,10 +51,10 @@ export const SearchTools: React.FC = () => {
             py: !mediumDeviceSize ? 1.5 : 0,
           }}
         >
-          <Box sx={{ display: 'flex' }}>
+          <Box sx={{ display: 'flex', pl: 3, pr: 1.5 }}>
             {!mediumDeviceSize && (
               <>
-                <IconButton sx={{ pl: 3, pr: 1.5 }} disabled>
+                <IconButton disabled>
                   <MyLocationIcon />
                 </IconButton>
                 <InputBase placeholder="Find my location" />
@@ -62,14 +68,10 @@ export const SearchTools: React.FC = () => {
             sx={{ display: { xs: 'none', md: 'block' } }}
             orientation="vertical"
           />
-          <Box sx={{ display: 'flex' }}>
+          <Box sx={{ display: 'flex', pl: 3, pr: 1.5 }}>
             {!mediumDeviceSize && (
               <>
-                <IconButton
-                  sx={{ pl: 3, pr: 1.5 }}
-                  disabled
-                  aria-label="search"
-                >
+                <IconButton disabled aria-label="search">
                   <SearchIcon />
                 </IconButton>
                 <InputBase placeholder="Sport or venue name" />{' '}
@@ -83,28 +85,53 @@ export const SearchTools: React.FC = () => {
             sx={{ display: { xs: 'none', md: 'block' }, p: 0 }}
             orientation="vertical"
           />
-          <Box sx={{ display: 'flex' }}>
-            {!mediumDeviceSize && (
-              <>
-                <IconButton
-                  sx={{ pl: 3, pr: 1.5 }}
-                  disabled
-                  aria-label="search"
-                >
-                  <CalendarTodayIcon />
-                  {/* <AdapterMoment /> */}
-                </IconButton>
-                <InputBase placeholder="Pick a time" />
-              </>
-            )}
+          <Box sx={{ display: 'flex', pl: 3, pr: 1.5 }}>
             {mediumDeviceSize && (
-              <OutlinedInput fullWidth placeholder="Choose a date" />
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  value={value}
+                  openTo="year"
+                  views={['year', 'month', 'day']}
+                  InputAdornmentProps={{ position: 'start' }}
+                  onChange={newValue => {
+                    setValue(newValue);
+                  }}
+                  renderInput={params => <TextField {...params} fullWidth />}
+                />
+              </LocalizationProvider>
+            )}
+            {!mediumDeviceSize && (
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DesktopDatePicker
+                  value={value}
+                  disableFuture
+                  InputProps={{
+                    disableUnderline: true,
+                  }}
+                  openTo="year"
+                  views={['year', 'month', 'day']}
+                  InputAdornmentProps={{ position: 'start' }}
+                  onChange={newValue => {
+                    setValue(newValue);
+                  }}
+                  renderInput={params => (
+                    <TextField variant="standard" {...params} />
+                  )}
+                />
+              </LocalizationProvider>
             )}
           </Box>
 
-          <Box sx={{ display: 'flex' }}>
+          <Box sx={{ display: 'flex', pl: 3, pr: 1.5 }}>
             {mediumDeviceSize && (
-              <OutlinedInput fullWidth placeholder="Search" />
+              <Button
+                sx={{ px: 5, py: 1.5, textTransform: 'none', borderRadius: 1 }}
+                size="medium"
+                fullWidth
+                variant="contained"
+              >
+                Search
+              </Button>
             )}
           </Box>
         </Paper>
