@@ -27,9 +27,11 @@ export const SearchTools: React.FC = () => {
           sx={{
             display: 'flex',
             borderColor: mediumDeviceSize ? 'gray' : 'white',
-            borderRadius: 1,
+            borderRadius: 2,
             border: 0,
-            boxShadow: '0px 4px 24px rgba(21, 44, 66, 0.1)',
+            boxShadow: !mediumDeviceSize
+              ? '0px 4px 24px rgba(21, 44, 66, 0.1)'
+              : 'none',
             flexDirection: { xs: 'column', md: 'row' },
             width: mediumDeviceSize ? '100%' : 'auto',
             py: !mediumDeviceSize ? 1.5 : 0,

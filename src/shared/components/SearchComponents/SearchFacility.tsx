@@ -1,20 +1,12 @@
 import { Box, Grid } from '@mui/material';
 import React from 'react';
+import { SuggestedSports } from '../SuggestedSportsComponents/SuggestedSports';
 import { LandingHero } from './LandingHero';
 // import { PopularCards } from './PopularCards';
 import { SearchTools } from './SearchTools';
 // import { SuggestedSports } from './SuggestedSports';
 
 export const SearchFacility: React.FC = () => {
-  // const sports = [
-  //   'Football',
-  //   'Fitness',
-  //   'Basketball',
-  //   'Swimming',
-  //   'Tennis',
-  //   'Table tennis',
-  //   'Volleyball',
-  // ];
   // const popular = [
   //   {
   //     image: 'Slika1',
@@ -56,7 +48,7 @@ export const SearchFacility: React.FC = () => {
       >
         <LandingHero />
         <SearchTools />
-        {/* <SuggestedSports sports={sports} /> */}
+        <SuggestedSports />
         {/* <Box
           sx={{
             display: 'flex',

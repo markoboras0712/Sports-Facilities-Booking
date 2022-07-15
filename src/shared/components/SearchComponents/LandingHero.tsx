@@ -7,7 +7,7 @@ const styles = {
     backgroundImage: `url(https://img.freepik.com/free-vector/gradient-football-field-background_52683-65681.jpg?w=2000)`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    height: '50vh',
+    height: '30vh',
   },
 };
 

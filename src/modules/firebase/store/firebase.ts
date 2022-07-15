@@ -37,7 +37,7 @@ if (location.hostname === 'localhost') {
   connectFunctionsEmulator(functions, 'localhost', 5001);
 }
 
-enableIndexedDbPersistence(db).catch(err => {
+enableIndexedDbPersistence(db, { forceOwnership: true }).catch(err => {
   if (err.code == 'failed-precondition') {
     console.log('error code', err);
   } else if (err.code == 'unimplemented') {
