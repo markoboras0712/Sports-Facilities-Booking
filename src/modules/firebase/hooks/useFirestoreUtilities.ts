@@ -29,7 +29,9 @@ export const useFirestoreUtilities = <T>() => {
   ) => !collectionSnapshot.empty;
 
   const isOnboardingData = (data?: DocumentData): data is OnboardingData => {
-    return (data as OnboardingData).isOnboardingInProgress !== undefined;
+    return data
+      ? (data as OnboardingData).isOnboardingInProgress !== undefined
+      : false;
   };
 
   return {

@@ -1,6 +1,6 @@
 import { FirebaseOptions, getApp, getApps, initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { enableIndexedDbPersistence, getFirestore } from 'firebase/firestore';
 
 const clientCredentials: FirebaseOptions = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -41,13 +41,13 @@ const auth = getAuth();
 
 export { createFirebaseApp, db, auth };
 
-// enableIndexedDbPersistence(db, { forceOwnership: true }).catch(err => {
-//   if (err.code == 'failed-precondition') {
-//     console.log('error code', err);
-//   } else if (err.code == 'unimplemented') {
-//     console.log('error code', err);
-//   }
-// });
+enableIndexedDbPersistence(db, { forceOwnership: true }).catch(err => {
+  if (err.code == 'failed-precondition') {
+    console.log('error code', err);
+  } else if (err.code == 'unimplemented') {
+    console.log('error code', err);
+  }
+});
 
 // export const functions = getFunctions(firebaseApp);
 // export const storage = getStorage(firebaseApp);

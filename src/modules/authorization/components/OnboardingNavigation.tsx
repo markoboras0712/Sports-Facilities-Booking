@@ -32,7 +32,9 @@ export const OnboardingNavigation: React.FC<Props> = ({
       );
 
     if (activeStep === steps.length)
-      infoToast('You have completed the onboarding process!');
+      infoToast(
+        'You have completed the onboarding process! You can edit your settings before you finish.',
+      );
   }, [activeStep]);
 
   return (
