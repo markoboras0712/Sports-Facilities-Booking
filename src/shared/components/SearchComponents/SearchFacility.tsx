@@ -1,42 +1,11 @@
 import { Box, Grid } from '@mui/material';
 import React from 'react';
+import { PopularCards } from '../PopularComponents';
 import { SuggestedSports } from '../SuggestedSportsComponents/SuggestedSports';
 import { LandingHero } from './LandingHero';
-// import { PopularCards } from './PopularCards';
 import { SearchTools } from './SearchTools';
-// import { SuggestedSports } from './SuggestedSports';
 
 export const SearchFacility: React.FC = () => {
-  // const popular = [
-  //   {
-  //     image: 'Slika1',
-  //     name: 'Sokol Centar',
-  //     address: 'Adress',
-  //     indoor: true,
-  //     price: 300,
-  //   },
-  //   {
-  //     image: 'Slika2',
-  //     name: 'Sokol Centar',
-  //     address: 'Adress',
-  //     indoor: true,
-  //     price: 300,
-  //   },
-  //   {
-  //     image: 'Slika1',
-  //     name: 'Sokol Centar',
-  //     address: 'Adress',
-  //     indoor: true,
-  //     price: 300,
-  //   },
-  //   {
-  //     image: 'Slika2',
-  //     name: 'Sokol Centar',
-  //     address: 'Adress',
-  //     indoor: true,
-  //     price: 300,
-  //   },
-  // ];
   return (
     <Grid container>
       <Box
@@ -49,6 +18,7 @@ export const SearchFacility: React.FC = () => {
         <LandingHero />
         <SearchTools />
         <SuggestedSports />
+        <PopularCards />
         {/* <Box
           sx={{
             display: 'flex',

@@ -35,6 +35,7 @@ export const SearchTools: React.FC = () => {
             flexDirection: { xs: 'column', md: 'row' },
             width: mediumDeviceSize ? '100%' : 'auto',
             py: !mediumDeviceSize ? 1.5 : 0,
+            px: !mediumDeviceSize ? 0 : 2,
           }}
         >
           <FindMyLocation />
