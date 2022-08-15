@@ -1,1 +1,1 @@
-export * from './AvailableFacilities';
+export * from './AvailableFacilitiesPage';

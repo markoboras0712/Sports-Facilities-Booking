@@ -3,7 +3,7 @@ import { useAuthentication } from 'modules/authentication';
 import { useDashboardRedirects } from 'modules/dashboard';
 import React from 'react';
 
-export const AvailableFacilities: React.FC = () => {
+export const AvailableFacilitiesPage: React.FC = () => {
   const { logout } = useAuthentication();
   const { loading } = useDashboardRedirects();
 

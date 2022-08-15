@@ -23,7 +23,7 @@ import { useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Copyright, CustomizedSnackbars } from 'shared/components';
 
-export const ForgotPassword: React.FC = () => {
+export const ForgotPasswordPage: React.FC = () => {
   const {
     register,
     handleSubmit,

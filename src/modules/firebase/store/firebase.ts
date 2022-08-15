@@ -1,17 +1,12 @@
 import { initializeApp } from 'firebase/app';
 import {
-  getFirestore,
-  enableIndexedDbPersistence,
-  connectFirestoreEmulator,
-} from 'firebase/firestore';
-import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
-import { connectStorageEmulator, getStorage } from 'firebase/storage';
-import {
-  connectAuthEmulator,
   FacebookAuthProvider,
   getAuth,
   GoogleAuthProvider,
 } from 'firebase/auth';
+import { enableIndexedDbPersistence, getFirestore } from 'firebase/firestore';
+import { getFunctions } from 'firebase/functions';
+import { getStorage } from 'firebase/storage';
 
 export const firebaseApp = initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -30,14 +25,7 @@ export const googleProvider = new GoogleAuthProvider();
 export const facebookProvider = new FacebookAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 
-if (location.hostname === 'localhost') {
-  connectAuthEmulator(auth, 'http://localhost:9099');
-  connectFirestoreEmulator(db, 'localhost', 8080);
-  connectStorageEmulator(storage, 'localhost', 9199);
-  connectFunctionsEmulator(functions, 'localhost', 5001);
-}
-
-enableIndexedDbPersistence(db).catch(err => {
+enableIndexedDbPersistence(db, { forceOwnership: true }).catch(err => {
   if (err.code == 'failed-precondition') {
     console.log('error code', err);
   } else if (err.code == 'unimplemented') {
