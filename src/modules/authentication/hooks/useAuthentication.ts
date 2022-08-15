@@ -13,10 +13,12 @@ import {
   User,
 } from 'firebase/auth';
 import { useCallback, useEffect, useMemo } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { authSelectors } from '../store';
 import { getLoginErrorMessage, getRegisterErrorMessage } from '../utils';
 import { Routes } from 'modules/routing';
+import { settingsSelector } from 'modules/authorization';
+import { useFirestore } from 'modules/firebase';
 
 /**
  * Use Firebase Authentication Hook
@@ -29,8 +31,11 @@ export function useAuthentication() {
   const auth = useMemo(getAuth, []);
   const googleProvider = useMemo(() => new GoogleAuthProvider(), []);
   const facebookProvider = useMemo(() => new FacebookAuthProvider(), []);
+  const settingsCleanup = useSetRecoilState(settingsSelector.settingsCleanup);
   const [user, setUser] = useRecoilState(authSelectors.user);
   const { errorToast, successToast } = useToast();
+  const { getSettings } = useFirestore();
+  const setSettings = useSetRecoilState(settingsSelector.settings);
 
   /**
    * Create new account with email and password
@@ -143,15 +148,19 @@ export function useAuthentication() {
 
   const onUserAuthStateChange = useCallback(
     async (user: User | null) => {
-      console.log('user', { user });
       if (!user) {
         setUser({
           email: null,
           userUid: null,
           creationTime: undefined,
         });
+        settingsCleanup(null);
         return;
       }
+
+      const settings = await getSettings(user.uid);
+      if (settings) setSettings(settings);
+
       setUser({
         email: user.email,
         userUid: user.uid,

@@ -18,6 +18,7 @@ export const useAuthenticationRedirects = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
+    console.log('redirects', user, settings);
     if (user?.userUid === null) {
       setLoading(false);
       navigate(pathname);

@@ -11,6 +11,7 @@ export const useDashboardRedirects = () => {
   const settings = useRecoilValue(settingsSelector.settings);
 
   useEffect(() => {
+    console.log('dashboard redicts', user, settings);
     if (user?.userUid && !settings?.isOnboardingInProgress) {
       setLoading(false);
       navigate(Routes.AvailableObjects);
@@ -18,6 +19,11 @@ export const useDashboardRedirects = () => {
     if (user?.userUid && settings?.isOnboardingInProgress) {
       setLoading(false);
       navigate(Routes.Onboarding);
+    }
+
+    if (user?.userUid === null) {
+      setLoading(false);
+      navigate(Routes.Login);
     }
   }, [user]);
 
