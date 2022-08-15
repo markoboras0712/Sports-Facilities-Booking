@@ -1,9 +1,5 @@
 import { FirebaseOptions, getApp, getApps, initializeApp } from 'firebase/app';
-import {
-  FacebookAuthProvider,
-  getAuth,
-  GoogleAuthProvider,
-} from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const clientCredentials: FirebaseOptions = {
@@ -43,21 +39,7 @@ const db = getFirestore(createFirebaseApp());
  */
 const auth = getAuth();
 
-/**
- * @name googleProvider
- * @description Google authentication provider of Firebase
- */
-const googleProvider = new GoogleAuthProvider();
-googleProvider.setCustomParameters({ prompt: 'select_account' });
-
-/**
- * @name facebookProvider
- * @description Facebook authentication provider of Firebase
- */
-const facebookProvider = new FacebookAuthProvider();
-facebookProvider.setCustomParameters({ prompt: 'select_account' });
-
-export { createFirebaseApp, db, auth, googleProvider, facebookProvider };
+export { createFirebaseApp, db, auth };
 
 // enableIndexedDbPersistence(db, { forceOwnership: true }).catch(err => {
 //   if (err.code == 'failed-precondition') {

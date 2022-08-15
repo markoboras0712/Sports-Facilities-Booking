@@ -19,7 +19,7 @@ export const AvailableFacilitiesPage: React.FC = () => {
     <>
       Available Facilities
       <Button
-        onClick={() => logout()}
+        onClick={logout}
         type="submit"
         fullWidth
         variant="contained"

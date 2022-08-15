@@ -1,4 +1,4 @@
-import { userSelectors } from 'modules/authentication';
+import { authSelectors } from 'modules/authentication';
 import { useFirestore } from 'modules/firebase';
 import React from 'react';
 import { UseFormHandleSubmit } from 'react-hook-form';
@@ -8,7 +8,7 @@ import { settingsSelector } from '../store';
 
 export const useSteps = (handleSubmit: UseFormHandleSubmit<OnboardingData>) => {
   const { updateUser } = useFirestore();
-  const user = useRecoilValue(userSelectors.user);
+  const user = useRecoilValue(authSelectors.user);
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
   const setSettings = useSetRecoilState(settingsSelector.settings);

@@ -41,7 +41,7 @@ const settings = selector<OnboardingData | null>({
 });
 
 const settingsCleanup = selector({
-  key: 'authentication.cleanup',
+  key: 'authorization.cleanup',
   get: () => null,
   set: ({ reset }) => {
     reset(firstNameAtom);

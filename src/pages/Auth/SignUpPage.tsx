@@ -1,19 +1,14 @@
-import * as React from 'react';
-import { Paper, Box, Grid, Typography, LinearProgress } from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { Box, Grid, LinearProgress, Paper, Typography } from '@mui/material';
 import {
   AuthenticationForm,
   AuthenticationLayout,
   useAuthenticationRedirects,
-  userSelectors,
 } from 'modules/authentication';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { CustomizedSnackbars } from 'shared/components';
+import * as React from 'react';
 
 export const SignUpPage: React.FC = () => {
   const { loading } = useAuthenticationRedirects();
-  const registerError = useRecoilValue(userSelectors.registerError);
-  const errorCleanup = useSetRecoilState(userSelectors.registerErrorCleanup);
 
   if (loading) {
     return (
@@ -52,11 +47,6 @@ export const SignUpPage: React.FC = () => {
             authenticationTitle="Sign Up"
             forgotPassword
             backToLogin
-          />
-          <CustomizedSnackbars
-            errorCleanup={errorCleanup}
-            snackbarMessage={registerError}
-            snackbarOpen={Boolean(registerError)}
           />
         </Box>
       </Grid>

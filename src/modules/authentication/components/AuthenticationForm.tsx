@@ -34,21 +34,20 @@ export const AuthenticationForm: React.FC<Props> = ({
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const { login, register } = useAuthentication();
   const { pathname } = useLocation();
 
   const {
-    register,
+    register: registerInput,
     handleSubmit,
     formState: { errors },
   } = useForm<Authentication>();
-  const { loginWithEmailPassword, registerWithEmailPassword } =
-    useAuthentication();
 
   const onSubmit = handleSubmit((data: Authentication) => {
     const { email, password } = data;
     pathname === Routes.Login
-      ? loginWithEmailPassword(email, password)
-      : registerWithEmailPassword(email, password);
+      ? login(email, password)
+      : register(email, password);
   });
 
   return (
@@ -61,7 +60,7 @@ export const AuthenticationForm: React.FC<Props> = ({
     >
       <TextField
         margin="normal"
-        {...register('email', {
+        {...registerInput('email', {
           required: 'Email Address is required.',
           pattern: {
             value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -78,7 +77,7 @@ export const AuthenticationForm: React.FC<Props> = ({
       />
       <TextField
         margin="normal"
-        {...register('password', {
+        {...registerInput('password', {
           required: 'Password is required.',
           minLength: {
             message: 'Password must be at least 6 characters.',

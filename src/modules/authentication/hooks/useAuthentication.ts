@@ -1,149 +1,178 @@
-import { navigate } from '@reach/router';
+import { useToast } from 'shared/hooks';
 import { FirebaseError } from 'firebase/app';
+import { navigate } from '@reach/router';
 import {
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
+  FacebookAuthProvider,
+  getAuth,
+  GoogleAuthProvider,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   User,
 } from 'firebase/auth';
-import { settingsSelector } from 'modules/authorization';
-import {
-  auth,
-  facebookProvider,
-  googleProvider,
-  useFirestore,
-  useFirestoreUtilities,
-} from 'modules/firebase';
+import { useCallback, useEffect, useMemo } from 'react';
+import { useRecoilState } from 'recoil';
+import { authSelectors } from '../store';
+import { getLoginErrorMessage, getRegisterErrorMessage } from '../utils';
 import { Routes } from 'modules/routing';
-import { useCallback, useEffect } from 'react';
-import { useSetRecoilState } from 'recoil';
-import { userSelectors } from '../store';
 
-export const useAuthentication = () => {
-  const { getDocumentReference, setUserCollection } = useFirestoreUtilities();
-  const { createUserWithSocialMedia, getSettings } = useFirestore();
-  const userCleanup = useSetRecoilState(userSelectors.userCleanup);
-  const settingsCleanup = useSetRecoilState(settingsSelector.settingsCleanup);
-  const setUser = useSetRecoilState(userSelectors.user);
-  const setSettings = useSetRecoilState(settingsSelector.settings);
-  const setRegisterError = useSetRecoilState(userSelectors.setRegisterError);
-  const setLoginError = useSetRecoilState(userSelectors.setLoginError);
-  const setForgotPasswordError = useSetRecoilState(
-    userSelectors.setForgotPasswordError,
-  );
+/**
+ * Use Firebase Authentication Hook
+ * @name useAuthentication
+ * @description Hook that is used for Firebase Authentication. With this hook you can create user with email and password
+ * , login user with email and password, login user with Facebook, login user with Google, logout user, send password reset email.
+ */
+
+export function useAuthentication() {
+  const auth = useMemo(getAuth, []);
+  const googleProvider = useMemo(() => new GoogleAuthProvider(), []);
+  const facebookProvider = useMemo(() => new FacebookAuthProvider(), []);
+  const [user, setUser] = useRecoilState(authSelectors.user);
+  const { errorToast, successToast } = useToast();
+
+  /**
+   * Create new account with email and password
+   * @name register
+   * @description Function that creates new firebase account in Firebase Authentication.
+   */
+
+  async function register(email: string, password: string) {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+      successToast('You have successfully registered!');
+    } catch (error) {
+      if (error instanceof FirebaseError)
+        errorToast(getRegisterErrorMessage(error.code));
+    }
+  }
+
+  /**
+   * Login user with email and password
+   * @name login
+   * @description Function that logins user who has previously created account.
+   */
+
+  async function login(email: string, password: string) {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      successToast('You are logged in successfully!');
+    } catch (error) {
+      if (error instanceof FirebaseError)
+        errorToast(getLoginErrorMessage(error.code));
+    }
+  }
+
+  /**
+   * Logout user
+   * @name logout
+   * @description Function that logouts currently logged user.
+   */
+
+  async function logout() {
+    await signOut(auth)
+      .then(() => {
+        navigate(Routes.Login);
+        successToast('You have logged out successfully!');
+      })
+      .catch((error: FirebaseError) =>
+        errorToast('Something went wrong. Please try again.' + error.message),
+      );
+  }
+
+  /**
+   * Send forgot password link to user email
+   * @name resetPassword
+   * @description Function that sends reset password link to user email.
+   */
+
+  async function resetPassword(email: string) {
+    await sendPasswordResetEmail(auth, email)
+      .then(() => {
+        navigate(Routes.Login);
+        successToast(
+          'Check your email. Reset password mail has been sent successfully!',
+        );
+      })
+      .catch((error: FirebaseError) =>
+        errorToast(getLoginErrorMessage(error.code)),
+      );
+  }
+
+  /**
+   * Create new account or login user with Google
+   * @name loginWithGoogle
+   * @description Function that creates new firebase account in Firebase Authentication or logs in user with Google Provider.
+   */
+
+  async function loginWithGoogle() {
+    try {
+      googleProvider.setCustomParameters({ prompt: 'select_account' });
+      await signInWithPopup(auth, googleProvider);
+      successToast('You are logged in successfully using Google!');
+    } catch (error) {
+      if (error instanceof FirebaseError)
+        errorToast(getLoginErrorMessage(error.code));
+    }
+  }
+
+  /**
+   * Create new account or login user with Facebook
+   * @name loginWithFacebook
+   * @description Function that creates new firebase account in Firebase Authentication or logs in user with Facebook Provider.
+   * Set app in Facebook Developers, read firebase docs.
+   */
+
+  async function loginWithFacebook() {
+    try {
+      facebookProvider.setCustomParameters({ prompt: 'select_account' });
+      await signInWithPopup(auth, facebookProvider);
+      successToast('You are logged in successfully using Facebook!');
+    } catch (error) {
+      if (error instanceof FirebaseError)
+        errorToast(getLoginErrorMessage(error.code));
+    }
+  }
+
+  /**
+   * Function that is used as a callback for Firebase Auth onAuthStateChanged event.
+   * @name onUserAuthStateChange
+   * @description Function that is used as a callback inside of onAuthStateChanged to subscribe and get if user is logged in or not.
+   */
 
   const onUserAuthStateChange = useCallback(
     async (user: User | null) => {
+      console.log('user', { user });
       if (!user) {
         setUser({
-          userUid: null,
           email: null,
+          userUid: null,
           creationTime: undefined,
         });
-        settingsCleanup(null);
         return;
       }
-
-      const settings = await getSettings(user.uid);
-      if (settings) setSettings(settings);
       setUser({
         email: user.email,
         userUid: user.uid,
         creationTime: user.metadata.creationTime,
       });
     },
-    [setUser, userCleanup],
+    [setUser, user],
   );
 
   useEffect(() => {
-    const subscription = onAuthStateChanged(auth, onUserAuthStateChange);
+    const subscription = auth.onAuthStateChanged(onUserAuthStateChange);
 
-    return () => {
-      subscription();
-    };
+    return subscription;
   }, [auth, onUserAuthStateChange]);
 
-  const registerWithEmailPassword = async (
-    email1: string,
-    password: string,
-  ) => {
-    try {
-      const response = await createUserWithEmailAndPassword(
-        auth,
-        email1,
-        password,
-      );
-      const {
-        email,
-        metadata: { creationTime },
-        uid,
-      } = response.user;
-      const settingsDocumentReference = getDocumentReference(uid, 'settings');
-      await setUserCollection(settingsDocumentReference, {
-        email,
-        creationTime,
-        isOnboardingInProgress: true,
-      });
-      navigate(Routes.Onboarding);
-    } catch (error: unknown) {
-      if (error instanceof FirebaseError) setRegisterError(error.code);
-    }
-  };
-
-  const loginWithEmailPassword = async (email: string, password: string) => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate(Routes.AvailableObjects);
-    } catch (error) {
-      if (error instanceof FirebaseError) setLoginError(error.code);
-    }
-  };
-
-  const loginWithGoogle = async () => {
-    try {
-      const { user } = await signInWithPopup(auth, googleProvider);
-      await createUserWithSocialMedia(user);
-    } catch (error) {
-      if (error instanceof FirebaseError) setLoginError(error.code);
-    }
-  };
-
-  const loginWithFacebook = async () => {
-    try {
-      const { user } = await signInWithPopup(auth, facebookProvider);
-      await createUserWithSocialMedia(user);
-    } catch (error) {
-      if (error instanceof FirebaseError) setLoginError(error.code);
-    }
-  };
-
-  const resetPassword = async (email: string) => {
-    try {
-      await sendPasswordResetEmail(auth, email);
-      navigate(Routes.Login);
-    } catch (error) {
-      if (error instanceof FirebaseError) setForgotPasswordError(error.code);
-    }
-  };
-
-  const logout = async () => {
-    try {
-      await signOut(auth);
-      navigate(Routes.Login);
-    } catch (error) {
-      if (error instanceof FirebaseError) setRegisterError(error.code);
-    }
-  };
-
   return {
-    registerWithEmailPassword,
-    loginWithEmailPassword,
+    register,
+    logout,
+    login,
     resetPassword,
     loginWithGoogle,
     loginWithFacebook,
-    logout,
   };
-};
+}

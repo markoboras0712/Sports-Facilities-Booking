@@ -5,16 +5,11 @@ import {
   AuthenticationLayout,
   SideRandomImage,
   useAuthenticationRedirects,
-  userSelectors,
 } from 'modules/authentication';
 import * as React from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { CustomizedSnackbars } from 'shared/components';
 
 export const LoginPage: React.FC = () => {
   const { loading } = useAuthenticationRedirects();
-  const loginError = useRecoilValue(userSelectors.loginError);
-  const errorCleanup = useSetRecoilState(userSelectors.loginErrorCleanup);
 
   if (loading) {
     return (
@@ -55,11 +50,6 @@ export const LoginPage: React.FC = () => {
             authenticationTitle="Sign In"
             forgotPassword
             backToSignup
-          />
-          <CustomizedSnackbars
-            errorCleanup={errorCleanup}
-            snackbarMessage={loginError}
-            snackbarOpen={Boolean(loginError)}
           />
         </Box>
       </Grid>
