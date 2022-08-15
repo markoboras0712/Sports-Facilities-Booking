@@ -69,6 +69,7 @@ export const Navigation: React.FC = () => {
                     display: { xs: 'none', sm: 'block' },
                   }}
                   variant="outlined"
+                  onClick={() => navigate(Routes.Login)}
                 >
                   Login
                 </Button>
