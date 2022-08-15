@@ -1,15 +1,17 @@
 import { DefaultValue, selector } from 'recoil';
 import { OnboardingData } from '../models';
-import {
+import { settingsAtoms } from './atoms';
+
+const {
   addressAtom,
   avatarAtom,
   cityAtom,
   countryAtom,
   firstNameAtom,
+  isOnboardingInProgressAtom,
   lastNameAtom,
   postalCodeAtom,
-  isOnboardingInProgressAtom,
-} from './atoms';
+} = settingsAtoms;
 
 const settings = selector<OnboardingData | null>({
   key: 'authorization.user',

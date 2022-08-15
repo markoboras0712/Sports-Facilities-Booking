@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from '@mui/material';
-import { useSubmitOnEnter } from 'shared/hooks';
-import React from 'react';
+import { useSubmitOnEnter, useToast } from 'shared/hooks';
+import React, { useEffect } from 'react';
 
 interface Props {
   steps: string[];
@@ -22,13 +22,22 @@ export const OnboardingNavigation: React.FC<Props> = ({
   onSubmit,
 }) => {
   const submitButtonRef = useSubmitOnEnter();
+  const { infoToast } = useToast();
+
+  useEffect(() => {
+    if (activeStep === 0)
+      infoToast(
+        'Welcome to the onboarding process! You can change these settings at any time.',
+      );
+
+    if (activeStep === steps.length)
+      infoToast('You have completed the onboarding process!');
+  }, [activeStep]);
+
   return (
     <>
       {activeStep === steps.length ? (
         <>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            Onboarding completed. Congratulations.
-          </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Box sx={{ flex: '1 1 auto' }} />
             <Button onClick={handleReset}>Edit</Button>

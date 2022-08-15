@@ -22,9 +22,10 @@ export const OnboardingBuilder: React.FC = () => {
   const user = useRecoilValue(authSelectors.user);
   const settings = useRecoilValue(settingsSelector.settings);
   const setSettings = useSetRecoilState(settingsSelector.settings);
-  const { updateUser } = useFirestore();
   const form = useForm<OnboardingData>();
   const { handleSubmit } = form;
+
+  const { updateUser } = useFirestore();
   const { activeStep, skipped, handleBack, handleNext, handleReset } =
     useSteps(handleSubmit);
 
@@ -32,6 +33,7 @@ export const OnboardingBuilder: React.FC = () => {
     if (user?.userUid && settings) {
       setSettings({ ...settings, isOnboardingInProgress: false });
       updateUser(user.userUid, { ...data, isOnboardingInProgress: false });
+
       navigate(Routes.AvailableObjects);
     }
   });

@@ -28,8 +28,8 @@ export const useFirestoreUtilities = <T>() => {
     collectionSnapshot: QuerySnapshot<DocumentData>,
   ) => !collectionSnapshot.empty;
 
-  const isOnboardingData = (data: OnboardingData): data is OnboardingData => {
-    return (data as OnboardingData).firstName !== undefined;
+  const isOnboardingData = (data?: DocumentData): data is OnboardingData => {
+    return (data as OnboardingData).isOnboardingInProgress !== undefined;
   };
 
   return {

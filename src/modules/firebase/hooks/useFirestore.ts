@@ -51,9 +51,12 @@ export const useFirestore = () => {
   const getSettings = async (userUid: string) => {
     const settingsDocument = doc(db, userUid, 'settings');
     const settingsSnapshot = await getDoc(settingsDocument);
-    if (isOnboardingData(settingsSnapshot.data() as OnboardingData)) {
-      return settingsSnapshot.data() as OnboardingData;
+    const onboardingData = settingsSnapshot.data();
+
+    if (isOnboardingData(onboardingData)) {
+      return onboardingData;
     }
+
     return;
   };
 

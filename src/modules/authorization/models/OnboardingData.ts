@@ -1,3 +1,5 @@
+import { AvatarData } from './AvatarData';
+
 export interface OnboardingData {
   firstName: string | null;
   lastName: string | null;
@@ -10,25 +12,16 @@ export interface OnboardingData {
   isOnboardingInProgress: boolean;
 }
 
-export interface AvatarData {
-  skinTone: string;
-  eyes: string;
-  eyebrows: string;
-  mouth: string;
-  hair: string;
-  facialHair: string;
-  clothing: string;
-  accessory: string;
-  graphic: string;
-  hat: string;
-  body: string;
-  hairColor: string;
-  clothingColor: string;
-  circleColor: string;
-  lipColor: string;
-  hatColor: string;
-  faceMaskColor: string;
-  mask: boolean;
-  faceMask: boolean;
-  lashes: boolean;
+export class OnboardingData {
+  constructor(data: OnboardingData) {
+    this.firstName = data.firstName || null;
+    this.lastName = data.lastName || null;
+    this.avatar = data.avatar || undefined;
+    this.address = data.address || null;
+    this.country = data.country || undefined;
+    this.city = data.city || undefined;
+    this.postalCode = data.postalCode || undefined;
+    this.phone = data.phone || undefined;
+    this.isOnboardingInProgress = data.isOnboardingInProgress || false;
+  }
 }
