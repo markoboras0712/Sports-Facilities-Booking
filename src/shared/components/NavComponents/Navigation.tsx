@@ -52,7 +52,9 @@ export const Navigation: React.FC = () => {
                     mr: 2,
                     py: 1,
                     display: { xs: 'none', md: 'block' },
+                    cursor: 'pointer',
                   }}
+                  onClick={() => navigate(Routes.Profile)}
                 >
                   {fullName}
                 </Typography>

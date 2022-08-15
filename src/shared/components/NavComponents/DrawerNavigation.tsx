@@ -5,6 +5,8 @@ import { useState } from 'react';
 import * as React from 'react';
 import { useDeviceSizes } from 'shared/hooks';
 import { CustomDrawer } from './CustomDrawer';
+import { navigate } from '@reach/router';
+import { Routes } from 'modules/routing';
 
 export const DrawerNavigation: React.FC = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -44,14 +46,17 @@ export const DrawerNavigation: React.FC = () => {
           mr: mobile ? 1 : 4,
           display: { xs: 'none', sm: 'block' },
           alignContent: 'center',
+          cursor: 'pointer',
         }}
+        onClick={() => navigate(Routes.Landing)}
       >
         <SportsSoccerIcon />
       </Typography>
       <Typography
         sx={{
-          display: { xs: 'none', sm: 'block' },
+          display: { xs: 'none', sm: 'block', cursor: 'pointer' },
         }}
+        onClick={() => navigate(Routes.Landing)}
       >
         Bookings
       </Typography>
