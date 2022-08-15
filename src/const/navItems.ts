@@ -56,7 +56,7 @@ export const navItemsNotLoggedUser: NavItem[] = [
   },
   {
     item: 'Create account',
-    link: '/sign-up',
+    link: '/register',
   },
   {
     item: 'Forgot password',

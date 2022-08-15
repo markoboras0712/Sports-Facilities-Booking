@@ -6,7 +6,7 @@ import {
   LoginPage,
   OnboardingPage,
   ProfilePage,
-  SignUpPage,
+  RegisterPage,
 } from 'pages';
 import * as React from 'react';
 import { Routes } from '../routes';
@@ -20,7 +20,7 @@ export const Routing: React.FC = () => {
     <Router basepath="/">
       <RouterPage path={Routes.Landing} pageComponent={<LandingPage />} />
       <RouterPage path={Routes.Login} pageComponent={<LoginPage />} />
-      <RouterPage path={Routes.SignUp} pageComponent={<SignUpPage />} />
+      <RouterPage path={Routes.Register} pageComponent={<RegisterPage />} />
       <RouterPage
         path={Routes.ForgotPassword}
         pageComponent={<ForgotPasswordPage />}

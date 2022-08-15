@@ -7,7 +7,7 @@ import {
 } from 'modules/authentication';
 import * as React from 'react';
 
-export const SignUpPage: React.FC = () => {
+export const RegisterPage: React.FC = () => {
   const { loading } = useAuthenticationRedirects();
 
   if (loading) {
@@ -40,11 +40,11 @@ export const SignUpPage: React.FC = () => {
           }}
         >
           <Typography component="h1" variant="h5">
-            Sign up
+            Create account
           </Typography>
           <PersonAddIcon />
           <AuthenticationForm
-            authenticationTitle="Sign Up"
+            authenticationTitle="Create account"
             forgotPassword
             backToLogin
           />

@@ -24,14 +24,14 @@ interface Props {
   authenticationTitle: string;
   forgotPassword?: boolean;
   backToLogin?: boolean;
-  backToSignup?: boolean;
+  backToRegister?: boolean;
 }
 
 export const AuthenticationForm: React.FC<Props> = ({
   authenticationTitle,
   forgotPassword,
   backToLogin,
-  backToSignup,
+  backToRegister,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -125,9 +125,9 @@ export const AuthenticationForm: React.FC<Props> = ({
             {forgotPassword ? 'Forgot password?' : 'Back to login'}{' '}
           </Link>
         </Grid>
-        {backToSignup && (
+        {backToRegister && (
           <Grid item>
-            <Link to={Routes.SignUp}>{"Don't have an account? Sign Up"}</Link>
+            <Link to={Routes.Register}>{'Create account'}</Link>
           </Grid>
         )}
         {backToLogin && (

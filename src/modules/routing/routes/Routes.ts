@@ -1,5 +1,5 @@
 export enum Routes {
-  SignUp = '/sign-up', // TODO: rename to Register
+  Register = '/register',
   ForgotPassword = '/forgot-password',
   Login = '/login',
   Onboarding = '/onboarding',

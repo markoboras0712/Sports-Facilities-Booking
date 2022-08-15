@@ -1,4 +1,4 @@
 export * from './ForgotPasswordPage';
 export * from './LoginPage';
-export * from './SignUpPage';
+export * from './RegisterPage';
 export * from './OnboardingPage';

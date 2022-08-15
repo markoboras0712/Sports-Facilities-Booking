@@ -49,7 +49,7 @@ export const LoginPage: React.FC = () => {
           <AuthenticationForm
             authenticationTitle="Sign In"
             forgotPassword
-            backToSignup
+            backToRegister
           />
         </Box>
       </Grid>
