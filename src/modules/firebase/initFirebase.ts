@@ -42,6 +42,3 @@ enableIndexedDbPersistence(getFirestore(createFirebaseApp()), {
     console.log('error code', err);
   }
 });
-
-// export const functions = getFunctions(firebaseApp);
-// export const storage = getStorage(firebaseApp);

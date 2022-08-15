@@ -1,11 +1,11 @@
 import { RouteComponentProps, Router } from '@reach/router';
 import {
-  AvailableFacilitiesPage,
   ErrorPage,
   ForgotPasswordPage,
   LandingPage,
   LoginPage,
   OnboardingPage,
+  ProfilePage,
   SignUpPage,
 } from 'pages';
 import * as React from 'react';
@@ -25,11 +25,8 @@ export const Routing: React.FC = () => {
         path={Routes.ForgotPassword}
         pageComponent={<ForgotPasswordPage />}
       />
-      <RouterPage
-        path={Routes.AvailableObjects}
-        pageComponent={<AvailableFacilitiesPage />}
-      />
       <RouterPage path={Routes.Onboarding} pageComponent={<OnboardingPage />} />
+      <RouterPage path={Routes.Profile} pageComponent={<ProfilePage />} />
       <RouterPage path={Routes.NotFound} pageComponent={<ErrorPage />} />
     </Router>
   );

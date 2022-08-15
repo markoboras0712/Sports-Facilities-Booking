@@ -37,7 +37,7 @@ export const OnboardingBuilder: React.FC = () => {
       setSettings({ ...settings, isOnboardingInProgress: false });
       updateUser(user.userUid, { ...data, isOnboardingInProgress: false });
       successToast('Onboarding completed');
-      navigate(Routes.AvailableObjects);
+      navigate(Routes.Landing);
     }
   });
 

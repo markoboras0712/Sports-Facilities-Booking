@@ -26,7 +26,7 @@ export const useFirestore = () => {
     } = user;
     const collectionSnapshot = await getCollectionSnapshot(user.uid);
     if (collectionAlreadyExists(collectionSnapshot)) {
-      navigate(Routes.AvailableObjects);
+      navigate(Routes.Landing);
       return;
     }
     try {

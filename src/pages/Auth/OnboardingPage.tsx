@@ -1,7 +1,7 @@
-import * as React from 'react';
 import { Box, Grid, LinearProgress, Paper } from '@mui/material';
-import { OnboardingBuilder } from 'modules/authorization';
 import { useAuthenticationRedirects } from 'modules/authentication';
+import { OnboardingBuilder } from 'modules/authorization';
+import * as React from 'react';
 
 export const OnboardingPage: React.FC = () => {
   const { loading } = useAuthenticationRedirects();

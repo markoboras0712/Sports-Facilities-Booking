@@ -25,13 +25,15 @@ export const useAuthenticationRedirects = () => {
 
     if (user?.userUid && !settings?.isOnboardingInProgress) {
       setLoading(false);
-      navigate(Routes.AvailableObjects);
+      navigate(Routes.Landing);
     }
 
     if (user?.userUid && settings?.isOnboardingInProgress) {
       setLoading(false);
       navigate(Routes.Onboarding);
     }
+
+    if (user?.userUid === '') setLoading(true);
   }, [user]);
 
   return { loading };
