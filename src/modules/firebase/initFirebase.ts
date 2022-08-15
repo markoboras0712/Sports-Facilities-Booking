@@ -1,5 +1,4 @@
 import { FirebaseOptions, getApp, getApps, initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
 import { enableIndexedDbPersistence, getFirestore } from 'firebase/firestore';
 
 const clientCredentials: FirebaseOptions = {
@@ -27,21 +26,16 @@ function createFirebaseApp() {
   return getApp();
 }
 
-/**
- * @name db
- * @description Database instance of Firebase
- */
-const db = getFirestore(createFirebaseApp());
+export { createFirebaseApp };
 
 /**
- * @name auth
- * @description Authentication instance of Firebase
+ * Enable IndexedDB persistence
+ * @description Function that enables IndexedDB persistence for Firebase Firestore. This is used for offline capabilities.
  */
-const auth = getAuth();
 
-export { createFirebaseApp, db, auth };
-
-enableIndexedDbPersistence(db, { forceOwnership: true }).catch(err => {
+enableIndexedDbPersistence(getFirestore(createFirebaseApp()), {
+  forceOwnership: true,
+}).catch(err => {
   if (err.code == 'failed-precondition') {
     console.log('error code', err);
   } else if (err.code == 'unimplemented') {
@@ -51,4 +45,3 @@ enableIndexedDbPersistence(db, { forceOwnership: true }).catch(err => {
 
 // export const functions = getFunctions(firebaseApp);
 // export const storage = getStorage(firebaseApp);
-// export const auth = getAuth(firebaseApp);

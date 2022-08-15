@@ -1,13 +1,16 @@
 import { navigate } from '@reach/router';
 import { User } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, getFirestore } from 'firebase/firestore';
 import { OnboardingData } from 'modules/authorization';
 import { Routes } from 'modules/routing';
+import { useMemo } from 'react';
 import { removeEmptyProperties } from 'shared/utils';
-import { db } from '../initFirebase';
+import { createFirebaseApp } from '../initFirebase';
 import { useFirestoreUtilities } from './useFirestoreUtilities';
 
 export const useFirestore = () => {
+  const db = useMemo(() => getFirestore(createFirebaseApp()), []);
+
   const {
     getCollectionSnapshot,
     collectionAlreadyExists,

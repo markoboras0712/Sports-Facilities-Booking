@@ -4,16 +4,22 @@ import {
   DocumentData,
   DocumentReference,
   getDocs,
+  getFirestore,
   QuerySnapshot,
   setDoc,
 } from 'firebase/firestore';
 import { OnboardingData } from 'modules/authorization';
-import { db } from '../initFirebase';
+import { useMemo } from 'react';
+import { createFirebaseApp } from '../initFirebase';
 
 export const useFirestoreUtilities = <T>() => {
+  const db = useMemo(() => getFirestore(createFirebaseApp()), []);
+
   const getCollectionReference = (uid: string) => collection(db, uid);
+
   const getDocumentReference = (uid: string, documentName: string) =>
     doc(db, uid, documentName);
+
   const getCollectionSnapshot = (uid: string) => getDocs(collection(db, uid));
 
   const setUserCollection = async (
