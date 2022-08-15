@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Grid, Typography } from '@mui/material';
-import React from 'react';
+import * as React from 'react';
 import { useDeviceSizes } from 'shared/hooks';
 import { DrawerNavigation } from './DrawerNavigation';
 import { UserMenu } from './UserMenu';

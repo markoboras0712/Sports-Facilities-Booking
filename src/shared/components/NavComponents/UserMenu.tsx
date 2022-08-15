@@ -6,7 +6,8 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import * as React from 'react';
 import { useDeviceSizes } from 'shared/hooks';
 
 export const UserMenu: React.FC = () => {

@@ -1,6 +1,7 @@
 import { Box, Button, Typography } from '@mui/material';
 import { useSubmitOnEnter, useToast } from 'shared/hooks';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+import * as React from 'react';
 
 interface Props {
   steps: string[];

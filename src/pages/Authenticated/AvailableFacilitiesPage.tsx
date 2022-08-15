@@ -1,7 +1,7 @@
 import { Box, Button, LinearProgress } from '@mui/material';
 import { useAuthentication } from 'modules/authentication';
 import { useDashboardRedirects } from 'modules/dashboard';
-import React from 'react';
+import * as React from 'react';
 
 export const AvailableFacilitiesPage: React.FC = () => {
   const { logout } = useAuthentication();

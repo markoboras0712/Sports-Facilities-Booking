@@ -1,5 +1,5 @@
 import { Step, StepLabel, Stepper } from '@mui/material';
-import React from 'react';
+import * as React from 'react';
 
 interface Props {
   activeStep: number;

@@ -1,6 +1,6 @@
 import { Autocomplete, Box, Grid, TextField, Typography } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
-import React from 'react';
+import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { OnboardingData } from 'modules/authorization';
 import { countries } from 'const';

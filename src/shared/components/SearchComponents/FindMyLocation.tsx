@@ -1,5 +1,5 @@
 import { Box, IconButton, InputBase, OutlinedInput } from '@mui/material';
-import React from 'react';
+import * as React from 'react';
 import { useDeviceSizes } from 'shared/hooks';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 

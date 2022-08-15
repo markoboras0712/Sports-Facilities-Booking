@@ -8,7 +8,7 @@ import {
   OnboardingPage,
   SignUpPage,
 } from 'pages';
-import React from 'react';
+import * as React from 'react';
 import { Routes } from '../routes';
 
 const RouterPage = (

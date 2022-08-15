@@ -17,7 +17,7 @@ import {
   useAuthenticationRedirects,
 } from 'modules/authentication';
 import { Routes } from 'modules/routing';
-import React from 'react';
+import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { Copyright } from 'shared/components';
 

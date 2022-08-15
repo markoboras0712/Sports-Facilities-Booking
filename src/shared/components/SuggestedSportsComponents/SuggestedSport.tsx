@@ -1,6 +1,6 @@
 import { Box, IconButton, Typography } from '@mui/material';
 import { Sport } from 'const';
-import React from 'react';
+import * as React from 'react';
 import { useDeviceSizes } from 'shared/hooks';
 
 interface Props {

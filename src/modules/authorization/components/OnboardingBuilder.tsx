@@ -13,7 +13,8 @@ import {
 } from 'modules/authorization';
 import { useFirestore } from 'modules/firebase';
 import { Routes } from 'modules/routing';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { useSteps } from '../hooks';

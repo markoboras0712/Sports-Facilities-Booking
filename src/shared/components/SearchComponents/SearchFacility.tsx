@@ -1,5 +1,5 @@
 import { Box, Grid } from '@mui/material';
-import React from 'react';
+import * as React from 'react';
 import { PopularCards } from '../PopularComponents';
 import { SuggestedSports } from '../SuggestedSportsComponents/SuggestedSports';
 import { LandingHero } from './LandingHero';

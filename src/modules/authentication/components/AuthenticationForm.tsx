@@ -9,7 +9,8 @@ import {
 } from '@mui/material';
 import { Link, useLocation } from '@reach/router';
 import { Routes } from 'modules/routing';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Authentication,
