@@ -1,2 +1,3 @@
-export * from './store';
+export * from './components';
 export * from './hooks';
+export * from './initFirebase';

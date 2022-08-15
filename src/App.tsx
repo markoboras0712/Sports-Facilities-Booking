@@ -1,7 +1,7 @@
-import React from 'react';
-import { Routing } from 'modules/routing';
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material';
-import { FirebaseAuthProvider } from 'modules/authentication';
+import { FirebaseProvider } from 'modules/firebase';
+import { Routing } from 'modules/routing';
+import React from 'react';
 
 export const App: React.FC = () => {
   let theme = createTheme();
@@ -9,9 +9,9 @@ export const App: React.FC = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <FirebaseAuthProvider>
+      <FirebaseProvider>
         <Routing />
-      </FirebaseAuthProvider>
+      </FirebaseProvider>
     </ThemeProvider>
   );
 };

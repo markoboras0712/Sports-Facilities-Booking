@@ -4,7 +4,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { OnboardingData } from 'modules/authorization';
 import { Routes } from 'modules/routing';
 import { removeEmptyProperties } from 'shared/utils';
-import { db } from '../store';
+import { db } from '../initFirebase';
 import { useFirestoreUtilities } from './useFirestoreUtilities';
 
 export const useFirestore = () => {

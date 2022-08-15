@@ -1,0 +1,72 @@
+import { FirebaseOptions, getApp, getApps, initializeApp } from 'firebase/app';
+import {
+  FacebookAuthProvider,
+  getAuth,
+  GoogleAuthProvider,
+} from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+
+const clientCredentials: FirebaseOptions = {
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+};
+
+/**
+ * Initialization of Firebase
+ * @name createFirebaseApp
+ * @description Function that creates and initializes a firebase instance or retrieves the existing one.
+ */
+
+function createFirebaseApp() {
+  if (!getApps().length) {
+    const app = initializeApp(clientCredentials);
+
+    return app;
+  }
+
+  return getApp();
+}
+
+/**
+ * @name db
+ * @description Database instance of Firebase
+ */
+const db = getFirestore(createFirebaseApp());
+
+/**
+ * @name auth
+ * @description Authentication instance of Firebase
+ */
+const auth = getAuth();
+
+/**
+ * @name googleProvider
+ * @description Google authentication provider of Firebase
+ */
+const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: 'select_account' });
+
+/**
+ * @name facebookProvider
+ * @description Facebook authentication provider of Firebase
+ */
+const facebookProvider = new FacebookAuthProvider();
+facebookProvider.setCustomParameters({ prompt: 'select_account' });
+
+export { createFirebaseApp, db, auth, googleProvider, facebookProvider };
+
+// enableIndexedDbPersistence(db, { forceOwnership: true }).catch(err => {
+//   if (err.code == 'failed-precondition') {
+//     console.log('error code', err);
+//   } else if (err.code == 'unimplemented') {
+//     console.log('error code', err);
+//   }
+// });
+
+// export const functions = getFunctions(firebaseApp);
+// export const storage = getStorage(firebaseApp);
+// export const auth = getAuth(firebaseApp);

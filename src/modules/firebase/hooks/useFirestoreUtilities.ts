@@ -8,7 +8,7 @@ import {
   setDoc,
 } from 'firebase/firestore';
 import { OnboardingData } from 'modules/authorization';
-import { db } from '../store';
+import { db } from '../initFirebase';
 
 export const useFirestoreUtilities = <T>() => {
   const getCollectionReference = (uid: string) => collection(db, uid);
