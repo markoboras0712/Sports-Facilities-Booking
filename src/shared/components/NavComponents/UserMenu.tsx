@@ -31,6 +31,7 @@ export const UserMenu: React.FC = () => {
   const handleCloseUserMenu = () => {
     setUserMenuOpen(null);
   };
+
   return (
     <>
       <Menu

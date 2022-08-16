@@ -18,6 +18,7 @@ import {
 } from 'modules/authorization';
 import { useFirestore } from 'modules/firebase';
 import * as React from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Navigation } from 'shared/components';
@@ -55,6 +56,10 @@ export const ProfilePage: React.FC = () => {
     }
   });
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   if (user?.userUid === '' || !settings?.firstName) {
     return (
       <Box sx={{ width: '100%' }}>
@@ -62,6 +67,7 @@ export const ProfilePage: React.FC = () => {
       </Box>
     );
   }
+
   return (
     <>
       <Navigation />

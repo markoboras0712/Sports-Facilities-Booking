@@ -4,7 +4,7 @@ export enum Routes {
   Login = '/login',
   Onboarding = '/onboarding',
   Landing = '/', // Last page to do before inbox,chat,notifications
-  Profile = '/profile', // 1st
+  Profile = '/profile',
   MySportFacilities = '/sport-facilities', // List of objects created by the user and he can modify them //3rd
   MyReservations = '/my-reservations', // List of reservations made by the user
   AvailableFacilities = '/available-facilities', // List of objects available for the user to reserve
