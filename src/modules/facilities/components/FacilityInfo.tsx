@@ -1,5 +1,8 @@
 import { Box, Grid, MenuItem, TextField } from '@mui/material';
+import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import * as React from 'react';
+import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { availableSports } from '../const';
 import { Facility } from '../models';
@@ -8,7 +11,11 @@ export const FacilityInfo: React.FC = () => {
   const {
     register,
     formState: { errors },
+    setValue,
   } = useFormContext<Facility>();
+
+  const [startWork, setStartWork] = useState<Date | null>(new Date());
+  const [endWork, setEndWork] = useState<Date | null>(new Date());
 
   return (
     <Grid
@@ -39,8 +46,8 @@ export const FacilityInfo: React.FC = () => {
             required: 'Sport type is required.',
           })}
           id="sportType"
-          label="Sport Type"
           fullWidth
+          label="Sport Type"
           InputLabelProps={{ shrink: true }}
           autoFocus
           helperText={errors.sportType?.message}
@@ -56,38 +63,11 @@ export const FacilityInfo: React.FC = () => {
         </TextField>
         <TextField
           margin="normal"
-          {...register('startWorkingHour', {
-            required: 'Start working hour is required.',
-          })}
-          required
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-          error={errors.facilityName !== undefined}
-          id="startWorkingHour"
-          helperText={errors.facilityName?.message}
-          label="Start Working Hour"
-          autoFocus
-        />
-        <TextField
-          margin="normal"
-          {...register('endWorkingHour', {
-            required: 'End working hour is required.',
-          })}
-          required
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-          error={errors.facilityName !== undefined}
-          id="endWorkingHour"
-          helperText={errors.facilityName?.message}
-          label="End Working Hour"
-          autoFocus
-        />
-        <TextField
-          margin="normal"
           {...register('capacity', {
             required: 'Capacity is required.',
           })}
           required
+          type="number"
           fullWidth
           InputLabelProps={{ shrink: true }}
           error={errors.facilityName !== undefined}
@@ -96,6 +76,60 @@ export const FacilityInfo: React.FC = () => {
           label="Capacity"
           autoFocus
         />
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <TimePicker
+            renderInput={props => (
+              <TextField
+                margin="normal"
+                required
+                id="startWorkingHour"
+                error={errors.startWorkingHour !== undefined}
+                helperText={errors.startWorkingHour?.message}
+                InputLabelProps={{ shrink: true }}
+                sx={{
+                  width: '100%',
+                }}
+                {...props}
+              />
+            )}
+            {...register('startWorkingHour', {
+              required: 'Start working hour is required.',
+            })}
+            label="Start working hour"
+            value={startWork}
+            onChange={newValue => {
+              setStartWork(newValue);
+              setValue('startWorkingHour', newValue);
+            }}
+          />
+        </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <TimePicker
+            renderInput={props => (
+              <TextField
+                margin="normal"
+                required
+                id="endWorkingHour"
+                error={errors.endWorkingHour !== undefined}
+                helperText={errors.endWorkingHour?.message}
+                InputLabelProps={{ shrink: true }}
+                sx={{
+                  width: '100%',
+                }}
+                {...props}
+              />
+            )}
+            {...register('endWorkingHour', {
+              required: 'End working hour is required.',
+            })}
+            label="End working hour"
+            value={endWork}
+            onChange={newValue => {
+              setEndWork(newValue);
+              setValue('endWorkingHour', newValue);
+            }}
+          />
+        </LocalizationProvider>
       </Box>
     </Grid>
   );

@@ -30,11 +30,11 @@ export interface Facility {
   /**
    * Hour of the opening of the facility
    */
-  startWorkingHour: string;
+  startWorkingHour: Date | null;
   /**
    * Hour of the closing of the facility
    */
-  endWorkingHour: string;
+  endWorkingHour: Date | null;
   /**
    * Capacity of the facility
    */
