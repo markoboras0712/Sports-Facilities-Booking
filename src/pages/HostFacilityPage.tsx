@@ -1,8 +1,18 @@
-import { Box, Grid, Paper } from '@mui/material';
-import { FacilityBuilder } from 'modules/facilities';
+import { Box, Grid, LinearProgress, Paper } from '@mui/material';
+import { FacilityBuilder, useFacilitiesRedirects } from 'modules/facilities';
 import * as React from 'react';
 
 export const HostFacilityPage: React.FC = () => {
+  const { loading } = useFacilitiesRedirects();
+
+  if (loading) {
+    return (
+      <Box sx={{ width: '100%' }}>
+        <LinearProgress />
+      </Box>
+    );
+  }
+
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
       <Grid

@@ -26,14 +26,9 @@ export const OnboardingNavigation: React.FC<Props> = ({
   const { infoToast } = useToast();
 
   useEffect(() => {
-    if (activeStep === 0)
-      infoToast(
-        'Welcome to the onboarding process! You can change these settings at any time.',
-      );
-
     if (activeStep === steps.length)
       infoToast(
-        'You have completed the onboarding process! You can edit your settings before you finish.',
+        'You have successfully created sport facility! You can edit your facility before you finish.',
       );
   }, [activeStep]);
 
