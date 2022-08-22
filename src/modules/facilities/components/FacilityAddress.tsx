@@ -2,15 +2,19 @@ import { Autocomplete, Box, Grid, TextField, Typography } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import * as React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { OnboardingData } from 'modules/authorization';
 import { countries } from 'const';
+import { Facility } from '../models';
+import { useRecoilValue } from 'recoil';
+import { settingsSelector } from 'modules/authorization';
 
-export const Address: React.FC = () => {
+export const FacilityAddress: React.FC = () => {
   const {
     register,
     formState: { errors },
-    getValues,
-  } = useFormContext<OnboardingData>();
+  } = useFormContext<Facility>();
+
+  const settings = useRecoilValue(settingsSelector.settings);
+  console.log({ settings });
 
   return (
     <Grid
@@ -34,6 +38,7 @@ export const Address: React.FC = () => {
           fullWidth
           error={errors.address !== undefined}
           id="address"
+          defaultValue={settings?.address}
           helperText={errors.address?.message}
           label="Address"
           autoFocus
@@ -45,7 +50,7 @@ export const Address: React.FC = () => {
           autoHighlight
           getOptionLabel={option => option.label}
           defaultValue={countries.find(
-            country => country.label === getValues().country,
+            country => country.label === settings?.country,
           )}
           renderOption={(props, option) => (
             <Box
@@ -66,10 +71,7 @@ export const Address: React.FC = () => {
           renderInput={params => (
             <TextField
               {...params}
-              {...register('country', {
-                required: 'Country is required.',
-              })}
-              required
+              {...register('country')}
               InputLabelProps={{ shrink: true }}
               error={errors.country !== undefined}
               helperText={errors.country?.message}
@@ -87,6 +89,7 @@ export const Address: React.FC = () => {
           })}
           required
           fullWidth
+          defaultValue={settings?.city}
           InputLabelProps={{ shrink: true }}
           error={errors.city !== undefined}
           id="city"
@@ -100,6 +103,7 @@ export const Address: React.FC = () => {
           fullWidth
           InputLabelProps={{ shrink: true }}
           id="postalCode"
+          defaultValue={settings?.postalCode}
           label="Postal Code"
           autoFocus
         />

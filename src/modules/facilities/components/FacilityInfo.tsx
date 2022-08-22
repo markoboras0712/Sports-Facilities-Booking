@@ -12,10 +12,13 @@ export const FacilityInfo: React.FC = () => {
     register,
     formState: { errors },
     setValue,
+    getValues,
   } = useFormContext<Facility>();
 
-  const [startWork, setStartWork] = useState<Date | null>(new Date());
-  const [endWork, setEndWork] = useState<Date | null>(new Date());
+  const [startWork, setStartWork] = useState<Date | null>(new Date(0, 0, 0, 8));
+  const [endWork, setEndWork] = useState<Date | null>(new Date(0, 0, 0, 21));
+
+  console.log('get values', getValues().sportType);
 
   return (
     <Grid
@@ -52,7 +55,7 @@ export const FacilityInfo: React.FC = () => {
           autoFocus
           helperText={errors.sportType?.message}
           required
-          defaultValue=""
+          defaultValue={getValues().sportType}
           error={errors.sportType !== undefined}
         >
           {availableSports.map((sport, index) => (

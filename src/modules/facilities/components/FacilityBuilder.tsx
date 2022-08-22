@@ -2,7 +2,6 @@ import { Container } from '@mui/material';
 import { onboardingSteps } from 'const';
 import { authSelectors } from 'modules/authentication';
 import {
-  Address,
   OnboardingNavigation,
   OnboardingPreview,
   OnboardingStepper,
@@ -13,6 +12,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
 import { useFacilityBuilderSteps } from '../hooks';
 import { Facility } from '../models';
+import { FacilityAddress } from './FacilityAddress';
 import { FacilityInfo } from './FacilityInfo';
 
 export const FacilityBuilder: React.FC = () => {
@@ -46,7 +46,7 @@ export const FacilityBuilder: React.FC = () => {
         />
         <Container component="main" maxWidth="xl">
           {activeStep === 0 && <FacilityInfo />}
-          {activeStep === 1 && <Address />}
+          {activeStep === 1 && <FacilityAddress />}
           {activeStep === onboardingSteps.length && (
             <OnboardingPreview avatarPhoto={settings?.avatar} />
           )}

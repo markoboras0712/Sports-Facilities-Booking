@@ -58,7 +58,7 @@ export interface Facility {
   /**
    * Zip code of the facility
    */
-  zip?: string;
+  postalCode?: string;
   /**
    * Country of the facility
    */
@@ -93,7 +93,7 @@ export class Facility {
     this.description = data.description || undefined;
     this.address = data.address;
     this.city = data.city;
-    this.zip = data.zip || undefined;
+    this.postalCode = data.postalCode || undefined;
     this.country = data.country;
     this.phone = data.phone;
     this.email = data.email || undefined;

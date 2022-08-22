@@ -1,4 +1,4 @@
-export * from './Address';
+export * from './OnboardingAddress';
 export * from './OnboardingNavigation';
 export * from './OnboardingStepper';
 export * from './UserInfo';

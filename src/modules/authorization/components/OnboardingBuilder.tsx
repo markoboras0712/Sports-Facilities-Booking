@@ -3,7 +3,7 @@ import { navigate } from '@reach/router';
 import { onboardingSteps } from 'const';
 import { authSelectors } from 'modules/authentication';
 import {
-  Address,
+  OnboardingAddress,
   OnboardingData,
   OnboardingNavigation,
   OnboardingPreview,
@@ -58,7 +58,7 @@ export const OnboardingBuilder: React.FC = () => {
         />
         <Container component="main" maxWidth="xl">
           {activeStep === 0 && <UserInfo avatarPhoto={settings?.avatar} />}
-          {activeStep === 1 && <Address />}
+          {activeStep === 1 && <OnboardingAddress />}
           {activeStep === onboardingSteps.length && (
             <OnboardingPreview avatarPhoto={settings?.avatar} />
           )}
