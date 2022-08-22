@@ -155,6 +155,7 @@ export function useAuthentication() {
           creationTime: undefined,
         });
         settingsCleanup(null);
+        // navigate(Routes.Login);
         return;
       }
 

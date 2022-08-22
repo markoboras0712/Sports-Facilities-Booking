@@ -2,6 +2,7 @@ import { RouteComponentProps, Router } from '@reach/router';
 import {
   ErrorPage,
   ForgotPasswordPage,
+  HostFacilityPage,
   LandingPage,
   LoginPage,
   OnboardingPage,
@@ -27,6 +28,10 @@ export const Routing: React.FC = () => {
       />
       <RouterPage path={Routes.Onboarding} pageComponent={<OnboardingPage />} />
       <RouterPage path={Routes.Profile} pageComponent={<ProfilePage />} />
+      <RouterPage
+        path={Routes.FacilityBuilder}
+        pageComponent={<HostFacilityPage />}
+      />
       <RouterPage path={Routes.NotFound} pageComponent={<ErrorPage />} />
     </Router>
   );

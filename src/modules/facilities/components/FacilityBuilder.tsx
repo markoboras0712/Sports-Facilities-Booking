@@ -4,49 +4,44 @@ import { onboardingSteps } from 'const';
 import { authSelectors } from 'modules/authentication';
 import {
   Address,
-  OnboardingData,
   OnboardingNavigation,
   OnboardingPreview,
   OnboardingStepper,
   settingsSelector,
-  UserInfo,
 } from 'modules/authorization';
-import { useFirestore } from 'modules/firebase';
 import { Routes } from 'modules/routing';
-import { useEffect } from 'react';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useOnboardingSteps } from '../hooks';
+import { useRecoilValue } from 'recoil';
 import { useToast } from 'shared/hooks';
+import { useFacilityBuilderSteps } from '../hooks';
+import { Facility } from '../models';
+import { FacilityInfo } from './FacilityInfo';
 
-export const OnboardingBuilder: React.FC = () => {
+export const FacilityBuilder: React.FC = () => {
   const user = useRecoilValue(authSelectors.user);
   const settings = useRecoilValue(settingsSelector.settings);
-  const setSettings = useSetRecoilState(settingsSelector.settings);
-  const form = useForm<OnboardingData>();
+  const form = useForm<Facility>();
   const { handleSubmit } = form;
 
-  const { updateUser } = useFirestore();
   const { activeStep, skipped, handleBack, handleNext, handleReset } =
-    useOnboardingSteps(handleSubmit);
+    useFacilityBuilderSteps(handleSubmit);
   const { successToast } = useToast();
 
-  const onSubmit = handleSubmit((data: OnboardingData) => {
+  const onSubmit = handleSubmit((data: Facility) => {
+    console.log(data);
     if (user?.userUid && settings) {
-      setSettings({ ...settings, isOnboardingInProgress: false });
-      updateUser(user.userUid, { ...data, isOnboardingInProgress: false });
       successToast('Onboarding completed');
       navigate(Routes.Landing);
     }
   });
 
-  useEffect(() => {
-    if (settings) {
-      form.reset(settings);
-      return;
-    }
-  }, [user]);
+  //   useEffect(() => {
+  //     if (settings) {
+  //       form.reset(settings);
+  //       return;
+  //     }
+  //   }, [user]);
 
   return (
     <FormProvider {...form}>
@@ -57,7 +52,7 @@ export const OnboardingBuilder: React.FC = () => {
           steps={onboardingSteps}
         />
         <Container component="main" maxWidth="xl">
-          {activeStep === 0 && <UserInfo avatarPhoto={settings?.avatar} />}
+          {activeStep === 0 && <FacilityInfo />}
           {activeStep === 1 && <Address />}
           {activeStep === onboardingSteps.length && (
             <OnboardingPreview avatarPhoto={settings?.avatar} />
