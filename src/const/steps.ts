@@ -1,3 +1,3 @@
 export const onboardingSteps = ['Personal Data', 'Address'];
 
-export const facilityBuilderSteps = ['Basic info', 'Location', 'Contact'];
+export const facilityBuilderSteps = ['Info', 'Location', 'Pictures', 'Contact'];

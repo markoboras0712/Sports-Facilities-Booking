@@ -14,7 +14,6 @@ export const FacilityAddress: React.FC = () => {
   } = useFormContext<Facility>();
 
   const settings = useRecoilValue(settingsSelector.settings);
-  console.log({ settings });
 
   return (
     <Grid
@@ -23,7 +22,7 @@ export const FacilityAddress: React.FC = () => {
       justifyContent="center"
       alignItems="center"
     >
-      <Typography component="h1" variant="h5">
+      <Typography component="h1" variant="h5" sx={{ mt: 2 }}>
         Address
       </Typography>
       <HomeIcon />

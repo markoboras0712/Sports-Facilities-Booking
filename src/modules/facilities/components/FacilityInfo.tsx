@@ -1,6 +1,7 @@
-import { Box, Grid, MenuItem, TextField } from '@mui/material';
+import { Box, Grid, MenuItem, TextField, Typography } from '@mui/material';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import * as React from 'react';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -18,8 +19,6 @@ export const FacilityInfo: React.FC = () => {
   const [startWork, setStartWork] = useState<Date | null>(new Date(0, 0, 0, 8));
   const [endWork, setEndWork] = useState<Date | null>(new Date(0, 0, 0, 21));
 
-  console.log('get values', getValues().sportType);
-
   return (
     <Grid
       container
@@ -27,7 +26,11 @@ export const FacilityInfo: React.FC = () => {
       justifyContent="center"
       alignItems="center"
     >
-      <Box sx={{ mt: 1 }}>
+      <Typography component="h1" variant="h5" sx={{ mt: 2 }}>
+        Basic information of facility
+      </Typography>
+      <SettingsSuggestIcon />
+      <Box sx={{ mt: 1, display: 'flex', flexDirection: 'column' }}>
         <TextField
           margin="normal"
           {...register('facilityName', {
@@ -45,17 +48,17 @@ export const FacilityInfo: React.FC = () => {
         <TextField
           margin="normal"
           select
+          fullWidth
           {...register('sportType', {
             required: 'Sport type is required.',
           })}
           id="sportType"
-          fullWidth
           label="Sport Type"
           InputLabelProps={{ shrink: true }}
           autoFocus
           helperText={errors.sportType?.message}
           required
-          defaultValue={getValues().sportType}
+          defaultValue={getValues().sportType || 'football'}
           error={errors.sportType !== undefined}
         >
           {availableSports.map((sport, index) => (
@@ -85,13 +88,11 @@ export const FacilityInfo: React.FC = () => {
               <TextField
                 margin="normal"
                 required
+                fullWidth
                 id="startWorkingHour"
                 error={errors.startWorkingHour !== undefined}
                 helperText={errors.startWorkingHour?.message}
                 InputLabelProps={{ shrink: true }}
-                sx={{
-                  width: '100%',
-                }}
                 {...props}
               />
             )}
@@ -112,13 +113,11 @@ export const FacilityInfo: React.FC = () => {
               <TextField
                 margin="normal"
                 required
+                fullWidth
                 id="endWorkingHour"
                 error={errors.endWorkingHour !== undefined}
                 helperText={errors.endWorkingHour?.message}
                 InputLabelProps={{ shrink: true }}
-                sx={{
-                  width: '100%',
-                }}
                 {...props}
               />
             )}
