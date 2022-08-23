@@ -75,12 +75,41 @@ export const FacilityInfo: React.FC = () => {
           required
           type="number"
           fullWidth
+          defaultValue={10}
           InputLabelProps={{ shrink: true }}
           error={errors.facilityName !== undefined}
           id="capacity"
           helperText={errors.facilityName?.message}
           label="Capacity"
           autoFocus
+        />
+        <TextField
+          margin="normal"
+          {...register('price', {
+            required: 'Price is required.',
+          })}
+          required
+          type="number"
+          fullWidth
+          defaultValue={0}
+          InputLabelProps={{ shrink: true }}
+          error={errors.price !== undefined}
+          id="price"
+          helperText={errors.price?.message}
+          label="Price"
+          autoFocus
+        />
+        <TextField
+          margin="normal"
+          {...register('description')}
+          fullWidth
+          id="description"
+          label="Description"
+          InputLabelProps={{ shrink: true }}
+          multiline
+          autoFocus
+          rows={4}
+          maxRows={8}
         />
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <TimePicker

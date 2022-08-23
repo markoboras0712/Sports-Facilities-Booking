@@ -15,6 +15,7 @@ import { Facility } from '../models';
 import { FacilityAddress } from './FacilityAddress';
 import { FacilityContact } from './FacilityContact';
 import { FacilityInfo } from './FacilityInfo';
+import { FacilityPictures } from './FacilityPictures';
 
 export const FacilityBuilder: React.FC = () => {
   const user = useRecoilValue(authSelectors.user);
@@ -48,7 +49,7 @@ export const FacilityBuilder: React.FC = () => {
         <Container component="main" maxWidth="lg">
           {activeStep === 0 && <FacilityInfo />}
           {activeStep === 1 && <FacilityAddress />}
-          {activeStep === 2 && <FacilityAddress />}
+          {activeStep === 2 && <FacilityPictures />}
           {activeStep === 3 && <FacilityContact />}
           {activeStep === facilityBuilderSteps.length && (
             <OnboardingPreview avatarPhoto={settings?.avatar} />

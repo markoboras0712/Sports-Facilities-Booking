@@ -42,7 +42,7 @@ export interface Facility {
   /**
    * Price of the facility
    */
-  price: number | 'free';
+  price: number;
   /**
    * Description of the facility
    */
@@ -66,7 +66,7 @@ export interface Facility {
   /**
    * Phone number of the facility
    */
-  phone: string;
+  phone?: string;
   /**
    * Email of the facility
    */
@@ -95,7 +95,7 @@ export class Facility {
     this.city = data.city;
     this.postalCode = data.postalCode || undefined;
     this.country = data.country;
-    this.phone = data.phone;
+    this.phone = data.phone || undefined;
     this.email = data.email || undefined;
     this.website = data.website || undefined;
   }
