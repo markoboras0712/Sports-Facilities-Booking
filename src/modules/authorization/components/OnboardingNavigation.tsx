@@ -46,9 +46,7 @@ export const OnboardingNavigation: React.FC<Props> = ({
         </>
       ) : (
         <>
-          <Typography sx={{ mt: '10%', mb: 1 }}>
-            Step {activeStep + 1}
-          </Typography>
+          <Typography sx={{ mt: 4, mb: 1 }}>Step {activeStep + 1}</Typography>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
               color="inherit"
