@@ -30,6 +30,14 @@ export const useFirestoreUtilities = <T>() => {
     await setDoc(documentReference, data, { merge });
   };
 
+  const setFacilityDocument = async (
+    documentReference: DocumentReference<DocumentData>,
+    data: T,
+    merge?: boolean,
+  ) => {
+    await setDoc(documentReference, data, { merge });
+  };
+
   const collectionAlreadyExists = (
     collectionSnapshot: QuerySnapshot<DocumentData>,
   ) => !collectionSnapshot.empty;
@@ -45,6 +53,7 @@ export const useFirestoreUtilities = <T>() => {
     getDocumentReference,
     setUserCollection,
     getCollectionSnapshot,
+    setFacilityDocument,
     collectionAlreadyExists,
     isOnboardingData,
   };

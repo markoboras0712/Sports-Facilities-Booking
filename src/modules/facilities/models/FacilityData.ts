@@ -10,7 +10,7 @@ export interface Facility {
   /**
    * Date of the creation of the facility
    */
-  createdAt: string;
+  createdAt: Date | null;
   /**
    * Date of the last update of the facility
    */
@@ -99,6 +99,7 @@ export class Facility {
     this.city = data.city;
     this.postalCode = data.postalCode || undefined;
     this.country = data.country;
+    this.files = data.files || [];
     this.phone = data.phone || undefined;
     this.email = data.email || undefined;
     this.website = data.website || undefined;

@@ -1,10 +1,11 @@
 import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import { navigate } from '@reach/router';
+import { Routes } from 'modules/routing';
 import * as React from 'react';
 
 export const ErrorPage: React.FC = () => {
   function handlerClick() {
-    navigate(-1);
+    navigate(Routes.Landing);
   }
 
   return (

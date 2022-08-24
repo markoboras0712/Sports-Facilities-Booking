@@ -1,20 +1,36 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { authSelectors } from 'modules/authentication';
+import { settingsSelector } from 'modules/authorization';
+import { useFirestore } from 'modules/firebase';
 import { useState } from 'react';
-import { UseFormHandleSubmit } from 'react-hook-form';
+import { useForm, UseFormHandleSubmit } from 'react-hook-form';
+import { useRecoilValue } from 'recoil';
 import { Facility } from '../models';
 
 export const useFacilityBuilderSteps = (
   handleSubmit: UseFormHandleSubmit<Facility>,
 ) => {
   const [activeStep, setActiveStep] = useState(0);
+  const { getValues, setValue } = useForm<Facility>();
+
   const [skipped, setSkipped] = useState(new Set<number>());
-  // const user = useRecoilValue(authSelectors.user);
+  const user = useRecoilValue(authSelectors.user);
+  const settings = useRecoilValue(settingsSelector.settings);
+
   // const setSettings = useSetRecoilState(settingsSelector.settings);
 
-  // const { updateUser } = useFirestore();
+  const { createFacility, updateFacility } = useFirestore();
   const isStepSkipped = (step: number) => skipped.has(step);
 
-  const handleNext = handleSubmit((data: Facility) => {
-    console.log(data);
+  const handleNext = handleSubmit(async (data: Facility) => {
+    if (!user?.userUid || !settings?.country) return;
+    const { files, ...restData } = data;
+    const facilityData: Facility = {
+      ...restData,
+      creatorId: user?.userUid,
+      createdAt: new Date(),
+      country: data.country || settings.country,
+    };
     // setSettings(data);
 
     let newSkipped = skipped;
@@ -26,7 +42,13 @@ export const useFacilityBuilderSteps = (
 
     setActiveStep(prevActiveStep => prevActiveStep + 1);
 
-    // if (user?.userUid) updateUser(user.userUid, data);
+    if (activeStep === 0) {
+      const facilityId = await createFacility(user.userUid, facilityData);
+      if (facilityId) setValue('id', facilityId);
+    }
+
+    if (activeStep !== 0)
+      updateFacility(user.userUid, getValues().id, facilityData);
 
     setSkipped(newSkipped);
   });

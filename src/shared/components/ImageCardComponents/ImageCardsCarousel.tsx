@@ -7,15 +7,21 @@ interface Props {
 }
 
 export const ImageCardsCarousel: React.FC<Props> = ({ imageUrls }) => (
-  <Carousel>
-    {imageUrls?.map((url, i) => (
-      <Paper key={i}>
+  <Carousel sx={{ backgroundColor: 'none' }}>
+    {imageUrls ? (
+      imageUrls.map((url, i) => (
+        <Paper sx={{ backgroundColor: 'none' }} key={i}>
+          <img src={url} width={'100%'} />
+        </Paper>
+      ))
+    ) : (
+      <Paper>
         <img
-          src={url || 'https://source.unsplash.com/random'}
+          src={'https://source.unsplash.com/random'}
           height={'200px'}
           width={'100%'}
         />
       </Paper>
-    ))}
+    )}
   </Carousel>
 );

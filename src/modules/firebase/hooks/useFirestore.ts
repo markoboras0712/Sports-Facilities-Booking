@@ -1,7 +1,14 @@
 import { navigate } from '@reach/router';
 import { User } from 'firebase/auth';
-import { doc, getDoc, getFirestore } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getFirestore,
+} from 'firebase/firestore';
 import { OnboardingData } from 'modules/authorization';
+import { Facility } from 'modules/facilities';
 import { Routes } from 'modules/routing';
 import { useMemo } from 'react';
 import { removeEmptyProperties } from 'shared/utils';
@@ -17,6 +24,7 @@ export const useFirestore = () => {
     getDocumentReference,
     setUserCollection,
     isOnboardingData,
+    setFacilityDocument,
   } = useFirestoreUtilities();
 
   const createUserWithSocialMedia = async (user: User) => {
@@ -51,6 +59,46 @@ export const useFirestore = () => {
     }
   };
 
+  const createFacility = async (
+    userUid: string,
+    facilityData: Omit<Facility, 'files'>,
+  ) => {
+    try {
+      removeEmptyProperties(facilityData);
+      const subColRef = collection(db, userUid, 'facilities', 'entities');
+      const facilityRef = await addDoc(subColRef, facilityData);
+
+      return facilityRef.id;
+    } catch (error) {
+      console.log(error);
+    }
+
+    return;
+  };
+
+  const updateFacility = async (
+    userUid: string,
+    facilityId: string,
+    facilityData: Facility,
+  ) => {
+    try {
+      const documentReference = doc(
+        db,
+        userUid,
+        `facilities/entities/${facilityId}`,
+      );
+      removeEmptyProperties(facilityData);
+
+      await setFacilityDocument(
+        documentReference,
+        { ...facilityData, id: facilityId },
+        true,
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getSettings = async (userUid: string) => {
     const settingsDocument = doc(db, userUid, 'settings');
     const settingsSnapshot = await getDoc(settingsDocument);
@@ -65,7 +113,9 @@ export const useFirestore = () => {
 
   return {
     getSettings,
+    updateFacility,
     createUserWithSocialMedia,
     updateUser,
+    createFacility,
   };
 };
