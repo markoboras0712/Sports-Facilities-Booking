@@ -15,8 +15,11 @@ import { useFormContext } from 'react-hook-form';
 import { availableSports } from '../const';
 import { Facility } from '../models';
 import { DropzoneDialog } from 'react-mui-dropzone';
+import { useFirebaseStorage } from 'modules/firebase';
 
 export const FacilityInfo: React.FC = () => {
+  const { uploadBlobOrFile } = useFirebaseStorage();
+
   const {
     register,
     formState: { errors },
@@ -196,7 +199,9 @@ export const FacilityInfo: React.FC = () => {
           open={open}
           onClose={() => setOpen(false)}
           onSave={files => {
-            console.log('Files:', files);
+            files.forEach(file => {
+              uploadBlobOrFile(file, 'xxxxFacility', file.name);
+            });
             setOpen(false);
           }}
           showPreviews={true}
