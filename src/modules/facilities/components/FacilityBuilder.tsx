@@ -3,7 +3,6 @@ import { facilityBuilderSteps } from 'const';
 import { authSelectors } from 'modules/authentication';
 import {
   OnboardingNavigation,
-  OnboardingPreview,
   OnboardingStepper,
   settingsSelector,
 } from 'modules/authorization';
@@ -15,6 +14,7 @@ import { Facility } from '../models';
 import { FacilityAddress } from './FacilityAddress';
 import { FacilityContact } from './FacilityContact';
 import { FacilityInfo } from './FacilityInfo';
+import { FacilityPreview } from './FacilityPreview';
 
 export const FacilityBuilder: React.FC = () => {
   const user = useRecoilValue(authSelectors.user);
@@ -49,9 +49,7 @@ export const FacilityBuilder: React.FC = () => {
           {activeStep === 0 && <FacilityInfo />}
           {activeStep === 1 && <FacilityAddress />}
           {activeStep === 2 && <FacilityContact />}
-          {activeStep === facilityBuilderSteps.length && (
-            <OnboardingPreview avatarPhoto={settings?.avatar} />
-          )}
+          {activeStep === facilityBuilderSteps.length && <FacilityPreview />}
         </Container>
         <OnboardingNavigation
           activeStep={activeStep}
