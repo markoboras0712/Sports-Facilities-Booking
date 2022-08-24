@@ -1,4 +1,4 @@
-import { getStorage, ref, uploadBytes } from 'firebase/storage';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useMemo } from 'react';
 import { useToast } from 'shared/hooks';
 import { createFirebaseApp } from '../initFirebase';
@@ -18,10 +18,14 @@ export const useFirebaseStorage = () => {
 
     try {
       await uploadBytes(storageReference, file);
+      const url = await getDownloadURL(storageReference);
       successToast('You have successfully uploaded image!');
+      return url;
     } catch (error) {
       errorToast('You have failed uploading image!');
     }
+
+    return '';
   }
 
   return { getStorageReference, uploadBlobOrFile };

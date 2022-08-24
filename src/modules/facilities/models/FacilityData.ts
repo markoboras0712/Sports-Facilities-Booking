@@ -24,9 +24,13 @@ export interface Facility {
    */
   sportType: SportType;
   /**
-   * Image url of the facility
+   * Image urls of the facility
    */
-  image?: string;
+  imageUrls?: string[];
+  /**
+   * Files of the facility
+   */
+  files?: File[];
   /**
    * Hour of the opening of the facility
    */
@@ -85,7 +89,7 @@ export class Facility {
     this.updatedAt = data.updatedAt;
     this.facilityName = data.facilityName;
     this.sportType = data.sportType;
-    this.image = data.image || undefined;
+    this.imageUrls = data.imageUrls || [];
     this.startWorkingHour = data.startWorkingHour;
     this.endWorkingHour = data.endWorkingHour;
     this.capacity = data.capacity;

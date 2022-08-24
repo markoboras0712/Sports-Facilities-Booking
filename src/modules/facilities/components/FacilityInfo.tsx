@@ -197,10 +197,21 @@ export const FacilityInfo: React.FC = () => {
           dropzoneText={'Drag and drop an image here or click'}
           maxFileSize={5000000}
           open={open}
+          initialFiles={getValues().files}
           onClose={() => setOpen(false)}
           onSave={files => {
+            setValue('files', files);
+            const imageUrls: string[] = [];
             files.forEach(file => {
-              uploadBlobOrFile(file, 'xxxxFacility', file.name);
+              const imageUrlPromise = uploadBlobOrFile(
+                file,
+                'xxxxFacility',
+                file.name,
+              );
+              imageUrlPromise.then(url => {
+                imageUrls.push(url);
+                setValue('imageUrls', imageUrls);
+              });
             });
             setOpen(false);
           }}
