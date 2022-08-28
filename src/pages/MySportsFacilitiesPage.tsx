@@ -6,7 +6,6 @@ import {
   LinearProgress,
   Typography,
 } from '@mui/material';
-import { popularCards } from 'const';
 import { authSelectors } from 'modules/authentication';
 import { myFacilities } from 'modules/facilities';
 import { useFirestore } from 'modules/firebase';
@@ -41,6 +40,7 @@ export const MySportsFacilitiesPage = () => {
           sx={{
             display: 'flex',
             flexDirection: 'column',
+            width: '100%',
           }}
         >
           <Typography
@@ -54,39 +54,54 @@ export const MySportsFacilitiesPage = () => {
             spacing={{ xs: 2, md: 3 }}
             columns={{ xs: 3, sm: 6, md: 12 }}
           >
-            {popularCards.map(
-              ({ name, address, facilityType, price }, index) => (
-                <Grid
-                  sx={{ mb: 2, width: '100%' }}
-                  item
-                  key={index}
-                  xs={3}
-                  sm={3}
-                  md={3}
-                >
-                  <Card
+            {facilities ? (
+              facilities.map(
+                (
+                  { facilityName, address, sportType, price, imageUrls },
+                  index,
+                ) => (
+                  <Grid
                     sx={{
-                      height: '100%',
-                      width: '100%',
-                      borderRadius: 2,
+                      mb: 2,
                     }}
+                    item
+                    key={index}
+                    xs={8}
+                    sm={8}
+                    md={6}
                   >
-                    <ImageCardsCarousel />
-                    <CardContent>
-                      <Typography gutterBottom variant="h6" component="div">
-                        {name}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {address}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {facilityType}
-                      </Typography>
-                      <Typography gutterBottom>{price} HRK / hour</Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ),
+                    <Card
+                      sx={{
+                        height: '100%',
+                        width: '100%',
+                        borderRadius: 2,
+                      }}
+                    >
+                      <ImageCardsCarousel imageUrls={imageUrls} />
+                      <CardContent>
+                        <Typography gutterBottom variant="h6" component="div">
+                          {facilityName}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {address}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {sportType}
+                        </Typography>
+                        <Typography gutterBottom>{price} $ per hour</Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ),
+              )
+            ) : (
+              <Typography
+                variant="h3"
+                sx={{ color: '#939393', textTransform: 'uppercase', mb: 4 }}
+              >
+                You haven't created any sport facility yet. Please host facility
+                first.
+              </Typography>
             )}
           </Grid>
         </Box>
