@@ -9,6 +9,7 @@ import {
   setDoc,
 } from 'firebase/firestore';
 import { OnboardingData } from 'modules/authorization';
+import { Facility } from 'modules/facilities';
 import { useMemo } from 'react';
 import { createFirebaseApp } from '../initFirebase';
 
@@ -48,6 +49,10 @@ export const useFirestoreUtilities = <T>() => {
       : false;
   };
 
+  const isFacilityData = (data?: DocumentData): data is Facility => {
+    return data ? (data as Facility).facilityName !== undefined : false;
+  };
+
   return {
     getCollectionReference,
     getDocumentReference,
@@ -56,5 +61,6 @@ export const useFirestoreUtilities = <T>() => {
     setFacilityDocument,
     collectionAlreadyExists,
     isOnboardingData,
+    isFacilityData,
   };
 };

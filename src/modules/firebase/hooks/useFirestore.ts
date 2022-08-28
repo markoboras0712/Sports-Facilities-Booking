@@ -25,6 +25,7 @@ export const useFirestore = () => {
     setUserCollection,
     isOnboardingData,
     setFacilityDocument,
+    isFacilityData,
   } = useFirestoreUtilities();
 
   const createUserWithSocialMedia = async (user: User) => {
@@ -99,6 +100,22 @@ export const useFirestore = () => {
     }
   };
 
+  const getFacility = async (userUid: string, facilityId: string) => {
+    const facilityDocument = doc(
+      db,
+      userUid,
+      `facilities/entities/${facilityId}`,
+    );
+    const facilitySnapshot = await getDoc(facilityDocument);
+    const facilityData = facilitySnapshot.data();
+
+    if (isFacilityData(facilityData)) {
+      return facilityData;
+    }
+
+    return;
+  };
+
   const getSettings = async (userUid: string) => {
     const settingsDocument = doc(db, userUid, 'settings');
     const settingsSnapshot = await getDoc(settingsDocument);
@@ -117,5 +134,6 @@ export const useFirestore = () => {
     createUserWithSocialMedia,
     updateUser,
     createFacility,
+    getFacility,
   };
 };

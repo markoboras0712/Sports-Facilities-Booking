@@ -5,20 +5,19 @@ import { authSelectors } from 'modules/authentication';
 import {
   OnboardingAddress,
   OnboardingData,
-  OnboardingNavigation,
   OnboardingPreview,
-  OnboardingStepper,
   settingsSelector,
   UserInfo,
 } from 'modules/authorization';
 import { useFirestore } from 'modules/firebase';
 import { Routes } from 'modules/routing';
-import { useEffect } from 'react';
 import * as React from 'react';
+import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { useOnboardingSteps } from '../hooks';
+import { NavigationBuilder, StepperBuilder } from 'shared/components';
 import { useToast } from 'shared/hooks';
+import { useOnboardingSteps } from '../hooks';
 
 export const OnboardingBuilder: React.FC = () => {
   const user = useRecoilValue(authSelectors.user);
@@ -51,7 +50,7 @@ export const OnboardingBuilder: React.FC = () => {
   return (
     <FormProvider {...form}>
       <form>
-        <OnboardingStepper
+        <StepperBuilder
           activeStep={activeStep}
           skipped={skipped}
           steps={onboardingSteps}
@@ -63,7 +62,7 @@ export const OnboardingBuilder: React.FC = () => {
             <OnboardingPreview avatarPhoto={settings?.avatar} />
           )}
         </Container>
-        <OnboardingNavigation
+        <NavigationBuilder
           activeStep={activeStep}
           steps={onboardingSteps}
           onSubmit={onSubmit}

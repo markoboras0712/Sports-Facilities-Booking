@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Grid,
+  InputAdornment,
   MenuItem,
   TextField,
   Typography,
@@ -125,7 +126,7 @@ export const FacilityInfo: React.FC = () => {
           <TextField
             margin="normal"
             {...register('price', {
-              required: 'Price is required.',
+              required: 'Price per hour is required.',
             })}
             required
             type="number"
@@ -133,10 +134,15 @@ export const FacilityInfo: React.FC = () => {
             defaultValue={0}
             sx={{ width: '50%' }}
             InputLabelProps={{ shrink: true }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
             error={errors.price !== undefined}
             id="price"
             helperText={errors.price?.message}
-            label="Price"
+            label="Price per hour"
             autoFocus
           />
         </Box>

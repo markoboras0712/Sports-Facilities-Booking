@@ -3,17 +3,13 @@ import { Container } from '@mui/material';
 import { navigate } from '@reach/router';
 import { facilityBuilderSteps } from 'const';
 import { authSelectors } from 'modules/authentication';
-import {
-  OnboardingNavigation,
-  OnboardingStepper,
-  settingsSelector,
-} from 'modules/authorization';
+import { settingsSelector } from 'modules/authorization';
 import { useFirestore } from 'modules/firebase';
 import { Routes } from 'modules/routing';
 import * as React from 'react';
-import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
+import { NavigationBuilder, StepperBuilder } from 'shared/components';
 import { useToast } from 'shared/hooks';
 import { useFacilityBuilderSteps } from '../hooks';
 import { Facility } from '../models';
@@ -47,20 +43,13 @@ export const FacilityBuilder: React.FC = () => {
 
     updateFacility(user.userUid, facilityData.id, facilityData);
     successToast('Facility successfully created!');
-    navigate(Routes.Landing);
+    navigate(Routes.MySportFacilities);
   });
-
-  useEffect(() => {
-    if (settings) {
-      // form.reset(settings);
-      return;
-    }
-  }, [user]);
 
   return (
     <FormProvider {...form}>
       <form>
-        <OnboardingStepper
+        <StepperBuilder
           activeStep={activeStep}
           skipped={skipped}
           steps={facilityBuilderSteps}
@@ -71,7 +60,7 @@ export const FacilityBuilder: React.FC = () => {
           {activeStep === 2 && <FacilityContact />}
           {activeStep === facilityBuilderSteps.length && <FacilityPreview />}
         </Container>
-        <OnboardingNavigation
+        <NavigationBuilder
           activeStep={activeStep}
           steps={facilityBuilderSteps}
           onSubmit={onSubmit}

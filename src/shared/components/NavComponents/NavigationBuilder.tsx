@@ -16,7 +16,7 @@ interface Props {
   ) => Promise<void>;
 }
 
-export const OnboardingNavigation: React.FC<Props> = ({
+export const NavigationBuilder: React.FC<Props> = ({
   steps,
   activeStep,
   handleBack,

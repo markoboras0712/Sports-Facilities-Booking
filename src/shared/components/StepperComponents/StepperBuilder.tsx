@@ -7,7 +7,7 @@ interface Props {
   skipped: Set<number>;
 }
 
-export const OnboardingStepper: React.FC<Props> = ({
+export const StepperBuilder: React.FC<Props> = ({
   activeStep,
   steps,
   skipped,

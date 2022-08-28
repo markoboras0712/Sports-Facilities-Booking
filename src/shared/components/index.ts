@@ -4,3 +4,4 @@ export * from './SearchComponents';
 export * from './SuggestedSportsComponents';
 export * from './PopularComponents';
 export * from './ImageCardComponents';
+export * from './StepperComponents';

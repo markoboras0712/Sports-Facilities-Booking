@@ -1,5 +1,12 @@
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import { Box, Grid, MenuItem, TextField, Typography } from '@mui/material';
+import {
+  Box,
+  Grid,
+  InputAdornment,
+  MenuItem,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { authSelectors } from 'modules/authentication';
@@ -117,6 +124,11 @@ export const FacilityPreview: React.FC<Props> = () => {
             defaultValue={0}
             sx={{ width: '50%' }}
             InputLabelProps={{ shrink: true }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
             error={errors.price !== undefined}
             id="price"
             helperText={errors.price?.message}
