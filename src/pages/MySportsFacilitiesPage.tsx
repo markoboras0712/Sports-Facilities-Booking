@@ -1,9 +1,38 @@
-import { Box, Card, CardContent, Grid, Typography } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardContent,
+  Grid,
+  LinearProgress,
+  Typography,
+} from '@mui/material';
 import { popularCards } from 'const';
-import React from 'react';
+import { authSelectors } from 'modules/authentication';
+import { myFacilities } from 'modules/facilities';
+import { useFirestore } from 'modules/firebase';
+import React, { useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
 import { ImageCardsCarousel, Navigation } from 'shared/components';
 
 export const MySportsFacilitiesPage = () => {
+  const { getFacilities } = useFirestore();
+  const user = useRecoilValue(authSelectors.user);
+  const facilities = useRecoilValue(myFacilities);
+
+  useEffect(() => {
+    if (!user?.userUid) return;
+
+    getFacilities(user.userUid);
+  }, [user]);
+
+  if (!facilities) {
+    return (
+      <Box sx={{ width: '100%' }}>
+        <LinearProgress />
+      </Box>
+    );
+  }
+
   return (
     <>
       <Navigation />

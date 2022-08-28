@@ -53,6 +53,11 @@ export const useFirestoreUtilities = <T>() => {
     return data ? (data as Facility).facilityName !== undefined : false;
   };
 
+  const isFacilityArrayData = (data?: DocumentData[]): data is Facility[] => {
+    if (!data?.length) return false;
+    return (data as Facility[])[0].facilityName !== undefined;
+  };
+
   return {
     getCollectionReference,
     getDocumentReference,
@@ -62,5 +67,6 @@ export const useFirestoreUtilities = <T>() => {
     collectionAlreadyExists,
     isOnboardingData,
     isFacilityData,
+    isFacilityArrayData,
   };
 };

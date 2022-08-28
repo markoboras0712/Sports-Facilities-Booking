@@ -6,17 +6,22 @@ import {
   doc,
   getDoc,
   getFirestore,
+  onSnapshot,
+  orderBy,
+  query,
 } from 'firebase/firestore';
 import { OnboardingData } from 'modules/authorization';
-import { Facility } from 'modules/facilities';
+import { Facility, myFacilities } from 'modules/facilities';
 import { Routes } from 'modules/routing';
 import { useMemo } from 'react';
+import { useSetRecoilState } from 'recoil';
 import { removeEmptyProperties } from 'shared/utils';
 import { createFirebaseApp } from '../initFirebase';
 import { useFirestoreUtilities } from './useFirestoreUtilities';
 
 export const useFirestore = () => {
   const db = useMemo(() => getFirestore(createFirebaseApp()), []);
+  const setMyFacilities = useSetRecoilState(myFacilities);
 
   const {
     getCollectionSnapshot,
@@ -26,6 +31,7 @@ export const useFirestore = () => {
     isOnboardingData,
     setFacilityDocument,
     isFacilityData,
+    isFacilityArrayData,
   } = useFirestoreUtilities();
 
   const createUserWithSocialMedia = async (user: User) => {
@@ -116,6 +122,24 @@ export const useFirestore = () => {
     return;
   };
 
+  const getFacilities = (userUid: string) => {
+    try {
+      const facilitiesRef = collection(db, userUid, 'facilities', 'entities');
+
+      const q = query(facilitiesRef, orderBy('createdAt', 'asc'));
+      const unsubscribe = onSnapshot(q, snapshot => {
+        const facilities = snapshot.docs.map(doc => doc.data());
+        isFacilityArrayData(facilities)
+          ? setMyFacilities(facilities)
+          : setMyFacilities([]);
+      });
+      return unsubscribe;
+    } catch (error) {
+      console.error(error);
+    }
+    return;
+  };
+
   const getSettings = async (userUid: string) => {
     const settingsDocument = doc(db, userUid, 'settings');
     const settingsSnapshot = await getDoc(settingsDocument);
@@ -135,5 +159,6 @@ export const useFirestore = () => {
     updateUser,
     createFacility,
     getFacility,
+    getFacilities,
   };
 };
