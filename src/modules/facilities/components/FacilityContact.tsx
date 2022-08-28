@@ -13,6 +13,7 @@ export const FacilityContact: React.FC = () => {
     register,
     formState: { errors },
     setValue,
+    getValues,
   } = useFormContext<Facility>();
   const [number, setNumber] = useState('');
 
@@ -54,7 +55,7 @@ export const FacilityContact: React.FC = () => {
           autoFocus
         />
         <MuiTelInput
-          value={number}
+          value={getValues().phone || number}
           sx={{ mt: 1 }}
           defaultCountry="HR"
           label="Phone number"

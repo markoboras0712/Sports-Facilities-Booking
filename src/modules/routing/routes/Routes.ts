@@ -9,8 +9,8 @@ export enum Routes {
   MyReservations = '/my-reservations', // List of reservations made by the user
   AvailableFacilities = '/available-facilities', // List of objects available for the user to reserve
   FacilityBuilder = '/create-sport-facility', // Create a new sport facility //2st page to make
-  Notifications = '/notifications',
-  Chat = '/messages/:id',
-  Inbox = '/inbox',
+  Notifications = '/notifications', // TODO
+  Chat = '/messages/:id', // TODO
+  Inbox = '/inbox', // TODO
   NotFound = '*',
 }

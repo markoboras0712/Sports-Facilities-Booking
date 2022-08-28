@@ -19,22 +19,16 @@ export const useAuthenticationRedirects = () => {
 
   useEffect(() => {
     if (user?.userUid === null) {
-      console.log('here');
-
       setLoading(false);
       navigate(pathname);
     }
 
     if (user?.userUid && !settings?.isOnboardingInProgress) {
-      console.log('here');
-
       setLoading(false);
       navigate(Routes.Landing);
     }
 
     if (user?.userUid && settings?.isOnboardingInProgress) {
-      console.log('here');
-
       setLoading(false);
       navigate(Routes.Onboarding);
     }

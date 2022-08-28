@@ -2,6 +2,8 @@ import { Box, Button, Typography } from '@mui/material';
 import { useSubmitOnEnter, useToast } from 'shared/hooks';
 import { useEffect } from 'react';
 import * as React from 'react';
+import { navigate } from '@reach/router';
+import { Routes } from 'modules/routing';
 
 interface Props {
   steps: string[];
@@ -24,6 +26,14 @@ export const OnboardingNavigation: React.FC<Props> = ({
 }) => {
   const submitButtonRef = useSubmitOnEnter();
   const { infoToast } = useToast();
+
+  const handleReturnBack = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const shouldNavigate = window.confirm('Do you really want to go back?');
+
+    if (!shouldNavigate) return;
+    navigate(Routes.Landing);
+  };
 
   useEffect(() => {
     if (activeStep === steps.length)
@@ -50,8 +60,7 @@ export const OnboardingNavigation: React.FC<Props> = ({
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
               color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
+              onClick={activeStep === 0 ? handleReturnBack : handleBack}
               sx={{ mr: 1 }}
             >
               Back

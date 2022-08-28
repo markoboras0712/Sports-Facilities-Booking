@@ -3,15 +3,15 @@ import { authSelectors } from 'modules/authentication';
 import { settingsSelector } from 'modules/authorization';
 import { useFirestore } from 'modules/firebase';
 import { useState } from 'react';
-import { useForm, UseFormHandleSubmit } from 'react-hook-form';
+import { UseFormHandleSubmit, UseFormSetValue } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
 import { Facility } from '../models';
 
 export const useFacilityBuilderSteps = (
   handleSubmit: UseFormHandleSubmit<Facility>,
+  setValue: UseFormSetValue<Facility>,
 ) => {
   const [activeStep, setActiveStep] = useState(0);
-  const { getValues, setValue } = useForm<Facility>();
 
   const [skipped, setSkipped] = useState(new Set<number>());
   const user = useRecoilValue(authSelectors.user);
@@ -31,7 +31,6 @@ export const useFacilityBuilderSteps = (
       createdAt: new Date(),
       country: data.country || settings.country,
     };
-    // setSettings(data);
 
     let newSkipped = skipped;
 
@@ -42,13 +41,13 @@ export const useFacilityBuilderSteps = (
 
     setActiveStep(prevActiveStep => prevActiveStep + 1);
 
-    if (activeStep === 0) {
+    if (activeStep === 0 && !facilityData.id) {
       const facilityId = await createFacility(user.userUid, facilityData);
       if (facilityId) setValue('id', facilityId);
     }
 
-    if (activeStep !== 0)
-      updateFacility(user.userUid, getValues().id, facilityData);
+    if (facilityData.id)
+      updateFacility(user.userUid, facilityData.id, facilityData);
 
     setSkipped(newSkipped);
   });

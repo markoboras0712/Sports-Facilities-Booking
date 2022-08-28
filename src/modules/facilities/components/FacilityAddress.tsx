@@ -6,14 +6,19 @@ import { countries } from 'const';
 import { Facility } from '../models';
 import { useRecoilValue } from 'recoil';
 import { settingsSelector } from 'modules/authorization';
+import { useState } from 'react';
 
 export const FacilityAddress: React.FC = () => {
   const {
     register,
     formState: { errors },
+    getValues,
   } = useFormContext<Facility>();
 
   const settings = useRecoilValue(settingsSelector.settings);
+  const [selectedCountry] = useState<string | undefined>(
+    getValues().country || settings?.country,
+  );
 
   return (
     <Grid
@@ -49,7 +54,7 @@ export const FacilityAddress: React.FC = () => {
           autoHighlight
           getOptionLabel={option => option.label}
           defaultValue={countries.find(
-            country => country.label === settings?.country,
+            country => country.label === selectedCountry,
           )}
           renderOption={(props, option) => (
             <Box

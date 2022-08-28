@@ -90,8 +90,8 @@ export class Facility {
     this.facilityName = data.facilityName;
     this.sportType = data.sportType;
     this.imageUrls = data.imageUrls || [];
-    this.startWorkingHour = data.startWorkingHour;
-    this.endWorkingHour = data.endWorkingHour;
+    this.startWorkingHour = data.startWorkingHour || new Date();
+    this.endWorkingHour = data.endWorkingHour || new Date();
     this.capacity = data.capacity;
     this.price = data.price;
     this.description = data.description || undefined;

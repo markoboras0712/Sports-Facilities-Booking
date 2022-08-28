@@ -7,11 +7,11 @@ interface Props {
 }
 
 export const ImageCardsCarousel: React.FC<Props> = ({ imageUrls }) => (
-  <Carousel sx={{ backgroundColor: 'none' }}>
+  <Carousel sx={{ height: '250px', width: '400' }}>
     {imageUrls ? (
       imageUrls.map((url, i) => (
-        <Paper sx={{ backgroundColor: 'none' }} key={i}>
-          <img src={url} width={'100%'} />
+        <Paper key={i}>
+          <img src={url} width={'100%'} loading="lazy" />
         </Paper>
       ))
     ) : (

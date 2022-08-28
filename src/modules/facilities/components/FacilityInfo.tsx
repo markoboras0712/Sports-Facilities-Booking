@@ -1,3 +1,4 @@
+import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import {
   Box,
   Button,
@@ -8,18 +9,16 @@ import {
 } from '@mui/material';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
+import { useFirebaseStorage } from 'modules/firebase';
 import * as React from 'react';
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { DropzoneDialog } from 'react-mui-dropzone';
 import { availableSports } from '../const';
 import { Facility } from '../models';
-import { DropzoneDialog } from 'react-mui-dropzone';
-import { useFirebaseStorage } from 'modules/firebase';
 
 export const FacilityInfo: React.FC = () => {
   const { uploadBlobOrFile } = useFirebaseStorage();
-
   const {
     register,
     formState: { errors },
@@ -27,9 +26,34 @@ export const FacilityInfo: React.FC = () => {
     getValues,
   } = useFormContext<Facility>();
 
-  const [startWork, setStartWork] = useState<Date | null>(new Date(0, 0, 0, 8));
-  const [endWork, setEndWork] = useState<Date | null>(new Date(0, 0, 0, 21));
-  const [open, setOpen] = React.useState(false);
+  const [startWork, setStartWork] = useState<Date | null>(
+    getValues().startWorkingHour || null,
+  );
+  const [endWork, setEndWork] = useState<Date | null>(
+    getValues().endWorkingHour || null,
+  );
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  function saveFiles(files: File[]) {
+    setLoading(true);
+    setValue('files', files);
+    const imageUrls: string[] = [];
+
+    files.forEach(async file => {
+      const imageUrlPromise = uploadBlobOrFile(
+        file,
+        getValues().facilityName,
+        file.name,
+      );
+      const imageResult = await imageUrlPromise;
+
+      imageUrls.push(imageResult);
+      setValue('imageUrls', imageUrls);
+    });
+    setLoading(false);
+    setOpen(false);
+  }
 
   return (
     <Grid
@@ -193,28 +217,13 @@ export const FacilityInfo: React.FC = () => {
         <DropzoneDialog
           acceptedFiles={['image/*']}
           cancelButtonText={'cancel'}
-          submitButtonText={'submit'}
+          submitButtonText={loading ? 'Uploading...' : 'Upload'}
           dropzoneText={'Drag and drop an image here or click'}
           maxFileSize={5000000}
           open={open}
           initialFiles={getValues().files}
           onClose={() => setOpen(false)}
-          onSave={files => {
-            setValue('files', files);
-            const imageUrls: string[] = [];
-            files.forEach(file => {
-              const imageUrlPromise = uploadBlobOrFile(
-                file,
-                'xxxxFacility',
-                file.name,
-              );
-              imageUrlPromise.then(url => {
-                imageUrls.push(url);
-                setValue('imageUrls', imageUrls);
-              });
-            });
-            setOpen(false);
-          }}
+          onSave={saveFiles}
           showPreviews={true}
           showFileNamesInPreview={true}
         />

@@ -7,6 +7,7 @@ import {
   settingsSelector,
 } from 'modules/authorization';
 import * as React from 'react';
+import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
 import { useFacilityBuilderSteps } from '../hooks';
@@ -20,22 +21,21 @@ export const FacilityBuilder: React.FC = () => {
   const user = useRecoilValue(authSelectors.user);
   const settings = useRecoilValue(settingsSelector.settings);
   const form = useForm<Facility>();
-  const { handleSubmit } = form;
-  console.log({ user, settings });
+  const { handleSubmit, setValue } = form;
 
   const { activeStep, skipped, handleBack, handleNext, handleReset } =
-    useFacilityBuilderSteps(handleSubmit);
+    useFacilityBuilderSteps(handleSubmit, setValue);
 
   const onSubmit = handleSubmit((data: Facility) => {
     console.log(data);
   });
 
-  //   useEffect(() => {
-  //     if (settings) {
-  //       form.reset(settings);
-  //       return;
-  //     }
-  //   }, [user]);
+  useEffect(() => {
+    if (settings) {
+      // form.reset(settings);
+      return;
+    }
+  }, [user]);
 
   return (
     <FormProvider {...form}>

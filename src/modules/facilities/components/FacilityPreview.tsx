@@ -6,7 +6,7 @@ import { authSelectors } from 'modules/authentication';
 import { AvatarData } from 'modules/authorization';
 import { MuiTelInput } from 'mui-tel-input';
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useRecoilValue } from 'recoil';
 import { availableSports } from '../const';
@@ -26,9 +26,17 @@ export const FacilityPreview: React.FC<Props> = () => {
   } = useFormContext<Facility>();
   const user = useRecoilValue(authSelectors.user);
 
-  const [startWork, setStartWork] = useState<Date | null>(new Date(0, 0, 0, 8));
-  const [endWork, setEndWork] = useState<Date | null>(new Date(0, 0, 0, 21));
-  const [number, setNumber] = useState('');
+  const [startWork, setStartWork] = useState<Date | null>(
+    getValues().startWorkingHour,
+  );
+  const [endWork, setEndWork] = useState<Date | null>(
+    getValues().endWorkingHour,
+  );
+  const [number, setNumber] = useState(getValues().phone || '');
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Grid
