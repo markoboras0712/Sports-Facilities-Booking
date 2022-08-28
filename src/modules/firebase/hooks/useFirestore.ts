@@ -79,7 +79,7 @@ export const useFirestore = () => {
   const updateFacility = async (
     userUid: string,
     facilityId: string,
-    facilityData: Facility,
+    facilityData: Omit<Facility, 'files'>,
   ) => {
     try {
       const documentReference = doc(

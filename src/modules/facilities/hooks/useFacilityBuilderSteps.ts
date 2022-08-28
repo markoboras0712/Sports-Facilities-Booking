@@ -23,6 +23,8 @@ export const useFacilityBuilderSteps = (
   const isStepSkipped = (step: number) => skipped.has(step);
 
   const handleNext = handleSubmit(async (data: Facility) => {
+    // setSettings(data);
+
     if (!user?.userUid || !settings?.country) return;
     const { files, ...restData } = data;
     const facilityData: Facility = {
