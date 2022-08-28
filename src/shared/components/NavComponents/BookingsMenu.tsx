@@ -1,4 +1,4 @@
-import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Menu, MenuItem, Tooltip, Typography } from '@mui/material';
 import { navigate, useLocation } from '@reach/router';
 import { navItemsLoggedUser, navItemsNotLoggedUser } from 'const';
@@ -86,7 +86,7 @@ export const BookingsMenu: React.FC = () => {
           }}
           onClick={handleOpenUserMenu}
         >
-          <SportsSoccerIcon />
+          <KeyboardArrowDownIcon />
         </Typography>
       </Tooltip>
     </>
