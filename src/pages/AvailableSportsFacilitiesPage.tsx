@@ -7,11 +7,10 @@ import {
   CardContent,
   Collapse,
   Grid,
+  IconButton,
   LinearProgress,
-  styled,
   Typography,
 } from '@mui/material';
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import { navigate } from '@reach/router';
 import { authSelectors } from 'modules/authentication';
 import { availableFacilities } from 'modules/facilities';
@@ -20,27 +19,15 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ImageCardsCarousel, Navigation } from 'shared/components';
 
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
-
 export const AvailableSportsFacilitiesPage: React.FC = () => {
+  const [expandedId, setExpandedId] = useState(-1);
   const { getFacilities } = useFirebaseFunctions();
   const user = useRecoilValue(authSelectors.user);
   const facilities = useRecoilValue(availableFacilities);
 
-  const [expanded, setExpanded] = useState(false);
+  const handleExpandClick = (i: number) => {
+    setExpandedId(expandedId === i ? -1 : i);
+  };
 
   useEffect(() => {
     if (!user?.userUid) return;
@@ -103,7 +90,7 @@ export const AvailableSportsFacilitiesPage: React.FC = () => {
                 ) => (
                   <Grid
                     item
-                    key={index}
+                    key={id}
                     sx={{
                       mb: 2,
                     }}
@@ -113,7 +100,6 @@ export const AvailableSportsFacilitiesPage: React.FC = () => {
                   >
                     <Card
                       sx={{
-                        height: '100%',
                         width: '100%',
                         borderRadius: 2,
                       }}
@@ -152,16 +138,19 @@ export const AvailableSportsFacilitiesPage: React.FC = () => {
                         >
                           Make a reservation
                         </Button>
-                        <ExpandMore
-                          expand={expanded}
-                          onClick={() => setExpanded(!expanded)}
-                          aria-expanded={expanded}
+                        <IconButton
+                          onClick={() => handleExpandClick(index)}
+                          aria-expanded={expandedId === index}
                           aria-label="show more"
                         >
                           <ExpandMoreIcon />
-                        </ExpandMore>
+                        </IconButton>
                       </CardActions>
-                      <Collapse in={expanded} timeout="auto" unmountOnExit>
+                      <Collapse
+                        in={expandedId === index}
+                        timeout="auto"
+                        unmountOnExit
+                      >
                         <CardContent>
                           <Typography
                             variant="h6"
