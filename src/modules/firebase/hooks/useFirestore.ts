@@ -115,11 +115,9 @@ export const useFirestore = () => {
     const facilitySnapshot = await getDoc(facilityDocument);
     const facilityData = facilitySnapshot.data();
 
-    if (isFacilityData(facilityData)) {
-      return facilityData;
-    }
+    if (isFacilityData(facilityData)) return facilityData;
 
-    return;
+    return null;
   };
 
   const getFacilities = (userUid: string) => {
@@ -128,7 +126,15 @@ export const useFirestore = () => {
 
       const q = query(facilitiesRef, orderBy('createdAt', 'asc'));
       const unsubscribe = onSnapshot(q, snapshot => {
-        const facilities = snapshot.docs.map(doc => doc.data());
+        const facilities = snapshot.docs.map(doc => {
+          return {
+            ...doc.data(),
+            startWorkingHour: doc.data().startWorkingHour.toDate(),
+            endWorkingHour: doc.data().endWorkingHour.toDate(),
+            createdAt: doc.data().createdAt.toDate(),
+          };
+        });
+
         isFacilityArrayData(facilities)
           ? setMyFacilities(facilities)
           : setMyFacilities([]);

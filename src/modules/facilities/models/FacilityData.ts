@@ -14,7 +14,7 @@ export interface Facility {
   /**
    * Date of the last update of the facility
    */
-  updatedAt: string;
+  updatedAt: Date | null;
   /**
    *  Name of the facility
    */

@@ -1,5 +1,6 @@
 import { RouteComponentProps, Router } from '@reach/router';
 import {
+  EditFacilityPage,
   ErrorPage,
   ForgotPasswordPage,
   HostFacilityPage,
@@ -36,6 +37,10 @@ export const Routing: React.FC = () => {
       <RouterPage
         path={Routes.MySportFacilities}
         pageComponent={<MySportsFacilitiesPage />}
+      />
+      <RouterPage
+        path={Routes.EditFacility}
+        pageComponent={<EditFacilityPage />}
       />
       <RouterPage path={Routes.NotFound} pageComponent={<ErrorPage />} />
     </Router>
