@@ -6,3 +6,9 @@ export const myFacilities = atom<Facility[] | undefined>({
   default: undefined,
   dangerouslyAllowMutability: true,
 });
+
+export const availableFacilities = atom<Facility[] | undefined>({
+  key: 'availableFacilities',
+  default: undefined,
+  dangerouslyAllowMutability: true,
+});

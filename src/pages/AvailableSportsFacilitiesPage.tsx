@@ -1,3 +1,4 @@
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Box,
   Button,
@@ -10,13 +11,12 @@ import {
   styled,
   Typography,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import { navigate } from '@reach/router';
 import { authSelectors } from 'modules/authentication';
-import { myFacilities } from 'modules/facilities';
-import { useFirestore } from 'modules/firebase';
-import IconButton, { IconButtonProps } from '@mui/material/IconButton';
-import React, { useEffect } from 'react';
+import { availableFacilities } from 'modules/facilities';
+import { useFirebaseFunctions } from 'modules/firebase';
+import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ImageCardsCarousel, Navigation } from 'shared/components';
 
@@ -36,15 +36,16 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 export const AvailableSportsFacilitiesPage: React.FC = () => {
-  const { getMyFacilities } = useFirestore();
+  const { getFacilities } = useFirebaseFunctions();
   const user = useRecoilValue(authSelectors.user);
-  const facilities = useRecoilValue(myFacilities);
-  const [expanded, setExpanded] = React.useState(false);
+  const facilities = useRecoilValue(availableFacilities);
+
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     if (!user?.userUid) return;
 
-    getMyFacilities(user.userUid);
+    getFacilities();
   }, [user]);
 
   if (!facilities) {

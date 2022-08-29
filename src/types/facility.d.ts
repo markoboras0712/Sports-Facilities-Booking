@@ -11,3 +11,7 @@ type SportType =
   | 'squash'
   | 'multisport'
   | 'other';
+
+interface GetAvailableFacilities {
+  userUid: string;
+}

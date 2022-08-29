@@ -5,7 +5,7 @@ export enum Routes {
   Onboarding = '/onboarding',
   Landing = '/', // Last page to do before inbox,chat,notifications
   Profile = '/profile',
-  MySportFacilities = '/sport-facilities', // List of objects created by the user and he can modify them //3rd
+  MySportFacilities = '/sport-facilities',
   EditFacility = '/facility/:id',
   MyReservations = '/my-reservations', // List of reservations made by the user
   AvailableFacilities = '/available-facilities', // List of objects available for the user to reserve
@@ -15,3 +15,4 @@ export enum Routes {
   Inbox = '/inbox', // TODO
   NotFound = '*',
 }
+//also need to create page for search and quick search by sport type
