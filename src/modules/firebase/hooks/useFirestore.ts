@@ -34,6 +34,8 @@ export const useFirestore = () => {
     isFacilityArrayData,
   } = useFirestoreUtilities();
 
+  //SETTINGS collection
+
   const createUserWithSocialMedia = async (user: User) => {
     const {
       email,
@@ -65,6 +67,20 @@ export const useFirestore = () => {
       console.log(error);
     }
   };
+
+  const getSettings = async (userUid: string) => {
+    const settingsDocument = doc(db, userUid, 'settings');
+    const settingsSnapshot = await getDoc(settingsDocument);
+    const onboardingData = settingsSnapshot.data();
+
+    if (isOnboardingData(onboardingData)) {
+      return onboardingData;
+    }
+
+    return;
+  };
+
+  //FACILITIES collection
 
   const createFacility = async (
     userUid: string,
@@ -120,7 +136,7 @@ export const useFirestore = () => {
     return null;
   };
 
-  const getFacilities = (userUid: string) => {
+  const getMyFacilities = (userUid: string) => {
     try {
       const facilitiesRef = collection(db, userUid, 'facilities', 'entities');
 
@@ -146,17 +162,7 @@ export const useFirestore = () => {
     return;
   };
 
-  const getSettings = async (userUid: string) => {
-    const settingsDocument = doc(db, userUid, 'settings');
-    const settingsSnapshot = await getDoc(settingsDocument);
-    const onboardingData = settingsSnapshot.data();
-
-    if (isOnboardingData(onboardingData)) {
-      return onboardingData;
-    }
-
-    return;
-  };
+  //ALL root collections
 
   return {
     getSettings,
@@ -165,6 +171,6 @@ export const useFirestore = () => {
     updateUser,
     createFacility,
     getFacility,
-    getFacilities,
+    getMyFacilities,
   };
 };

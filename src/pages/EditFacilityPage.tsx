@@ -30,7 +30,7 @@ import { ImageCardsCarousel, Navigation } from 'shared/components';
 import { useToast } from 'shared/hooks';
 
 export const EditFacilityPage: React.FC = () => {
-  const { getFacilities, updateFacility } = useFirestore();
+  const { getMyFacilities, updateFacility } = useFirestore();
   const { uploadBlobOrFile } = useFirebaseStorage();
   const user = useRecoilValue(authSelectors.user);
   const facilities = useRecoilValue(myFacilities);
@@ -94,7 +94,7 @@ export const EditFacilityPage: React.FC = () => {
   useEffect(() => {
     if (!user?.userUid) return;
 
-    getFacilities(user.userUid);
+    getMyFacilities(user.userUid);
   }, [user]);
 
   useEffect(() => {

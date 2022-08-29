@@ -16,14 +16,14 @@ import { useRecoilValue } from 'recoil';
 import { ImageCardsCarousel, Navigation } from 'shared/components';
 
 export const MySportsFacilitiesPage: React.FC = () => {
-  const { getFacilities } = useFirestore();
+  const { getMyFacilities } = useFirestore();
   const user = useRecoilValue(authSelectors.user);
   const facilities = useRecoilValue(myFacilities);
 
   useEffect(() => {
     if (!user?.userUid) return;
 
-    getFacilities(user.userUid);
+    getMyFacilities(user.userUid);
   }, [user]);
 
   if (!facilities) {
