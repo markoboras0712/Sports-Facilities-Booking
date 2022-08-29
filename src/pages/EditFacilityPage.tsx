@@ -1,4 +1,5 @@
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import EditIcon from '@mui/icons-material/Edit';
 import {
   Autocomplete,
   Box,
@@ -14,41 +15,68 @@ import {
 } from '@mui/material';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { useParams } from '@reach/router';
+import { navigate, useParams } from '@reach/router';
 import { countries } from 'const';
 import { authSelectors } from 'modules/authentication';
 import { availableSports, Facility, myFacilities } from 'modules/facilities';
-import { useFirestore } from 'modules/firebase';
+import { useFirebaseStorage, useFirestore } from 'modules/firebase';
+import { Routes } from 'modules/routing';
 import { MuiTelInput } from 'mui-tel-input';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { DropzoneDialog } from 'react-mui-dropzone';
 import { useRecoilValue } from 'recoil';
-import { ImageCardsCarousel } from 'shared/components';
+import { ImageCardsCarousel, Navigation } from 'shared/components';
+import { useToast } from 'shared/hooks';
 
 export const EditFacilityPage: React.FC = () => {
-  const { getFacilities } = useFirestore();
+  const { getFacilities, updateFacility } = useFirestore();
+  const { uploadBlobOrFile } = useFirebaseStorage();
   const user = useRecoilValue(authSelectors.user);
   const facilities = useRecoilValue(myFacilities);
   const params = useParams();
+  const { successToast } = useToast();
   const { id } = params;
   const selectedFacility = facilities?.find(facility => facility.id === id);
-  console.log({ selectedFacility });
 
   const {
     register,
     formState: { errors },
     handleSubmit,
+    setValue,
   } = useForm<Facility>();
   const [startWork, setStartWork] = useState<Date | null>();
   const [endWork, setEndWork] = useState<Date | null>();
-
+  const [open, setOpen] = useState(false);
   const [number, setNumber] = useState(selectedFacility?.phone || '');
+
+  function saveFiles(files: File[]) {
+    if (!selectedFacility) return;
+    setValue('files', files);
+    const imageUrls: string[] = [];
+
+    files.forEach(async file => {
+      const imageUrlPromise = uploadBlobOrFile(
+        file,
+        selectedFacility?.facilityName || '',
+        file.name,
+      );
+      const imageResult = await imageUrlPromise;
+
+      imageUrls.push(imageResult);
+      selectedFacility.imageUrls?.push(imageResult);
+      setValue('imageUrls', imageUrls);
+    });
+    setOpen(false);
+  }
 
   const onSubmit = handleSubmit((data: Facility) => {
     if (!user?.userUid || !selectedFacility) return;
 
+    const { files, ...restData } = data;
+
     const facilityData: Facility = {
-      ...data,
+      ...restData,
       id: selectedFacility.id,
       creatorId: selectedFacility.creatorId,
       createdAt: selectedFacility.createdAt,
@@ -58,20 +86,9 @@ export const EditFacilityPage: React.FC = () => {
       endWorkingHour: endWork || new Date(),
       phone: number,
     };
-    console.log(facilityData);
-
-    // const updatedSettings: OnboardingData = {
-    //   ...data,
-    //   country: data.country || settings?.country,
-    //   avatar: settings?.avatar,
-    //   isOnboardingInProgress: false,
-    // };
-
-    // if (user?.userUid && updatedSettings) {
-    //   setSettings(updatedSettings);
-    //   updateUser(user.userUid, updatedSettings);
-    //   successToast('Your profile has been updated successfully!');
-    // }
+    updateFacility(user.userUid, selectedFacility.id, facilityData);
+    successToast('Your facility has been updated successfully!');
+    navigate(Routes.MySportFacilities);
   });
 
   useEffect(() => {
@@ -79,6 +96,10 @@ export const EditFacilityPage: React.FC = () => {
 
     getFacilities(user.userUid);
   }, [user]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     if (selectedFacility) {
@@ -98,6 +119,7 @@ export const EditFacilityPage: React.FC = () => {
 
   return (
     <>
+      <Navigation />
       <Grid
         container
         direction="column"
@@ -107,7 +129,7 @@ export const EditFacilityPage: React.FC = () => {
         <Typography component="h1" variant="h5" sx={{ mt: 2 }}>
           Edit facility
         </Typography>
-        <RemoveRedEyeIcon />
+        <EditIcon />
         <Box sx={{ mt: 1, display: 'flex', flexDirection: 'column' }}>
           <Card sx={{ height: '100%', width: '100%', mr: 4 }}>
             <ImageCardsCarousel imageUrls={selectedFacility.imageUrls} />
@@ -115,6 +137,26 @@ export const EditFacilityPage: React.FC = () => {
               <Typography gutterBottom variant="h5" component="div">
                 {selectedFacility.facilityName}
               </Typography>
+              <Button
+                variant="contained"
+                fullWidth
+                color="primary"
+                onClick={() => setOpen(true)}
+              >
+                Add Images
+              </Button>
+
+              <DropzoneDialog
+                acceptedFiles={['image/*']}
+                cancelButtonText={'cancel'}
+                submitButtonText={'Upload'}
+                dropzoneText={'Drag and drop an image here or click'}
+                maxFileSize={5000000}
+                open={open}
+                showFileNames
+                onClose={() => setOpen(false)}
+                onSave={saveFiles}
+              />
             </CardContent>
           </Card>
 

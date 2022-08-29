@@ -8,12 +8,11 @@ interface Props {
 
 export const ImageCardsCarousel: React.FC<Props> = ({ imageUrls }) => (
   <Carousel
-    fullHeightHover
+    height={'300px'}
     sx={{
-      xs: {
-        height: '600px',
-      },
       width: '100%',
+      height: '300px',
+      maxHeight: '300px',
     }}
   >
     {imageUrls ? (

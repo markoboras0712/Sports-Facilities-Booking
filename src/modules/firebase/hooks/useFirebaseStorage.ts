@@ -5,7 +5,7 @@ import { createFirebaseApp } from '../initFirebase';
 
 export const useFirebaseStorage = () => {
   const storage = useMemo(() => getStorage(createFirebaseApp()), []);
-  const { errorToast, successToast } = useToast();
+  const { errorToast, infoToast } = useToast();
 
   const getStorageReference = (facilityId: string) => ref(storage, facilityId);
 
@@ -19,7 +19,9 @@ export const useFirebaseStorage = () => {
     try {
       await uploadBytes(storageReference, file);
       const url = await getDownloadURL(storageReference);
-      successToast('You have successfully uploaded image!');
+      infoToast(
+        'Submit the form so you can successfully save updated pictures!',
+      );
       return url;
     } catch (error) {
       errorToast('You have failed uploading image!');

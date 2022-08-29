@@ -14,7 +14,7 @@ export const navItemsLoggedUser: NavItem[] = [
   },
   {
     item: 'Host Facility',
-    link: '/sport-facility/:id',
+    link: '/create-sport-facility',
   },
   {
     item: 'My Sport Facilities',
