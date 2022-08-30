@@ -18,7 +18,7 @@ import {
 import { OnboardingData, settingsSelector } from 'modules/authorization';
 import { Facility, myFacilities } from 'modules/facilities';
 import { myReservations, Reservation } from 'modules/reservations';
-import { Notification } from 'modules/notifications';
+import { myNotifications, Notification } from 'modules/notifications';
 import { Routes } from 'modules/routing';
 import { useMemo } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -30,6 +30,7 @@ export const useFirestore = () => {
   const db = useMemo(() => getFirestore(createFirebaseApp()), []);
   const setMyFacilities = useSetRecoilState(myFacilities);
   const setMyReservations = useSetRecoilState(myReservations);
+  const setMyNotifications = useSetRecoilState(myNotifications);
   const settings = useRecoilValue(settingsSelector.settings);
 
   const {
@@ -42,6 +43,7 @@ export const useFirestore = () => {
     isFacilityData,
     isFacilityArrayData,
     isReservationArrayData,
+    isNotificationArrayData,
   } = useFirestoreUtilities();
 
   //SETTINGS collection
@@ -340,6 +342,38 @@ export const useFirestore = () => {
     return;
   };
 
+  const getMyNotifications = (userUid: string) => {
+    try {
+      const notificationsRef = collection(
+        db,
+        userUid,
+        'notifications',
+        'entities',
+      );
+
+      const q = query(notificationsRef, orderBy('createdAt', 'asc'));
+      const unsubscribe = onSnapshot(q, snapshot => {
+        const notifications = snapshot.docs.map(doc => {
+          return {
+            ...doc.data(),
+            startTime: doc.data().startTime.toDate(),
+            endTime: doc.data().endTime.toDate(),
+            createdAt: doc.data().createdAt.toDate(),
+            id: doc.id,
+          };
+        });
+
+        isNotificationArrayData(notifications)
+          ? setMyNotifications(notifications)
+          : setMyNotifications([]);
+      });
+      return unsubscribe;
+    } catch (error) {
+      console.error(error);
+    }
+    return;
+  };
+
   return {
     getSettings,
     updateFacility,
@@ -353,5 +387,6 @@ export const useFirestore = () => {
     deleteReservation,
     createNotification,
     deleteNotification,
+    getMyNotifications,
   };
 };
