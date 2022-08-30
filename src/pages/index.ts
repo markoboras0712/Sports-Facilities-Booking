@@ -6,3 +6,4 @@ export * from './HostFacilityPage';
 export * from './MySportsFacilitiesPage';
 export * from './EditFacilityPage';
 export * from './AvailableSportsFacilitiesPage';
+export * from './MyReservationsPage';

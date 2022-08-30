@@ -12,6 +12,7 @@ import {
 } from 'firebase/firestore';
 import { OnboardingData } from 'modules/authorization';
 import { Facility, myFacilities } from 'modules/facilities';
+import { Reservation } from 'modules/reservations';
 import { Routes } from 'modules/routing';
 import { useMemo } from 'react';
 import { useSetRecoilState } from 'recoil';
@@ -162,7 +163,26 @@ export const useFirestore = () => {
     return;
   };
 
-  //ALL root collections
+  //RESERVATION collections
+
+  const createReservation = async (
+    userUid: string,
+    reservationData: Omit<Reservation, 'id'>,
+  ) => {
+    try {
+      console.log(reservationData);
+
+      removeEmptyProperties(reservationData);
+      const subColRef = collection(db, userUid, 'reservations', 'entities');
+      const reservationRef = await addDoc(subColRef, reservationData);
+
+      return reservationRef.id;
+    } catch (error) {
+      console.log(error);
+    }
+
+    return;
+  };
 
   return {
     getSettings,
@@ -172,5 +192,6 @@ export const useFirestore = () => {
     createFacility,
     getFacility,
     getMyFacilities,
+    createReservation,
   };
 };

@@ -7,6 +7,7 @@ import {
   HostFacilityPage,
   LandingPage,
   LoginPage,
+  MyReservationsPage,
   MySportsFacilitiesPage,
   OnboardingPage,
   ProfilePage,
@@ -46,6 +47,10 @@ export const Routing: React.FC = () => {
       <RouterPage
         path={Routes.AvailableFacilities}
         pageComponent={<AvailableSportsFacilitiesPage />}
+      />
+      <RouterPage
+        path={Routes.MyReservations}
+        pageComponent={<MyReservationsPage />}
       />
       <RouterPage path={Routes.NotFound} pageComponent={<ErrorPage />} />
     </Router>
