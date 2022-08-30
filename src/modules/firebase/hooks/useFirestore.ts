@@ -32,6 +32,7 @@ export const useFirestore = () => {
   const setMyReservations = useSetRecoilState(myReservations);
   const setMyNotifications = useSetRecoilState(myNotifications);
   const settings = useRecoilValue(settingsSelector.settings);
+  const facilities = useRecoilValue(myFacilities);
 
   const {
     getCollectionSnapshot,
@@ -39,7 +40,7 @@ export const useFirestore = () => {
     getDocumentReference,
     setUserCollection,
     isOnboardingData,
-    setFacilityDocument,
+    setDocument,
     isFacilityData,
     isFacilityArrayData,
     isReservationArrayData,
@@ -124,7 +125,7 @@ export const useFirestore = () => {
       );
       removeEmptyProperties(facilityData);
 
-      await setFacilityDocument(
+      await setDocument(
         documentReference,
         { ...facilityData, id: facilityId },
         true,
@@ -374,6 +375,73 @@ export const useFirestore = () => {
     return;
   };
 
+  const acceptReservation = async (
+    userUid: string,
+    notificationData: Notification,
+  ) => {
+    try {
+      if (!notificationData.facilityId || !notificationData.id) return;
+      removeEmptyProperties(notificationData);
+      console.log(notificationData);
+
+      //update notification document
+      const notificationDocumentReference = doc(
+        db,
+        userUid,
+        `notifications/entities/${notificationData.id}`,
+      );
+      await setDocument(notificationDocumentReference, notificationData, true);
+
+      //update facility document
+      const selectedFacilityReservedTimes = facilities?.find(
+        facility => facility.id === notificationData.facilityId,
+      )?.reservedTimes;
+
+      const selectedReservation = selectedFacilityReservedTimes?.find(
+        reservation => reservation.facilityId === notificationData.facilityId,
+      );
+      console.log(selectedReservation);
+
+      const facilityDocumentReference = doc(
+        db,
+        userUid,
+        `facilities/entities/${notificationData.facilityId}`,
+      );
+
+      await updateDoc(facilityDocumentReference, {
+        reservedTimes: arrayRemove({
+          ...selectedReservation,
+        }),
+      });
+      await updateDoc(facilityDocumentReference, {
+        reservedTimes: arrayUnion({
+          ...selectedReservation,
+          type: 'accepted',
+        }),
+      });
+
+      //other user reservation document
+
+      const reservationDocumentReference = doc(
+        db,
+        notificationData.creatorId,
+        `reservations/entities/${selectedReservation?.reservationId}`,
+      );
+      await setDocument(
+        reservationDocumentReference,
+        {
+          ...selectedReservation,
+          type: 'accepted',
+        },
+        true,
+      );
+    } catch (error) {
+      console.log(error);
+    }
+
+    return;
+  };
+
   return {
     getSettings,
     updateFacility,
@@ -388,5 +456,6 @@ export const useFirestore = () => {
     createNotification,
     deleteNotification,
     getMyNotifications,
+    acceptReservation,
   };
 };

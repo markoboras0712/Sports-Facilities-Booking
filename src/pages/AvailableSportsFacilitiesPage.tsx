@@ -66,6 +66,7 @@ export const AvailableSportsFacilitiesPage: React.FC = () => {
         type: 'pending',
         address: facility.address,
         capacity: facility.capacity,
+        reservationId: '',
         country: facility.country,
         sportType: facility.sportType,
         imageUrls: facility.imageUrls,

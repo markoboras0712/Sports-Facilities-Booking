@@ -10,13 +10,14 @@ import { useRecoilValue } from 'recoil';
 
 export const App: React.FC = () => {
   const user = useRecoilValue(authSelectors.user);
-  const { getMyNotifications } = useFirestore();
+  const { getMyNotifications, getMyFacilities } = useFirestore();
   const theme = responsiveFontSizes(createTheme());
 
   useEffect(() => {
     if (!user?.userUid) return;
 
     getMyNotifications(user.userUid);
+    getMyFacilities(user.userUid);
   }, [user]);
 
   return (

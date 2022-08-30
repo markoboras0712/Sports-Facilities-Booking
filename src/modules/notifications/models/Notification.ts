@@ -2,6 +2,10 @@ import { AvatarData } from 'modules/authorization';
 
 export interface Notification {
   /**
+   * The id of the reservation
+   */
+  id?: string;
+  /**
    * Unique identifier for the user who created the notification
    */
   creatorId: string;
@@ -41,6 +45,7 @@ export interface Notification {
 
 export class Notification {
   constructor(data: Notification) {
+    this.id = data.id;
     this.creatorId = data.creatorId;
     this.creatorName = data.creatorName;
     this.avatar = data.avatar || undefined;

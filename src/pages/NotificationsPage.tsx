@@ -13,7 +13,9 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import { myNotifications } from 'modules/notifications';
+import { authSelectors } from 'modules/authentication';
+import { useFirestore } from 'modules/firebase';
+import { myNotifications, Notification } from 'modules/notifications';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { Navigation } from 'shared/components';
@@ -22,7 +24,16 @@ import { useDeviceSizes } from 'shared/hooks';
 export const NotificationsPage: React.FC = () => {
   const { mobile } = useDeviceSizes();
   const notifications = useRecoilValue(myNotifications);
-  console.log({ notifications });
+  const user = useRecoilValue(authSelectors.user);
+  const { acceptReservation } = useFirestore();
+
+  async function handleAcceptReservation(notification: Notification) {
+    if (!user?.userUid) return;
+    await acceptReservation(user.userUid, {
+      ...notification,
+      type: 'accepted',
+    });
+  }
 
   if (!notifications) {
     return (
@@ -69,7 +80,10 @@ export const NotificationsPage: React.FC = () => {
                           <IconButton
                             sx={{ color: 'green' }}
                             edge="end"
-                            aria-label="delete"
+                            onClick={() =>
+                              handleAcceptReservation(notification)
+                            }
+                            aria-label="confirm"
                           >
                             <CheckIcon />
                           </IconButton>
@@ -119,7 +133,7 @@ export const NotificationsPage: React.FC = () => {
               ) : (
                 <Typography
                   variant="h6"
-                  sx={{ color: '#121212', mt: 4, pl: 2 }}
+                  sx={{ color: '#121212', mt: 4, pl: 4 }}
                 >
                   You don't have any notification yet. You can also check your
                   notifications in upper right corner of navigation.

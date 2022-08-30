@@ -30,7 +30,7 @@ import { ImageCardsCarousel, Navigation } from 'shared/components';
 import { useToast } from 'shared/hooks';
 
 export const EditFacilityPage: React.FC = () => {
-  const { getMyFacilities, updateFacility } = useFirestore();
+  const { updateFacility } = useFirestore();
   const { uploadBlobOrFile } = useFirebaseStorage();
   const user = useRecoilValue(authSelectors.user);
   const facilities = useRecoilValue(myFacilities);
@@ -90,12 +90,6 @@ export const EditFacilityPage: React.FC = () => {
     successToast('Your facility has been updated successfully!');
     navigate(Routes.MySportFacilities);
   });
-
-  useEffect(() => {
-    if (!user?.userUid) return;
-
-    getMyFacilities(user.userUid);
-  }, [user]);
 
   useEffect(() => {
     window.scrollTo(0, 0);

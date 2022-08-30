@@ -33,7 +33,7 @@ export const useFirestoreUtilities = <T>() => {
     await setDoc(documentReference, data, { merge });
   };
 
-  const setFacilityDocument = async (
+  const setDocument = async (
     documentReference: DocumentReference<DocumentData>,
     data: T,
     merge?: boolean,
@@ -79,7 +79,7 @@ export const useFirestoreUtilities = <T>() => {
     getDocumentReference,
     setUserCollection,
     getCollectionSnapshot,
-    setFacilityDocument,
+    setDocument,
     collectionAlreadyExists,
     isOnboardingData,
     isFacilityData,

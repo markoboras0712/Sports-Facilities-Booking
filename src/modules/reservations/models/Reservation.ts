@@ -16,6 +16,10 @@ export interface Reservation {
    */
   facilityId: string;
   /**
+   * Unique identifier of reservation
+   */
+  reservationId: string;
+  /**
    * Hour of the start of the reservation
    */
   startTime: Date | null;
@@ -68,6 +72,7 @@ export class Reservation {
     this.endTime = data.endTime || new Date();
     this.type = data.type || 'pending';
     this.id = data.id;
+    this.reservationId = data.reservationId;
     this.creatorId = data.creatorId;
     this.createdAt = data.createdAt;
     this.facilityName = data.facilityName;

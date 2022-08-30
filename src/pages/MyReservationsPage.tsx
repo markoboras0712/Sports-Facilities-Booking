@@ -11,7 +11,7 @@ import {
 import { authSelectors } from 'modules/authentication';
 import { useFirestore } from 'modules/firebase';
 import { myReservations, Reservation } from 'modules/reservations';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ImageCardsCarousel, Navigation } from 'shared/components';
 import { useDeviceSizes, useToast } from 'shared/hooks';
@@ -20,17 +20,10 @@ export const MyReservationsPage: React.FC = () => {
   const [open, setOpen] = useState(false);
   const { mobile } = useDeviceSizes();
   const [loading, setLoading] = useState(false);
-  const { getMyReservations, deleteReservation, deleteNotification } =
-    useFirestore();
+  const { deleteReservation, deleteNotification } = useFirestore();
   const { errorToast, successToast } = useToast();
   const user = useRecoilValue(authSelectors.user);
   const reservations = useRecoilValue(myReservations);
-
-  useEffect(() => {
-    if (!user?.userUid) return;
-
-    getMyReservations(user.userUid);
-  }, [user]);
 
   async function handleCancelReservation(reservation: Reservation) {
     if (!user?.userUid) return;

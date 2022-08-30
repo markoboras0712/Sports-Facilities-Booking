@@ -1,3 +1,5 @@
+import { Reservation } from 'modules/reservations';
+
 export interface Facility {
   /**
    * The id of the facility
@@ -42,7 +44,7 @@ export interface Facility {
   /**
    * Reserved times of the facility
    */
-  reservedTimes: Date[] | null;
+  reservedTimes: Reservation[] | null;
   /**
    * Capacity of the facility
    */
@@ -96,7 +98,7 @@ export class Facility {
     this.imageUrls = data.imageUrls || [];
     this.startWorkingHour = data.startWorkingHour || new Date();
     this.endWorkingHour = data.endWorkingHour || new Date();
-    this.reservedTimes = data.reservedTimes || [new Date()];
+    this.reservedTimes = data.reservedTimes;
     this.capacity = data.capacity;
     this.price = data.price;
     this.description = data.description || undefined;

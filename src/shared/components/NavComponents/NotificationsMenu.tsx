@@ -116,9 +116,8 @@ export const NotificationsMenu: React.FC = () => {
                 </Box>
               ))
             ) : (
-              <Typography variant="h6" sx={{ color: '#121212', mt: 4, pl: 2 }}>
-                You don't have any notification yet. You can also check your
-                notifications in upper right corner of navigation.
+              <Typography variant="h6" sx={{ color: '#121212', p: 1 }}>
+                You don't have any notification yet.
               </Typography>
             )}
           </List>

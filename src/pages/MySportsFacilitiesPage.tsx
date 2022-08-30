@@ -8,23 +8,13 @@ import {
   Typography,
 } from '@mui/material';
 import { navigate } from '@reach/router';
-import { authSelectors } from 'modules/authentication';
 import { myFacilities } from 'modules/facilities';
-import { useFirestore } from 'modules/firebase';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { ImageCardsCarousel, Navigation } from 'shared/components';
 
 export const MySportsFacilitiesPage: React.FC = () => {
-  const { getMyFacilities } = useFirestore();
-  const user = useRecoilValue(authSelectors.user);
   const facilities = useRecoilValue(myFacilities);
-
-  useEffect(() => {
-    if (!user?.userUid) return;
-
-    getMyFacilities(user.userUid);
-  }, [user]);
 
   if (!facilities) {
     return (
