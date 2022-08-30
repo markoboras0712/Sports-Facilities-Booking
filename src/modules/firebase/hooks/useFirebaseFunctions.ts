@@ -1,7 +1,7 @@
 import { collection, getDocs, getFirestore } from 'firebase/firestore';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { authSelectors } from 'modules/authentication';
-import { availableFacilities, Facility } from 'modules/facilities';
+import { availableFacilities } from 'modules/facilities';
 import { useCallback, useMemo } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { isStringArray } from 'shared/utils';
@@ -23,6 +23,8 @@ export const useFirebaseFunctions = () => {
     'getAvailableFacilities',
   );
 
+  //AVAILABLE FACILITIES
+
   const getFacilities = useCallback(async () => {
     if (!getAvailableFacilities || !user?.userUid) return;
 
@@ -37,8 +39,6 @@ export const useFirebaseFunctions = () => {
             collection(db, data, 'facilities', 'entities'),
           );
 
-          const availableFacilitiesData: Facility[] = [];
-
           querySnapshot.forEach(doc => {
             const facilityData = {
               ...doc.data(),
@@ -46,11 +46,19 @@ export const useFirebaseFunctions = () => {
               endWorkingHour: doc.data().endWorkingHour.toDate(),
               createdAt: doc.data().createdAt.toDate(),
             };
-            if (isFacilityData(facilityData))
-              availableFacilitiesData.push(facilityData);
-          });
 
-          setAvailableFacilities(availableFacilitiesData);
+            if (isFacilityData(facilityData)) {
+              setAvailableFacilities(currentState => {
+                if (!currentState) return [facilityData];
+                if (
+                  currentState.find(facility => facility.id === facilityData.id)
+                ) {
+                  return currentState;
+                }
+                return [...currentState, facilityData];
+              });
+            }
+          });
         });
       }
     } catch (e) {

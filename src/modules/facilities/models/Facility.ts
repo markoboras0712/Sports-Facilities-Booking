@@ -40,6 +40,10 @@ export interface Facility {
    */
   endWorkingHour: Date | null;
   /**
+   * Reserved times of the facility
+   */
+  reservedTimes: Date[] | null;
+  /**
    * Capacity of the facility
    */
   capacity: number;
@@ -92,6 +96,7 @@ export class Facility {
     this.imageUrls = data.imageUrls || [];
     this.startWorkingHour = data.startWorkingHour || new Date();
     this.endWorkingHour = data.endWorkingHour || new Date();
+    this.reservedTimes = data.reservedTimes || [new Date()];
     this.capacity = data.capacity;
     this.price = data.price;
     this.description = data.description || undefined;

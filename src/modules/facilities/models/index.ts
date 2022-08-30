@@ -1,1 +1,1 @@
-export * from './FacilityData';
+export * from './Facility';

@@ -15,3 +15,5 @@ type SportType =
 interface GetAvailableFacilities {
   userUid: string;
 }
+
+type ReservationType = 'pending' | 'accepted' | 'rejected';

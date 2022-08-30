@@ -2,6 +2,7 @@ import { navigate } from '@reach/router';
 import { User } from 'firebase/auth';
 import {
   addDoc,
+  arrayUnion,
   collection,
   doc,
   getDoc,
@@ -9,10 +10,11 @@ import {
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
 } from 'firebase/firestore';
 import { OnboardingData } from 'modules/authorization';
 import { Facility, myFacilities } from 'modules/facilities';
-import { Reservation } from 'modules/reservations';
+import { myReservations, Reservation } from 'modules/reservations';
 import { Routes } from 'modules/routing';
 import { useMemo } from 'react';
 import { useSetRecoilState } from 'recoil';
@@ -23,6 +25,7 @@ import { useFirestoreUtilities } from './useFirestoreUtilities';
 export const useFirestore = () => {
   const db = useMemo(() => getFirestore(createFirebaseApp()), []);
   const setMyFacilities = useSetRecoilState(myFacilities);
+  const setMyReservations = useSetRecoilState(myReservations);
 
   const {
     getCollectionSnapshot,
@@ -33,6 +36,7 @@ export const useFirestore = () => {
     setFacilityDocument,
     isFacilityData,
     isFacilityArrayData,
+    isReservationArrayData,
   } = useFirestoreUtilities();
 
   //SETTINGS collection
@@ -173,14 +177,67 @@ export const useFirestore = () => {
       console.log(reservationData);
 
       removeEmptyProperties(reservationData);
-      const subColRef = collection(db, userUid, 'reservations', 'entities');
-      const reservationRef = await addDoc(subColRef, reservationData);
+      const reservationsSubColRef = collection(
+        db,
+        userUid,
+        'reservations',
+        'entities',
+      );
+
+      const reservationRef = await addDoc(
+        reservationsSubColRef,
+        reservationData,
+      );
+
+      const documentReference = doc(
+        db,
+        reservationData.creatorId,
+        `facilities/entities/${reservationData.facilityId}`,
+      );
+
+      await updateDoc(documentReference, {
+        reservedTimes: arrayUnion({
+          ...reservationData,
+          reservationId: reservationRef.id,
+        }),
+      });
 
       return reservationRef.id;
     } catch (error) {
       console.log(error);
     }
 
+    return;
+  };
+
+  const getMyReservations = (userUid: string) => {
+    try {
+      const reservationsRef = collection(
+        db,
+        userUid,
+        'reservations',
+        'entities',
+      );
+
+      const q = query(reservationsRef, orderBy('createdAt', 'asc'));
+      const unsubscribe = onSnapshot(q, snapshot => {
+        const reservations = snapshot.docs.map(doc => {
+          return {
+            ...doc.data(),
+            startTime: doc.data().startTime.toDate(),
+            endTime: doc.data().endTime.toDate(),
+            createdAt: doc.data().createdAt.toDate(),
+          };
+        });
+
+        isReservationArrayData(reservations)
+          ? setMyReservations(reservations)
+          : setMyFacilities([]);
+      });
+      return unsubscribe;
+    } catch (error) {
+      console.error(error);
+    }
     return;
   };
 
@@ -193,5 +250,6 @@ export const useFirestore = () => {
     getFacility,
     getMyFacilities,
     createReservation,
+    getMyReservations,
   };
 };

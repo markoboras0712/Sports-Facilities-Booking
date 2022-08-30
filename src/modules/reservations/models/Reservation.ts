@@ -23,6 +23,34 @@ export interface Reservation {
    * Date of the creation of the reservation
    */
   createdAt: Date | null;
+  /**
+   * Type of reservation
+   */
+  type: ReservationType;
+  /**
+   * Image urls of the facility
+   */
+  imageUrls?: string[];
+  /**
+   * Address of the facility
+   */
+  address: string;
+  /**
+   * Capacity of the facility
+   */
+  capacity: number;
+  /**
+   * Country of the facility
+   */
+  country: string;
+  /**
+   * The type of the facility
+   */
+  sportType: SportType;
+  /**
+   *  Name of the facility
+   */
+  facilityName: string;
 }
 
 export class Reservation {
@@ -33,5 +61,15 @@ export class Reservation {
     this.facilityId = data.facilityId;
     this.startTime = data.startTime || new Date();
     this.endTime = data.endTime || new Date();
+    this.type = data.type || 'pending';
+    this.id = data.id;
+    this.creatorId = data.creatorId;
+    this.createdAt = data.createdAt;
+    this.facilityName = data.facilityName;
+    this.sportType = data.sportType;
+    this.imageUrls = data.imageUrls || [];
+    this.capacity = data.capacity;
+    this.address = data.address;
+    this.country = data.country;
   }
 }

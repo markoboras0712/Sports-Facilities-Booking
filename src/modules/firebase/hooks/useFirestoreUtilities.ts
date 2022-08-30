@@ -10,6 +10,7 @@ import {
 } from 'firebase/firestore';
 import { OnboardingData } from 'modules/authorization';
 import { Facility } from 'modules/facilities';
+import { Reservation } from 'modules/reservations';
 import { useMemo } from 'react';
 import { createFirebaseApp } from '../initFirebase';
 
@@ -58,6 +59,13 @@ export const useFirestoreUtilities = <T>() => {
     return (data as Facility[])[0].facilityName !== undefined;
   };
 
+  const isReservationArrayData = (
+    data?: DocumentData[],
+  ): data is Reservation[] => {
+    if (!data?.length) return false;
+    return (data as Reservation[])[0].facilityId !== undefined;
+  };
+
   return {
     getCollectionReference,
     getDocumentReference,
@@ -68,5 +76,6 @@ export const useFirestoreUtilities = <T>() => {
     isOnboardingData,
     isFacilityData,
     isFacilityArrayData,
+    isReservationArrayData,
   };
 };

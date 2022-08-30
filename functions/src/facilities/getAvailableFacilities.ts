@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import {firestore} from 'firebase-admin';
 import {region} from 'firebase-functions';
 

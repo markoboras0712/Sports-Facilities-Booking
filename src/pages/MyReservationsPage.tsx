@@ -9,24 +9,24 @@ import {
 } from '@mui/material';
 import { navigate } from '@reach/router';
 import { authSelectors } from 'modules/authentication';
-import { myFacilities } from 'modules/facilities';
 import { useFirestore } from 'modules/firebase';
+import { myReservations } from 'modules/reservations';
 import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ImageCardsCarousel, Navigation } from 'shared/components';
 
 export const MyReservationsPage: React.FC = () => {
-  const { getMyFacilities } = useFirestore();
+  const { getMyReservations } = useFirestore();
   const user = useRecoilValue(authSelectors.user);
-  const facilities = useRecoilValue(myFacilities);
+  const reservations = useRecoilValue(myReservations);
 
   useEffect(() => {
     if (!user?.userUid) return;
 
-    getMyFacilities(user.userUid);
+    getMyReservations(user.userUid);
   }, [user]);
 
-  if (!facilities) {
+  if (!reservations) {
     return (
       <Box sx={{ width: '100%' }}>
         <LinearProgress />
@@ -56,10 +56,20 @@ export const MyReservationsPage: React.FC = () => {
             spacing={{ xs: 2, md: 3 }}
             columns={{ xs: 3, sm: 6, md: 12 }}
           >
-            {facilities.length ? (
-              facilities.map(
+            {reservations.length ? (
+              reservations.map(
                 (
-                  { facilityName, address, sportType, price, imageUrls, id },
+                  {
+                    facilityName,
+                    address,
+                    sportType,
+                    imageUrls,
+                    id,
+                    capacity,
+                    startTime,
+                    endTime,
+                    type,
+                  },
                   index,
                 ) => (
                   <Grid
@@ -95,7 +105,26 @@ export const MyReservationsPage: React.FC = () => {
                           color="text.secondary"
                           gutterBottom
                         >
-                          {price} $ per hour
+                          Capacity: {capacity}
+                        </Typography>
+                        <Typography
+                          variant="h6"
+                          color="text.secondary"
+                          gutterBottom
+                        >
+                          Reservation time: {startTime?.getHours()}
+                          {':'}
+                          {startTime?.getMinutes()} - {endTime?.getHours()}
+                          {endTime?.getMinutes() === 0
+                            ? ''
+                            : `:${endTime?.getMinutes()}`}
+                        </Typography>
+                        <Typography
+                          variant="h6"
+                          color="text.secondary"
+                          gutterBottom
+                        >
+                          Reservation type: {type}
                         </Typography>
                         <Button
                           sx={{
@@ -108,7 +137,7 @@ export const MyReservationsPage: React.FC = () => {
                           variant="outlined"
                           onClick={() => navigate(`/facility/${id}`)}
                         >
-                          Edit
+                          Cancel reservation
                         </Button>
                       </CardContent>
                     </Card>
