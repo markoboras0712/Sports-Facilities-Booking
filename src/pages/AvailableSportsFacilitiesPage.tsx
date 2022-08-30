@@ -196,9 +196,10 @@ export const AvailableSportsFacilitiesPage: React.FC = () => {
                                 }}
                                 label="Start date and time"
                                 minDate={new Date()}
+                                maxDate={endTime}
                                 onError={error => setStartError(error)}
                                 minTime={facility.startWorkingHour}
-                                maxTime={facility.endWorkingHour}
+                                maxTime={endTime}
                                 inputFormat="yyyy/MM/dd hh:mm a"
                                 mask="___/__/__ __:__ _M"
                                 renderInput={params => (
@@ -216,9 +217,9 @@ export const AvailableSportsFacilitiesPage: React.FC = () => {
                                   setEndTime(newValue);
                                 }}
                                 label="End date and time"
-                                minDate={new Date()}
+                                minDate={startTime}
                                 onError={error => setEndError(error)}
-                                minTime={facility.startWorkingHour}
+                                minTime={startTime}
                                 maxTime={facility.endWorkingHour}
                                 inputFormat="yyyy/MM/dd hh:mm a"
                                 mask="___/__/__ __:__ _M"
