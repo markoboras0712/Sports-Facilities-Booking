@@ -2,8 +2,10 @@ import { navigate } from '@reach/router';
 import { User } from 'firebase/auth';
 import {
   addDoc,
+  arrayRemove,
   arrayUnion,
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getFirestore,
@@ -174,8 +176,6 @@ export const useFirestore = () => {
     reservationData: Omit<Reservation, 'id'>,
   ) => {
     try {
-      console.log(reservationData);
-
       removeEmptyProperties(reservationData);
       const reservationsSubColRef = collection(
         db,
@@ -210,6 +210,40 @@ export const useFirestore = () => {
     return;
   };
 
+  const deleteReservation = async (
+    userUid: string,
+    reservationData: Reservation,
+  ) => {
+    try {
+      removeEmptyProperties(reservationData);
+      const reservationDocRef = doc(
+        db,
+        userUid,
+        'reservations',
+        'entities',
+        reservationData.id,
+      );
+      await deleteDoc(reservationDocRef);
+
+      const documentReference = doc(
+        db,
+        reservationData.creatorId,
+        `facilities/entities/${reservationData.facilityId}`,
+      );
+      const { id, ...restData } = reservationData;
+      await updateDoc(documentReference, {
+        reservedTimes: arrayRemove({
+          ...restData,
+          reservationId: id,
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    return;
+  };
+
   const getMyReservations = (userUid: string) => {
     try {
       const reservationsRef = collection(
@@ -227,12 +261,13 @@ export const useFirestore = () => {
             startTime: doc.data().startTime.toDate(),
             endTime: doc.data().endTime.toDate(),
             createdAt: doc.data().createdAt.toDate(),
+            id: doc.id,
           };
         });
 
         isReservationArrayData(reservations)
           ? setMyReservations(reservations)
-          : setMyFacilities([]);
+          : setMyReservations([]);
       });
       return unsubscribe;
     } catch (error) {
@@ -251,5 +286,6 @@ export const useFirestore = () => {
     getMyFacilities,
     createReservation,
     getMyReservations,
+    deleteReservation,
   };
 };

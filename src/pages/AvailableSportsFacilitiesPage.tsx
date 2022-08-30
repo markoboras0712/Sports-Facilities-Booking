@@ -79,7 +79,6 @@ export const AvailableSportsFacilitiesPage: React.FC = () => {
     } catch (error) {
       errorToast('Something went wrong! Please try again later');
     }
-    if (!user?.userUid) return;
   }
 
   if (!facilities) {

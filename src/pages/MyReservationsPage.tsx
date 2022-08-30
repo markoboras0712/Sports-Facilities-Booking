@@ -5,18 +5,23 @@ import {
   CardContent,
   Grid,
   LinearProgress,
+  Modal,
   Typography,
 } from '@mui/material';
-import { navigate } from '@reach/router';
 import { authSelectors } from 'modules/authentication';
 import { useFirestore } from 'modules/firebase';
-import { myReservations } from 'modules/reservations';
-import React, { useEffect } from 'react';
+import { myReservations, Reservation } from 'modules/reservations';
+import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ImageCardsCarousel, Navigation } from 'shared/components';
+import { useDeviceSizes, useToast } from 'shared/hooks';
 
 export const MyReservationsPage: React.FC = () => {
-  const { getMyReservations } = useFirestore();
+  const [open, setOpen] = useState(false);
+  const { mobile } = useDeviceSizes();
+  const [loading, setLoading] = useState(false);
+  const { getMyReservations, deleteReservation } = useFirestore();
+  const { errorToast, successToast } = useToast();
   const user = useRecoilValue(authSelectors.user);
   const reservations = useRecoilValue(myReservations);
 
@@ -25,6 +30,19 @@ export const MyReservationsPage: React.FC = () => {
 
     getMyReservations(user.userUid);
   }, [user]);
+
+  async function handleCancelReservation(reservation: Reservation) {
+    if (!user?.userUid) return;
+    try {
+      setLoading(true);
+      await deleteReservation(user.userUid, reservation);
+      successToast('You have successfully deleted your reservation!');
+      setLoading(false);
+      setOpen(false);
+    } catch (error) {
+      errorToast('Something went wrong! Please try again later');
+    }
+  }
 
   if (!reservations) {
     return (
@@ -57,93 +75,143 @@ export const MyReservationsPage: React.FC = () => {
             columns={{ xs: 3, sm: 6, md: 12 }}
           >
             {reservations.length ? (
-              reservations.map(
-                (
-                  {
-                    facilityName,
-                    address,
-                    sportType,
-                    imageUrls,
-                    id,
-                    capacity,
-                    startTime,
-                    endTime,
-                    type,
-                  },
-                  index,
-                ) => (
-                  <Grid
-                    item
-                    key={index}
+              reservations.map((reservation, index) => (
+                <Grid
+                  item
+                  key={index}
+                  sx={{
+                    mb: 2,
+                  }}
+                  xs={8}
+                  sm={8}
+                  md={6}
+                >
+                  <Card
                     sx={{
-                      mb: 2,
+                      height: '100%',
+                      width: '100%',
+                      borderRadius: 2,
                     }}
-                    xs={8}
-                    sm={8}
-                    md={6}
                   >
-                    <Card
-                      sx={{
-                        height: '100%',
-                        width: '100%',
-                        borderRadius: 2,
-                      }}
-                    >
-                      <ImageCardsCarousel imageUrls={imageUrls} />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          Facility name: {facilityName}
-                        </Typography>
-                        <Typography variant="h6" color="text.secondary">
-                          Address: {address}
-                        </Typography>
-                        <Typography variant="h6" color="text.secondary">
-                          Sport: {sportType.toUpperCase()}
-                        </Typography>
-                        <Typography
-                          variant="h6"
-                          color="text.secondary"
-                          gutterBottom
-                        >
-                          Capacity: {capacity}
-                        </Typography>
-                        <Typography
-                          variant="h6"
-                          color="text.secondary"
-                          gutterBottom
-                        >
-                          Reservation time: {startTime?.getHours()}
-                          {':'}
-                          {startTime?.getMinutes()} - {endTime?.getHours()}
-                          {endTime?.getMinutes() === 0
-                            ? ''
-                            : `:${endTime?.getMinutes()}`}
-                        </Typography>
-                        <Typography
-                          variant="h6"
-                          color="text.secondary"
-                          gutterBottom
-                        >
-                          Reservation type: {type}
-                        </Typography>
-                        <Button
+                    <ImageCardsCarousel imageUrls={reservation.imageUrls} />
+                    <CardContent>
+                      <Typography gutterBottom variant="h5" component="div">
+                        Facility name: {reservation.facilityName}
+                      </Typography>
+                      <Typography variant="h6" color="text.secondary">
+                        Address: {reservation.address}
+                      </Typography>
+                      <Typography variant="h6" color="text.secondary">
+                        Sport: {reservation.sportType.toUpperCase()}
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        Capacity: {reservation.capacity}
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        Reservation time: {reservation.startTime?.getHours()}
+                        {reservation.startTime?.getMinutes() === 0
+                          ? ''
+                          : `:${reservation.startTime?.getMinutes()}`}{' '}
+                        - {reservation.endTime?.getHours()}
+                        {reservation.endTime?.getMinutes() === 0
+                          ? ''
+                          : `:${reservation.endTime?.getMinutes()}`}
+                      </Typography>
+                      <Typography
+                        variant="h6"
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        Reservation type: {reservation.type}
+                      </Typography>
+                      <Button
+                        sx={{
+                          borderRadius: 2,
+                          textTransform: 'none',
+                          py: 1,
+                          px: 3.5,
+                          mr: 5,
+                        }}
+                        variant="outlined"
+                        onClick={() => setOpen(true)}
+                      >
+                        Cancel reservation
+                      </Button>
+                      <Modal
+                        open={open}
+                        onClose={() => setOpen(false)}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                      >
+                        <Box
                           sx={{
+                            position: 'absolute' as const,
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            bgcolor: 'background.paper',
+                            boxShadow: 24,
+                            width: mobile ? '300px' : '50%',
+                            p: 4,
                             borderRadius: 2,
-                            textTransform: 'none',
-                            py: 1,
-                            px: 3.5,
-                            mr: 5,
                           }}
-                          variant="outlined"
-                          onClick={() => navigate(`/facility/${id}`)}
                         >
-                          Cancel reservation
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                ),
-              )
+                          <Typography
+                            id="modal-modal-title"
+                            variant="h6"
+                            component="h2"
+                            sx={{ mb: 2 }}
+                          >
+                            Are you sure you want to cancel your reservation?
+                          </Typography>
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              width: '100%',
+                            }}
+                          ></Box>
+                          <Button
+                            sx={{
+                              borderRadius: 2,
+                              textTransform: 'none',
+                              py: 1,
+                              px: 3.5,
+                              mt: 2,
+                            }}
+                            variant="outlined"
+                            color="error"
+                            onClick={() => handleCancelReservation(reservation)}
+                          >
+                            {loading ? 'Loading...' : 'Yes, delete it'}
+                          </Button>
+                          <Button
+                            sx={{
+                              borderRadius: 2,
+                              textTransform: 'none',
+                              py: 1,
+                              px: 3.5,
+                              mt: 2,
+                              ml: 2,
+                            }}
+                            variant="outlined"
+                            onClick={() => setOpen(false)}
+                          >
+                            No, keep it
+                          </Button>
+                        </Box>
+                      </Modal>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))
             ) : (
               <Typography variant="h6" sx={{ color: '#121212', mt: 4, pl: 2 }}>
                 You haven't created any reservation yet. Please make a
