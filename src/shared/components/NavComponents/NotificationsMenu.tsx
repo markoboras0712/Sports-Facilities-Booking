@@ -72,7 +72,12 @@ export const NotificationsMenu: React.FC = () => {
                       primary={
                         mobile
                           ? `${notification.creatorName} has made ...`
-                          : `${notification.creatorName} has made reservation request on ${notification.facilityName}.`
+                          : (notification.type === 'pending' &&
+                              `${notification.creatorName} has made reservation request for ${notification.facilityName}`) ||
+                            (notification.type === 'accepted' &&
+                              `You have accepted reservation of ${notification.creatorName} for ${notification.facilityName}`) ||
+                            (notification.type === 'rejected' &&
+                              `You have rejected reservation of ${notification.creatorName} for ${notification.facilityName}`)
                       }
                       secondary={
                         <React.Fragment>
@@ -92,22 +97,28 @@ export const NotificationsMenu: React.FC = () => {
                               ? ''
                               : `:${notification.endTime?.getMinutes()}`}
                           </Typography>
-                          <IconButton
-                            sx={{ color: 'green' }}
-                            edge="end"
-                            onClick={() => console.log('Confirm')}
-                            aria-label="confirm"
-                          >
-                            <CheckIcon />
-                          </IconButton>
-                          <IconButton
-                            sx={{ color: 'red' }}
-                            edge="end"
-                            onClick={() => console.log('Reject')}
-                            aria-label="delete"
-                          >
-                            <ClearIcon />
-                          </IconButton>
+                          {notification.type === 'pending' ? (
+                            <>
+                              <IconButton
+                                sx={{ color: 'green' }}
+                                edge="end"
+                                onClick={() => console.log('Confirm')}
+                                aria-label="confirm"
+                              >
+                                <CheckIcon />
+                              </IconButton>
+                              <IconButton
+                                sx={{ color: 'red' }}
+                                edge="end"
+                                onClick={() => console.log('Reject')}
+                                aria-label="delete"
+                              >
+                                <ClearIcon />
+                              </IconButton>
+                            </>
+                          ) : (
+                            <></>
+                          )}
                         </React.Fragment>
                       }
                     />

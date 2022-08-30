@@ -112,6 +112,28 @@ export const useFirestore = () => {
     return;
   };
 
+  const deleteFacility = async (
+    userUid: string,
+    facilityData: Omit<Facility, 'files'>,
+  ) => {
+    try {
+      removeEmptyProperties(facilityData);
+      const facilityDocRef = doc(
+        db,
+        userUid,
+        'facilities',
+        'entities',
+        facilityData.id,
+      );
+
+      await deleteDoc(facilityDocRef);
+    } catch (error) {
+      console.log(error);
+    }
+
+    return;
+  };
+
   const updateFacility = async (
     userUid: string,
     facilityId: string,
@@ -184,6 +206,7 @@ export const useFirestore = () => {
   ) => {
     try {
       if (!notificationId) return;
+
       removeEmptyProperties(reservationData);
       const reservationsSubColRef = collection(
         db,
@@ -194,6 +217,7 @@ export const useFirestore = () => {
 
       const reservationRef = await addDoc(reservationsSubColRef, {
         ...reservationData,
+        reservationCreatorId: userUid,
         notificationId,
       });
 
@@ -206,7 +230,9 @@ export const useFirestore = () => {
       await updateDoc(documentReference, {
         reservedTimes: arrayUnion({
           ...reservationData,
+          reservationCreatorId: userUid,
           reservationId: reservationRef.id,
+          notificationId,
         }),
       });
 
@@ -229,8 +255,9 @@ export const useFirestore = () => {
         userUid,
         'reservations',
         'entities',
-        reservationData.id,
+        reservationData.reservationId,
       );
+
       await deleteDoc(reservationDocRef);
 
       const documentReference = doc(
@@ -245,6 +272,28 @@ export const useFirestore = () => {
           reservationId: id,
         }),
       });
+    } catch (error) {
+      console.log(error);
+    }
+
+    return;
+  };
+
+  const deleteReservationForFacility = async (
+    userUid: string,
+    reservationData: Reservation,
+  ) => {
+    try {
+      removeEmptyProperties(reservationData);
+      const reservationDocRef = doc(
+        db,
+        userUid,
+        'reservations',
+        'entities',
+        reservationData.reservationId,
+      );
+
+      await deleteDoc(reservationDocRef);
     } catch (error) {
       console.log(error);
     }
@@ -326,6 +375,7 @@ export const useFirestore = () => {
 
   const deleteNotification = async (reservationData: Reservation) => {
     try {
+      console.log(reservationData);
       if (!reservationData.notificationId) return;
       removeEmptyProperties(reservationData);
       const notificationDocRef = doc(
@@ -335,6 +385,7 @@ export const useFirestore = () => {
         'entities',
         reservationData.notificationId,
       );
+      console.log(notificationDocRef.path);
       await deleteDoc(notificationDocRef);
     } catch (error) {
       console.log(error);
@@ -456,6 +507,8 @@ export const useFirestore = () => {
     createNotification,
     deleteNotification,
     getMyNotifications,
+    deleteFacility,
     acceptReservation,
+    deleteReservationForFacility,
   };
 };

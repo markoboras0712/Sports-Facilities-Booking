@@ -12,6 +12,10 @@ export interface Reservation {
    */
   creatorId: string;
   /**
+   * Unique identifier for the user who is creating the reservation
+   */
+  reservationCreatorId?: string;
+  /**
    * Unique identifier of facility on which user is making reservation
    */
   facilityId: string;
@@ -67,6 +71,7 @@ export class Reservation {
     this.notificationId = data.notificationId;
     this.creatorId = data.creatorId;
     this.createdAt = data.createdAt;
+    this.reservationCreatorId = data.reservationCreatorId;
     this.facilityId = data.facilityId;
     this.startTime = data.startTime || new Date();
     this.endTime = data.endTime || new Date();
