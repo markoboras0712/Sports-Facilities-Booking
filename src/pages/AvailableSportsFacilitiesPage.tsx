@@ -28,7 +28,7 @@ import { Routes } from 'modules/routing';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ImageCardsCarousel, Navigation } from 'shared/components';
-import { useDeviceSizes } from 'shared/hooks';
+import { useDeviceSizes, useToast } from 'shared/hooks';
 
 export const AvailableSportsFacilitiesPage: React.FC = () => {
   const [expandedId, setExpandedId] = useState(-1);
@@ -41,6 +41,7 @@ export const AvailableSportsFacilitiesPage: React.FC = () => {
 
   const { getFacilities } = useFirebaseFunctions();
   const { createReservation } = useFirestore();
+  const { errorToast, successToast } = useToast();
 
   const user = useRecoilValue(authSelectors.user);
   const facilities = useRecoilValue(availableFacilities);
@@ -53,25 +54,32 @@ export const AvailableSportsFacilitiesPage: React.FC = () => {
 
   async function handleReservation(facility: Facility) {
     if (!user?.userUid) return;
+    try {
+      const reservationData: Omit<Reservation, 'id'> = {
+        facilityId: facility.id,
+        creatorId: facility.creatorId,
+        startTime,
+        endTime,
+        createdAt: new Date(),
+        type: 'pending',
+        address: facility.address,
+        capacity: facility.capacity,
+        country: facility.country,
+        sportType: facility.sportType,
+        imageUrls: facility.imageUrls,
+        facilityName: facility.facilityName,
+      };
 
-    const reservationData: Omit<Reservation, 'id'> = {
-      facilityId: facility.id,
-      creatorId: facility.creatorId,
-      startTime,
-      endTime,
-      createdAt: new Date(),
-      type: 'pending',
-      address: facility.address,
-      capacity: facility.capacity,
-      country: facility.country,
-      sportType: facility.sportType,
-      imageUrls: facility.imageUrls,
-      facilityName: facility.facilityName,
-    };
+      await createReservation(user.userUid, reservationData);
+      successToast(
+        'You have successfully created reservation! Checkout reservation type and look out for your notifications when facility owner accepts your reservation',
+      );
 
-    await createReservation(user.userUid, reservationData);
-
-    navigate(Routes.MyReservations);
+      navigate(Routes.MyReservations);
+    } catch (error) {
+      errorToast('Something went wrong! Please try again later');
+    }
+    if (!user?.userUid) return;
   }
 
   if (!facilities) {
@@ -196,7 +204,6 @@ export const AvailableSportsFacilitiesPage: React.FC = () => {
                                 }}
                                 label="Start date and time"
                                 minDate={new Date()}
-                                maxDate={endTime}
                                 onError={error => setStartError(error)}
                                 minTime={facility.startWorkingHour}
                                 maxTime={endTime}
