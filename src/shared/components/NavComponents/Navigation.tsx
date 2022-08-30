@@ -7,6 +7,7 @@ import * as React from 'react';
 import { useRecoilValue } from 'recoil';
 import { useDeviceSizes } from 'shared/hooks';
 import { DrawerNavigation } from './DrawerNavigation';
+import { NotificationsMenu } from './NotificationsMenu';
 import { UserMenu } from './UserMenu';
 
 export const Navigation: React.FC = () => {
@@ -59,6 +60,7 @@ export const Navigation: React.FC = () => {
                   {fullName}
                 </Typography>
                 <UserMenu />
+                <NotificationsMenu />
               </>
             ) : (
               <>
