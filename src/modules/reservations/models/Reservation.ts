@@ -4,6 +4,10 @@ export interface Reservation {
    */
   id: string;
   /**
+   * The id of notification which gets faciltiy owner
+   */
+  notificationId?: string;
+  /**
    * Unique identifier for the user who created the facility
    */
   creatorId: string;
@@ -56,6 +60,7 @@ export interface Reservation {
 export class Reservation {
   constructor(data: Reservation) {
     this.id = data.id;
+    this.notificationId = data.notificationId;
     this.creatorId = data.creatorId;
     this.createdAt = data.createdAt;
     this.facilityId = data.facilityId;

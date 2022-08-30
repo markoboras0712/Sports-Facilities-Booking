@@ -31,6 +31,7 @@ import { ImageCardsCarousel, Navigation } from 'shared/components';
 import { useDeviceSizes, useToast } from 'shared/hooks';
 
 export const AvailableSportsFacilitiesPage: React.FC = () => {
+  const [loading, setLoading] = useState(false);
   const [expandedId, setExpandedId] = useState(-1);
   const [startTime, setStartTime] = useState<Date | null>(new Date());
   const [endTime, setEndTime] = useState<Date | null>(new Date());
@@ -40,7 +41,7 @@ export const AvailableSportsFacilitiesPage: React.FC = () => {
   const { mobile } = useDeviceSizes();
 
   const { getFacilities } = useFirebaseFunctions();
-  const { createReservation } = useFirestore();
+  const { createReservation, createNotification } = useFirestore();
   const { errorToast, successToast } = useToast();
 
   const user = useRecoilValue(authSelectors.user);
@@ -55,6 +56,7 @@ export const AvailableSportsFacilitiesPage: React.FC = () => {
   async function handleReservation(facility: Facility) {
     if (!user?.userUid) return;
     try {
+      setLoading(true);
       const reservationData: Omit<Reservation, 'id'> = {
         facilityId: facility.id,
         creatorId: facility.creatorId,
@@ -70,12 +72,17 @@ export const AvailableSportsFacilitiesPage: React.FC = () => {
         facilityName: facility.facilityName,
       };
 
-      await createReservation(user.userUid, reservationData);
+      const notificationId = await createNotification(
+        user.userUid,
+        reservationData,
+      );
+      await createReservation(user.userUid, reservationData, notificationId);
       successToast(
         'You have successfully created reservation! Checkout reservation type and look out for your notifications when facility owner accepts your reservation',
       );
 
       navigate(Routes.MyReservations);
+      setLoading(false);
     } catch (error) {
       errorToast('Something went wrong! Please try again later');
     }
@@ -252,7 +259,7 @@ export const AvailableSportsFacilitiesPage: React.FC = () => {
                             onClick={() => handleReservation(facility)}
                             fullWidth
                           >
-                            Make a reservation
+                            {loading ? 'Loading...' : 'Make a reservation'}
                           </Button>
                         </Box>
                       </Modal>

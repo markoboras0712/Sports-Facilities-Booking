@@ -38,6 +38,10 @@ export const useFirebaseFunctions = () => {
           const querySnapshot = await getDocs(
             collection(db, data, 'facilities', 'entities'),
           );
+          if (!querySnapshot.size) {
+            setAvailableFacilities([]);
+            return;
+          }
 
           querySnapshot.forEach(doc => {
             const facilityData = {

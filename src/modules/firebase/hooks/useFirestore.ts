@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { navigate } from '@reach/router';
 import { User } from 'firebase/auth';
 import {
@@ -14,12 +15,13 @@ import {
   query,
   updateDoc,
 } from 'firebase/firestore';
-import { OnboardingData } from 'modules/authorization';
+import { OnboardingData, settingsSelector } from 'modules/authorization';
 import { Facility, myFacilities } from 'modules/facilities';
 import { myReservations, Reservation } from 'modules/reservations';
+import { Notification } from 'modules/notifications';
 import { Routes } from 'modules/routing';
 import { useMemo } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { removeEmptyProperties } from 'shared/utils';
 import { createFirebaseApp } from '../initFirebase';
 import { useFirestoreUtilities } from './useFirestoreUtilities';
@@ -28,6 +30,7 @@ export const useFirestore = () => {
   const db = useMemo(() => getFirestore(createFirebaseApp()), []);
   const setMyFacilities = useSetRecoilState(myFacilities);
   const setMyReservations = useSetRecoilState(myReservations);
+  const settings = useRecoilValue(settingsSelector.settings);
 
   const {
     getCollectionSnapshot,
@@ -174,8 +177,10 @@ export const useFirestore = () => {
   const createReservation = async (
     userUid: string,
     reservationData: Omit<Reservation, 'id'>,
+    notificationId?: string,
   ) => {
     try {
+      if (!notificationId) return;
       removeEmptyProperties(reservationData);
       const reservationsSubColRef = collection(
         db,
@@ -184,10 +189,10 @@ export const useFirestore = () => {
         'entities',
       );
 
-      const reservationRef = await addDoc(
-        reservationsSubColRef,
-        reservationData,
-      );
+      const reservationRef = await addDoc(reservationsSubColRef, {
+        ...reservationData,
+        notificationId,
+      });
 
       const documentReference = doc(
         db,
@@ -230,7 +235,7 @@ export const useFirestore = () => {
         reservationData.creatorId,
         `facilities/entities/${reservationData.facilityId}`,
       );
-      const { id, ...restData } = reservationData;
+      const { id, notificationId, ...restData } = reservationData;
       await updateDoc(documentReference, {
         reservedTimes: arrayRemove({
           ...restData,
@@ -276,6 +281,65 @@ export const useFirestore = () => {
     return;
   };
 
+  //NOTIFICATION COLLECTIONS
+
+  const createNotification = async (
+    userUid: string,
+    reservationData: Omit<Reservation, 'id'>,
+  ) => {
+    try {
+      if (!settings) return;
+
+      const notificationData: Notification = {
+        createdAt: new Date(),
+        creatorId: userUid,
+        creatorName: settings.firstName + ' ' + settings.lastName,
+        startTime: reservationData.startTime,
+        endTime: reservationData.endTime,
+        facilityId: reservationData.facilityId,
+        facilityName: reservationData.facilityName,
+        avatar: settings.avatar,
+        type: reservationData.type,
+      };
+
+      const notificationsSubColRef = collection(
+        db,
+        reservationData.creatorId,
+        'notifications',
+        'entities',
+      );
+
+      const notificationDoc = await addDoc(
+        notificationsSubColRef,
+        notificationData,
+      );
+      return notificationDoc.id;
+    } catch (error) {
+      console.log(error);
+    }
+
+    return;
+  };
+
+  const deleteNotification = async (reservationData: Reservation) => {
+    try {
+      if (!reservationData.notificationId) return;
+      removeEmptyProperties(reservationData);
+      const notificationDocRef = doc(
+        db,
+        reservationData.creatorId,
+        'notifications',
+        'entities',
+        reservationData.notificationId,
+      );
+      await deleteDoc(notificationDocRef);
+    } catch (error) {
+      console.log(error);
+    }
+
+    return;
+  };
+
   return {
     getSettings,
     updateFacility,
@@ -287,5 +351,7 @@ export const useFirestore = () => {
     createReservation,
     getMyReservations,
     deleteReservation,
+    createNotification,
+    deleteNotification,
   };
 };

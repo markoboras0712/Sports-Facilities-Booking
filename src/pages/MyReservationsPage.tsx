@@ -20,7 +20,8 @@ export const MyReservationsPage: React.FC = () => {
   const [open, setOpen] = useState(false);
   const { mobile } = useDeviceSizes();
   const [loading, setLoading] = useState(false);
-  const { getMyReservations, deleteReservation } = useFirestore();
+  const { getMyReservations, deleteReservation, deleteNotification } =
+    useFirestore();
   const { errorToast, successToast } = useToast();
   const user = useRecoilValue(authSelectors.user);
   const reservations = useRecoilValue(myReservations);
@@ -36,6 +37,7 @@ export const MyReservationsPage: React.FC = () => {
     try {
       setLoading(true);
       await deleteReservation(user.userUid, reservation);
+      await deleteNotification(reservation);
       successToast('You have successfully deleted your reservation!');
       setLoading(false);
       setOpen(false);
