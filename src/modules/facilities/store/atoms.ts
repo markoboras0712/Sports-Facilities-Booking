@@ -18,3 +18,15 @@ export const selectedFacility = atom<Facility | null>({
   default: null,
   dangerouslyAllowMutability: true,
 });
+
+export const searchFacilityInput = atom<string>({
+  key: 'searchFacilityInput',
+  default: '',
+  dangerouslyAllowMutability: true,
+});
+
+export const searchDateInput = atom<Date | null>({
+  key: 'searchDateInput',
+  default: new Date(),
+  dangerouslyAllowMutability: true,
+});

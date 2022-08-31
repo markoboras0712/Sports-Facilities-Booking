@@ -16,7 +16,7 @@ import { Routes } from 'modules/routing';
 import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ImageCardsCarousel, Navigation } from 'shared/components';
-import { isQuickSearchTypeGuard } from 'shared/utils';
+import { isQuickSearchTypeGuard, isSearchTypeGuard } from 'shared/utils';
 
 export const QuickSearchPage: React.FC = () => {
   const user = useRecoilValue(authSelectors.user);
@@ -24,20 +24,29 @@ export const QuickSearchPage: React.FC = () => {
   const { getFacilities } = useFirebaseFunctions();
 
   const location = useLocation();
-  const state = isQuickSearchTypeGuard(location) && location.state;
-  const name = state ? state.name : '';
+  const quickSearchState = isQuickSearchTypeGuard(location) && location.state;
+  const name = quickSearchState ? quickSearchState.name : '';
+
+  const searchState = isSearchTypeGuard(location) && location.state;
+  const searchInputValue = searchState
+    ? searchState.searchFacilityInputValue
+    : '';
+
   const selectedFacilities = facilities?.filter(
-    facility => facility.sportType === name,
+    facility =>
+      facility.sportType === name ||
+      facility.sportType.includes(searchInputValue),
   );
 
-  console.log(selectedFacilities);
+  console.log(name, searchInputValue);
+
   useEffect(() => {
     if (!user?.userUid) return;
 
     getFacilities();
   }, [user]);
 
-  if (!selectedFacilities || !name) {
+  if (!selectedFacilities) {
     return (
       <Box sx={{ width: '100%' }}>
         <LinearProgress />
