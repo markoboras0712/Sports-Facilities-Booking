@@ -1,19 +1,54 @@
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import {
   Box,
   Card,
   CardContent,
-  CardMedia,
   Grid,
   IconButton,
+  Skeleton,
   Typography,
 } from '@mui/material';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { popularCards } from 'const';
+import { navigate } from '@reach/router';
+import { settingsSelector } from 'modules/authorization';
+import { availableFacilities } from 'modules/facilities';
+import { Routes } from 'modules/routing';
 import * as React from 'react';
+import { useRecoilValue } from 'recoil';
 import { useDeviceSizes } from 'shared/hooks';
+import { ImageCardsCarousel } from '../ImageCardComponents';
 
 export const PopularCards: React.FC = () => {
   const { mediumDeviceSize } = useDeviceSizes();
+  const facilities = useRecoilValue(availableFacilities);
+  const settings = useRecoilValue(settingsSelector.settings);
+  const nearByFacilities = facilities?.filter(
+    facility => facility.city === settings?.city,
+  );
+
+  if (!nearByFacilities) {
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          px: 8,
+          pb: 15,
+          pt: !mediumDeviceSize ? 5 : 20,
+          display: 'flex',
+          flexWrap: 'wrap',
+        }}
+      >
+        {[...new Array(12)].map((_, index) => (
+          <Skeleton
+            key={index}
+            sx={{ m: 4 }}
+            variant="rectangular"
+            width={210}
+            height={118}
+          />
+        ))}
+      </Box>
+    );
+  }
 
   return (
     <Grid item>
@@ -38,7 +73,10 @@ export const PopularCards: React.FC = () => {
           >
             Popular near you
           </Typography>
-          <IconButton disabled>
+          <IconButton
+            onClick={() => navigate(Routes.AvailableFacilities)}
+            sx={{ cursor: 'pointer' }}
+          >
             <Typography sx={{ color: '#0758A4' }}>See all</Typography>
             <ArrowForwardIosIcon sx={{ color: '#0758A4', mr: 3 }} />
           </IconButton>
@@ -50,8 +88,8 @@ export const PopularCards: React.FC = () => {
           }}
         >
           <Grid container>
-            {popularCards.map(
-              ({ image, name, address, facilityType, price }, index) => (
+            {nearByFacilities.length ? (
+              nearByFacilities.map((facility, index) => (
                 <Grid item key={index} xs={12} sm={6} md={6} lg={3}>
                   <Card
                     sx={{
@@ -60,27 +98,29 @@ export const PopularCards: React.FC = () => {
                       mr: { sm: 3.5, md: 7, lg: 4 },
                     }}
                   >
-                    <CardMedia
-                      component="img"
-                      height="220"
-                      image={image}
-                      alt="green iguana"
-                    />
+                    <ImageCardsCarousel imageUrls={facility.imageUrls} />
                     <CardContent>
                       <Typography gutterBottom variant="h6">
-                        {name}
+                        {facility.facilityName}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {address}
+                        {facility.address}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {facilityType}
+                        {facility.sportType}
                       </Typography>
-                      <Typography gutterBottom>{price} HRK / hour</Typography>
+                      <Typography gutterBottom>
+                        ${facility.price}/hour
+                      </Typography>
                     </CardContent>
                   </Card>
                 </Grid>
-              ),
+              ))
+            ) : (
+              <Typography variant="h6" sx={{ color: '#121212', mt: 4, pl: 2 }}>
+                There isn't any sport facility near {settings?.city} to
+                reservate yet. Please check another time.
+              </Typography>
             )}
           </Grid>
         </Box>

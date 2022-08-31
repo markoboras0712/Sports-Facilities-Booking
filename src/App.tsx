@@ -1,6 +1,10 @@
 import { createTheme, responsiveFontSizes, ThemeProvider } from '@mui/material';
 import { authSelectors } from 'modules/authentication';
-import { FirebaseProvider, useFirestore } from 'modules/firebase';
+import {
+  FirebaseProvider,
+  useFirebaseFunctions,
+  useFirestore,
+} from 'modules/firebase';
 import { Routing } from 'modules/routing';
 import * as React from 'react';
 import { useEffect } from 'react';
@@ -12,6 +16,7 @@ export const App: React.FC = () => {
   const user = useRecoilValue(authSelectors.user);
   const { getMyNotifications, getMyFacilities, getMyReservations } =
     useFirestore();
+  const { getFacilities } = useFirebaseFunctions();
   const theme = responsiveFontSizes(createTheme());
 
   useEffect(() => {
@@ -20,6 +25,7 @@ export const App: React.FC = () => {
     getMyNotifications(user.userUid);
     getMyReservations(user.userUid);
     getMyFacilities(user.userUid);
+    getFacilities();
   }, [user]);
 
   return (
