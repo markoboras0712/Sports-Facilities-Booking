@@ -5,6 +5,7 @@ import {
   ErrorPage,
   ForgotPasswordPage,
   HostFacilityPage,
+  InboxPage,
   LandingPage,
   LoginPage,
   MakeReservationPage,
@@ -67,6 +68,7 @@ export const Routing: React.FC = () => {
         path={Routes.QuickSearch}
         pageComponent={<QuickSearchPage />}
       />
+      <RouterPage path={Routes.Inbox} pageComponent={<InboxPage />} />
       <RouterPage path={Routes.NotFound} pageComponent={<ErrorPage />} />
     </Router>
   );

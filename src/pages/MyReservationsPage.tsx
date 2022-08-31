@@ -11,6 +11,7 @@ import {
 import { authSelectors } from 'modules/authentication';
 import { useFacilitiesRedirects } from 'modules/facilities';
 import { useFirestore } from 'modules/firebase';
+import { myNotifications } from 'modules/notifications';
 import { myReservations, Reservation } from 'modules/reservations';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
@@ -26,14 +27,18 @@ export const MyReservationsPage: React.FC = () => {
   const { errorToast, successToast } = useToast();
   const user = useRecoilValue(authSelectors.user);
   const reservations = useRecoilValue(myReservations);
+  const notifications = useRecoilValue(myNotifications);
 
   async function handleCancelReservation(reservation: Reservation) {
     if (!user?.userUid) return;
     try {
       setLoading(true);
+      const notificationToDelete = notifications?.find(
+        notification => notification.facilityId === reservation.facilityId,
+      );
 
       await deleteReservation(user.userUid, reservation);
-      await deleteNotification(reservation);
+      await deleteNotification(reservation, notificationToDelete);
       successToast('You have successfully deleted your reservation!');
       setLoading(false);
       setOpen(false);

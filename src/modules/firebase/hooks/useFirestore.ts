@@ -376,18 +376,33 @@ export const useFirestore = () => {
     return;
   };
 
-  const deleteNotification = async (reservationData: Reservation) => {
+  const deleteNotification = async (
+    reservationData: Reservation,
+    notificationToDelete?: Notification | null,
+  ) => {
     try {
       if (!reservationData.notificationId) return;
       removeEmptyProperties(reservationData);
-      const notificationDocRef = doc(
+
+      const receiverNotificationDocRef = doc(
         db,
         reservationData.creatorId,
         'notifications',
         'entities',
         reservationData.notificationId,
       );
-      await deleteDoc(notificationDocRef);
+      await deleteDoc(receiverNotificationDocRef);
+
+      if (notificationToDelete?.id) {
+        const senderNotificationDocRef = doc(
+          db,
+          reservationData.creatorId,
+          'notifications',
+          'entities',
+          notificationToDelete.id,
+        );
+        await deleteDoc(senderNotificationDocRef);
+      }
     } catch (error) {
       console.log(error);
     }

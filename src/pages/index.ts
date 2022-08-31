@@ -10,3 +10,4 @@ export * from './MyReservationsPage';
 export * from './NotificationsPage';
 export * from './MakeReservationPage';
 export * from './QuickSearchPage';
+export * from './InboxPage';
