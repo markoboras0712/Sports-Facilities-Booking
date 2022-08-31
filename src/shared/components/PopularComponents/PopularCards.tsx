@@ -18,7 +18,7 @@ import { useDeviceSizes } from 'shared/hooks';
 import { ImageCardsCarousel } from '../ImageCardComponents';
 
 export const PopularCards: React.FC = () => {
-  const { mediumDeviceSize } = useDeviceSizes();
+  const { mediumDeviceSize, smallDeviceSize } = useDeviceSizes();
   const facilities = useRecoilValue(availableFacilities);
   const settings = useRecoilValue(settingsSelector.settings);
   const nearByFacilities = facilities?.filter(
@@ -86,18 +86,36 @@ export const PopularCards: React.FC = () => {
             justifyContent: 'space-between',
           }}
         >
-          <Typography
-            variant="h6"
-            sx={{ color: '#939393', textTransform: 'uppercase' }}
-          >
-            Popular near you
-          </Typography>
+          {!smallDeviceSize ? (
+            <Typography
+              variant="h6"
+              sx={{ color: '#939393', textTransform: 'uppercase' }}
+            >
+              Popular near you
+            </Typography>
+          ) : (
+            <Typography
+              variant="body2"
+              sx={{ color: '#939393', textTransform: 'uppercase' }}
+            >
+              Popular near you
+            </Typography>
+          )}
+
           <IconButton
             onClick={() => navigate(Routes.AvailableFacilities)}
             sx={{ cursor: 'pointer' }}
           >
-            <Typography sx={{ color: '#0758A4' }}>See all</Typography>
-            <ArrowForwardIosIcon sx={{ color: '#0758A4' }} />
+            {!smallDeviceSize ? (
+              <>
+                <Typography sx={{ color: '#0758A4' }}>See all</Typography>
+                <ArrowForwardIosIcon sx={{ color: '#0758A4' }} />
+              </>
+            ) : (
+              <Typography variant="body2" sx={{ color: '#0758A4' }}>
+                See all
+              </Typography>
+            )}
           </IconButton>
         </Box>
         <Box
