@@ -11,6 +11,7 @@ const {
   isOnboardingInProgressAtom,
   lastNameAtom,
   postalCodeAtom,
+  activeChatsAtom,
 } = settingsAtoms;
 
 const settings = selector<OnboardingData | null>({
@@ -25,6 +26,7 @@ const settings = selector<OnboardingData | null>({
       city: get(cityAtom),
       postalCode: get(postalCodeAtom),
       isOnboardingInProgress: get(isOnboardingInProgressAtom),
+      activeChats: get(activeChatsAtom),
     };
     return settings;
   },
@@ -38,6 +40,7 @@ const settings = selector<OnboardingData | null>({
       set(cityAtom, onboardingData.city);
       set(postalCodeAtom, onboardingData.postalCode);
       set(isOnboardingInProgressAtom, onboardingData.isOnboardingInProgress);
+      set(activeChatsAtom, onboardingData.activeChats);
     }
   },
 });
@@ -54,6 +57,7 @@ const settingsCleanup = selector({
     reset(cityAtom);
     reset(postalCodeAtom);
     reset(isOnboardingInProgressAtom);
+    reset(activeChatsAtom);
   },
 });
 

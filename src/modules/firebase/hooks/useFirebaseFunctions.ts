@@ -70,5 +70,52 @@ export const useFirebaseFunctions = () => {
     }
   }, [getAvailableFacilities]);
 
+  //AVAILABLE CHATS
+
+  // const getChats = useCallback(async () => {
+  //   if (!getAvailableFacilities || !user?.userUid) return;
+
+  //   try {
+  //     const availableFacilitiesData: GetAvailableFacilities = {
+  //       userUid: user.userUid,
+  //     };
+  //     const { data } = await getAvailableFacilities(availableFacilitiesData);
+  //     let total = 0;
+  //     if (isStringArray(data)) {
+  //       data.forEach(async data => {
+  //         const querySnapshot = await getDocs(
+  //           collection(db, data, 'facilities', 'entities'),
+  //         );
+
+  //         if (querySnapshot.size) total++;
+
+  //         querySnapshot.forEach(doc => {
+  //           const facilityData = {
+  //             ...doc.data(),
+  //             startWorkingHour: doc.data().startWorkingHour.toDate(),
+  //             endWorkingHour: doc.data().endWorkingHour.toDate(),
+  //             createdAt: doc.data().createdAt.toDate(),
+  //           };
+
+  //           if (isFacilityData(facilityData)) {
+  //             setAvailableFacilities(currentState => {
+  //               if (!currentState) return [facilityData];
+  //               if (
+  //                 currentState.find(facility => facility.id === facilityData.id)
+  //               ) {
+  //                 return currentState;
+  //               }
+  //               return [...currentState, facilityData];
+  //             });
+  //           }
+  //         });
+  //         if (total === 0) setAvailableFacilities([]);
+  //       });
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }, [getAvailableFacilities]);
+
   return { getFacilities };
 };

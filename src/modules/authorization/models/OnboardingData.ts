@@ -10,6 +10,7 @@ export interface OnboardingData {
   postalCode?: string;
   phone?: string;
   isOnboardingInProgress: boolean;
+  activeChats: string[] | null;
 }
 
 export class OnboardingData {
@@ -23,5 +24,6 @@ export class OnboardingData {
     this.postalCode = data.postalCode || undefined;
     this.phone = data.phone || undefined;
     this.isOnboardingInProgress = data.isOnboardingInProgress || false;
+    this.activeChats = data.activeChats || [];
   }
 }

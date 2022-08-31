@@ -42,6 +42,11 @@ const isOnboardingInProgressAtom = atom<boolean>({
   default: true,
 });
 
+const activeChatsAtom = atom<string[] | null>({
+  key: 'authorization.user.activeChats',
+  default: [],
+});
+
 export const settingsAtoms = {
   avatarAtom,
   firstNameAtom,
@@ -51,4 +56,5 @@ export const settingsAtoms = {
   postalCodeAtom,
   isOnboardingInProgressAtom,
   lastNameAtom,
+  activeChatsAtom,
 };
