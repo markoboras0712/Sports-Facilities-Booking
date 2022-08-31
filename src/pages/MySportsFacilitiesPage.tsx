@@ -24,8 +24,7 @@ import { useDeviceSizes, useToast } from 'shared/hooks';
 export const MySportsFacilitiesPage: React.FC = () => {
   const facilities = useRecoilValue(myFacilities);
   const user = useRecoilValue(authSelectors.user);
-  const { deleteNotification, deleteReservationForFacility, deleteFacility } =
-    useFirestore();
+  const { deleteReservationForFacility, deleteFacility } = useFirestore();
   const { loading: userLoading } = useFacilitiesRedirects();
   const { mobile } = useDeviceSizes();
   const { successToast, errorToast } = useToast();
@@ -43,7 +42,6 @@ export const MySportsFacilitiesPage: React.FC = () => {
             reservation.reservationCreatorId,
             reservation,
           );
-          await deleteNotification(reservation);
         });
       }
       await deleteFacility(user.userUid, facility);
