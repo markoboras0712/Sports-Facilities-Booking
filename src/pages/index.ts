@@ -8,3 +8,4 @@ export * from './EditFacilityPage';
 export * from './AvailableSportsFacilitiesPage';
 export * from './MyReservationsPage';
 export * from './NotificationsPage';
+export * from './MakeReservationPage';

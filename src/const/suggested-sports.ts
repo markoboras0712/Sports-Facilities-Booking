@@ -16,23 +16,23 @@ export interface Sport {
 
 export const suggestedSports: Sport[] = [
   {
-    name: 'Football',
+    name: 'football',
     SportIcon: SportsSoccerIcon,
   },
   {
-    name: 'Fitness',
+    name: 'gym',
     SportIcon: FitnessCenterIcon,
   },
   {
-    name: 'Basketball',
+    name: 'basketball',
     SportIcon: SportsBasketballIcon,
   },
   {
-    name: 'Swimming',
+    name: 'swimming',
     SportIcon: PoolIcon,
   },
   {
-    name: 'Tennis',
+    name: 'tennis',
     SportIcon: SportsTennisIcon,
   },
 ];

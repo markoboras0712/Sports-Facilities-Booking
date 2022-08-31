@@ -2,7 +2,6 @@ import { Box, Button, Divider, Grid, Paper } from '@mui/material';
 import * as React from 'react';
 import { useDeviceSizes } from 'shared/hooks';
 import { CustomDatePicker } from './CustomDatePicker';
-import { FindMyLocation } from './FindMyLocation';
 import { SearchSport } from './SearchSport';
 
 export const SearchTools: React.FC = () => {
@@ -38,11 +37,6 @@ export const SearchTools: React.FC = () => {
             px: !mediumDeviceSize ? 0 : 2,
           }}
         >
-          <FindMyLocation />
-          <Divider
-            sx={{ display: { xs: 'none', md: 'block' } }}
-            orientation="vertical"
-          />
           <SearchSport />
           <Divider
             sx={{ display: { xs: 'none', md: 'block' }, p: 0 }}

@@ -16,7 +16,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { OnboardingData, settingsSelector } from 'modules/authorization';
-import { Facility, myFacilities } from 'modules/facilities';
+import { Facility, myFacilities, selectedFacility } from 'modules/facilities';
 import { myReservations, Reservation } from 'modules/reservations';
 import { myNotifications, Notification } from 'modules/notifications';
 import { Routes } from 'modules/routing';
@@ -31,6 +31,7 @@ export const useFirestore = () => {
   const setMyFacilities = useSetRecoilState(myFacilities);
   const setMyReservations = useSetRecoilState(myReservations);
   const setMyNotifications = useSetRecoilState(myNotifications);
+  const setSelectedFacility = useSetRecoilState(selectedFacility);
   const settings = useRecoilValue(settingsSelector.settings);
   const facilities = useRecoilValue(myFacilities);
 
@@ -164,9 +165,14 @@ export const useFirestore = () => {
       `facilities/entities/${facilityId}`,
     );
     const facilitySnapshot = await getDoc(facilityDocument);
-    const facilityData = facilitySnapshot.data();
+    const facilityData = {
+      ...facilitySnapshot.data(),
+      startWorkingHour: facilitySnapshot.data()?.startWorkingHour.toDate(),
+      endWorkingHour: facilitySnapshot.data()?.endWorkingHour.toDate(),
+      createdAt: facilitySnapshot.data()?.createdAt.toDate(),
+    };
 
-    if (isFacilityData(facilityData)) return facilityData;
+    if (isFacilityData(facilityData)) setSelectedFacility(facilityData);
 
     return null;
   };
