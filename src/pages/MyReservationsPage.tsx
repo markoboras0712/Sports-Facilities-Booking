@@ -29,6 +29,7 @@ export const MyReservationsPage: React.FC = () => {
     if (!user?.userUid) return;
     try {
       setLoading(true);
+
       await deleteReservation(user.userUid, reservation);
       await deleteNotification(reservation);
       successToast('You have successfully deleted your reservation!');

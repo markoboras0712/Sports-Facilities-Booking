@@ -271,12 +271,9 @@ export const useFirestore = () => {
         reservationData.creatorId,
         `facilities/entities/${reservationData.facilityId}`,
       );
-      const { id, notificationId, ...restData } = reservationData;
+
       await updateDoc(documentReference, {
-        reservedTimes: arrayRemove({
-          ...restData,
-          reservationId: id,
-        }),
+        reservedTimes: arrayRemove(reservationData),
       });
     } catch (error) {
       console.log(error);
@@ -324,7 +321,7 @@ export const useFirestore = () => {
             startTime: doc.data().startTime.toDate(),
             endTime: doc.data().endTime.toDate(),
             createdAt: doc.data().createdAt.toDate(),
-            id: doc.id,
+            reservationId: doc.id,
           };
         });
 
