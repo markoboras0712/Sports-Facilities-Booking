@@ -42,8 +42,8 @@ export const PopularCards: React.FC = () => {
             key={index}
             sx={{ m: 4 }}
             variant="rectangular"
-            width={210}
-            height={118}
+            width={344}
+            height={172}
           />
         ))}
       </Box>
@@ -78,7 +78,7 @@ export const PopularCards: React.FC = () => {
             sx={{ cursor: 'pointer' }}
           >
             <Typography sx={{ color: '#0758A4' }}>See all</Typography>
-            <ArrowForwardIosIcon sx={{ color: '#0758A4', mr: 3 }} />
+            <ArrowForwardIosIcon sx={{ color: '#0758A4' }} />
           </IconButton>
         </Box>
         <Box
@@ -87,15 +87,28 @@ export const PopularCards: React.FC = () => {
             mt: 3.5,
           }}
         >
-          <Grid container>
+          <Grid
+            container
+            spacing={{ xs: 2, md: 3 }}
+            columns={{ xs: 3, sm: 6, md: 12 }}
+          >
             {nearByFacilities.length ? (
               nearByFacilities.map((facility, index) => (
-                <Grid item key={index} xs={12} sm={6} md={6} lg={3}>
+                <Grid
+                  item
+                  key={facility.id || index}
+                  sx={{
+                    mb: 2,
+                  }}
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  lg={3}
+                >
                   <Card
                     sx={{
-                      maxWidth: 344,
+                      width: '100%',
                       borderRadius: 2,
-                      mr: { sm: 3.5, md: 7, lg: 4 },
                     }}
                   >
                     <ImageCardsCarousel imageUrls={facility.imageUrls} />

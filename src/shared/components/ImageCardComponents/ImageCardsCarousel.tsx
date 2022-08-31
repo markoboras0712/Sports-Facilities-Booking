@@ -11,7 +11,7 @@ export const ImageCardsCarousel: React.FC<Props> = ({ imageUrls }) => {
   const { mobile } = useDeviceSizes();
   return (
     <Carousel
-      height={'300px'}
+      height={'100%'}
       sx={{
         width: '100%',
         height: '300px',
