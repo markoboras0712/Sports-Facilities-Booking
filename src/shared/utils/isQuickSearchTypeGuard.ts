@@ -2,12 +2,11 @@ import { WindowLocation } from '@reach/router';
 
 interface ExtendedLocation extends WindowLocation<unknown> {
   state: {
-    creatorId: string;
-    facilityId: string;
+    name: string;
   };
 }
 
-export function isLocationTypeGuard(
+export function isQuickSearchTypeGuard(
   location: WindowLocation<unknown>,
 ): location is ExtendedLocation {
   return typeof location.state === 'object' && location.state !== null;

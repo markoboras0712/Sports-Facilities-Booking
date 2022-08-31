@@ -13,6 +13,7 @@ import {
   NotificationsPage,
   OnboardingPage,
   ProfilePage,
+  QuickSearchPage,
   RegisterPage,
 } from 'pages';
 import * as React from 'react';
@@ -61,6 +62,10 @@ export const Routing: React.FC = () => {
       <RouterPage
         path={Routes.MakeReservation}
         pageComponent={<MakeReservationPage />}
+      />
+      <RouterPage
+        path={Routes.QuickSearch}
+        pageComponent={<QuickSearchPage />}
       />
       <RouterPage path={Routes.NotFound} pageComponent={<ErrorPage />} />
     </Router>

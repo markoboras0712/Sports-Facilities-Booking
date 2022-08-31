@@ -33,7 +33,11 @@ export const SuggestedSport: React.FC<Props> = ({ sports }) => {
             pl: 1,
           }}
           onClick={() =>
-            navigate(Routes.AvailableFacilities, { state: { name } })
+            navigate(Routes.QuickSearch, {
+              state: {
+                name,
+              },
+            })
           }
         >
           <IconButton sx={{ mr: 0.5 }} disabled>

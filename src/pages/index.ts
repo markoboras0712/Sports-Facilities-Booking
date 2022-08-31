@@ -9,3 +9,4 @@ export * from './AvailableSportsFacilitiesPage';
 export * from './MyReservationsPage';
 export * from './NotificationsPage';
 export * from './MakeReservationPage';
+export * from './QuickSearchPage';

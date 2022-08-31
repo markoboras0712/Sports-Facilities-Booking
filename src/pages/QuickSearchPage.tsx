@@ -8,7 +8,7 @@ import {
   LinearProgress,
   Typography,
 } from '@mui/material';
-import { navigate } from '@reach/router';
+import { navigate, useLocation } from '@reach/router';
 import { authSelectors } from 'modules/authentication';
 import { availableFacilities } from 'modules/facilities';
 import { useFirebaseFunctions } from 'modules/firebase';
@@ -16,20 +16,28 @@ import { Routes } from 'modules/routing';
 import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ImageCardsCarousel, Navigation } from 'shared/components';
+import { isQuickSearchTypeGuard } from 'shared/utils';
 
-export const AvailableSportsFacilitiesPage: React.FC = () => {
-  const { getFacilities } = useFirebaseFunctions();
-
+export const QuickSearchPage: React.FC = () => {
   const user = useRecoilValue(authSelectors.user);
   const facilities = useRecoilValue(availableFacilities);
+  const { getFacilities } = useFirebaseFunctions();
 
+  const location = useLocation();
+  const state = isQuickSearchTypeGuard(location) && location.state;
+  const name = state ? state.name : '';
+  const selectedFacilities = facilities?.filter(
+    facility => facility.sportType === name,
+  );
+
+  console.log(selectedFacilities);
   useEffect(() => {
     if (!user?.userUid) return;
 
     getFacilities();
   }, [user]);
 
-  if (!facilities) {
+  if (!selectedFacilities || !name) {
     return (
       <Box sx={{ width: '100%' }}>
         <LinearProgress />
@@ -59,8 +67,8 @@ export const AvailableSportsFacilitiesPage: React.FC = () => {
             spacing={{ xs: 2, md: 3 }}
             columns={{ xs: 3, sm: 6, md: 12 }}
           >
-            {facilities.length ? (
-              facilities.map((facility, index) => (
+            {selectedFacilities && selectedFacilities.length ? (
+              selectedFacilities.map((facility, index) => (
                 <Grid
                   item
                   key={facility.id || index}
@@ -138,7 +146,7 @@ export const AvailableSportsFacilitiesPage: React.FC = () => {
               ))
             ) : (
               <Typography variant="h6" sx={{ color: '#121212', mt: 4, pl: 2 }}>
-                There isn't any available sport facility to reservate yet.
+                There isn't any available {name} facility to reservate yet.
                 Please check another time.
               </Typography>
             )}

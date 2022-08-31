@@ -31,7 +31,7 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { ImageCardsCarousel, Navigation } from 'shared/components';
 import { useDeviceSizes, useToast } from 'shared/hooks';
-import { isLocationTypeGuard } from 'shared/utils';
+import { isReservationTypeGuard } from 'shared/utils';
 
 export const MakeReservationPage: React.FC = () => {
   const [expanded, setExpanded] = useState(false);
@@ -44,7 +44,7 @@ export const MakeReservationPage: React.FC = () => {
 
   const { mobile } = useDeviceSizes();
   const location = useLocation();
-  const state = isLocationTypeGuard(location) && location.state;
+  const state = isReservationTypeGuard(location) && location.state;
   const facilityId = state ? state.facilityId : '/';
   const userUid = state ? state.creatorId : '/';
 
