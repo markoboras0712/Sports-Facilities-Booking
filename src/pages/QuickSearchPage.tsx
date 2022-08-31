@@ -9,24 +9,19 @@ import {
   Typography,
 } from '@mui/material';
 import { navigate, useLocation } from '@reach/router';
-import { authSelectors } from 'modules/authentication';
-import {
-  availableFacilities,
-  useFacilitiesRedirects,
-} from 'modules/facilities';
-import { useFirebaseFunctions } from 'modules/firebase';
+import { settingsSelector } from 'modules/authorization';
+import { availableFacilities } from 'modules/facilities';
 import { Routes } from 'modules/routing';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { ImageCardsCarousel, Navigation } from 'shared/components';
+import { useDeviceSizes } from 'shared/hooks';
 import { isQuickSearchTypeGuard, isSearchTypeGuard } from 'shared/utils';
 
 export const QuickSearchPage: React.FC = () => {
-  const user = useRecoilValue(authSelectors.user);
   const facilities = useRecoilValue(availableFacilities);
-  const { loading } = useFacilitiesRedirects();
-
-  const { getFacilities } = useFirebaseFunctions();
+  const settings = useRecoilValue(settingsSelector.settings);
+  const { mediumDeviceSize } = useDeviceSizes();
 
   const location = useLocation();
   const quickSearchState = isQuickSearchTypeGuard(location) && location.state;
@@ -43,17 +38,33 @@ export const QuickSearchPage: React.FC = () => {
       facility.sportType.includes(searchInputValue),
   );
 
-  useEffect(() => {
-    if (!user?.userUid) return;
-
-    getFacilities();
-  }, [user]);
-
-  if (!selectedFacilities || loading) {
+  if (!selectedFacilities && settings?.firstName) {
     return (
       <Box sx={{ width: '100%' }}>
         <LinearProgress />
       </Box>
+    );
+  }
+
+  if (!settings?.firstName || !selectedFacilities) {
+    return (
+      <>
+        <Navigation />
+        <Box
+          sx={{
+            width: '100%',
+            px: 8,
+            pb: 15,
+            pt: !mediumDeviceSize ? 5 : 20,
+            display: 'flex',
+            flexWrap: 'wrap',
+          }}
+        >
+          <Typography variant="h6" sx={{ color: '#121212', mt: 4, pl: 2 }}>
+            You aren't logged in. Please login first to see facilities near you
+          </Typography>
+        </Box>
+      </>
     );
   }
 

@@ -33,15 +33,14 @@ export const useFirebaseFunctions = () => {
         userUid: user.userUid,
       };
       const { data } = await getAvailableFacilities(availableFacilitiesData);
+      let total = 0;
       if (isStringArray(data)) {
         data.forEach(async data => {
           const querySnapshot = await getDocs(
             collection(db, data, 'facilities', 'entities'),
           );
-          if (!querySnapshot.size) {
-            setAvailableFacilities([]);
-            return;
-          }
+
+          if (querySnapshot.size) total++;
 
           querySnapshot.forEach(doc => {
             const facilityData = {
@@ -63,6 +62,7 @@ export const useFirebaseFunctions = () => {
               });
             }
           });
+          if (total === 0) setAvailableFacilities([]);
         });
       }
     } catch (e) {
