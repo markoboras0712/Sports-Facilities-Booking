@@ -492,6 +492,53 @@ export const useFirestore = () => {
     return;
   };
 
+  //messages collection
+
+  async function createChat(notification: Notification, userUid: string) {
+    try {
+      console.log(notification);
+      //create chat
+      const chatRef = await addDoc(collection(db, 'messages'), {});
+      await addDoc(collection(db, 'messages', chatRef.id, 'messages'), {});
+      //update activeChat for both parties
+      await updateDoc(doc(db, userUid, 'settings'), {
+        activeChats: arrayUnion(chatRef.id),
+      });
+      await updateDoc(doc(db, notification.creatorId, 'settings'), {
+        activeChats: arrayUnion(chatRef.id),
+      });
+      //send generic message to user who has reserved
+      const messageSubCollectionRef = collection(
+        db,
+        'messages',
+        chatRef.id,
+        'messages',
+      );
+      await addDoc(messageSubCollectionRef, {
+        createdAt: new Date(Date.now()),
+        text: `Hello ${notification.creatorName}. You have successfully reserved ${notification.facilityName}. If you have any questions you can ask me here.`,
+        uid: userUid,
+        to: notification.creatorId,
+      });
+      //send notification to user who has reserved
+
+      const notificationsSubColRef = collection(
+        db,
+        notification.creatorId,
+        'notifications',
+        'entities',
+      );
+
+      await addDoc(notificationsSubColRef, {
+        ...notification,
+        type: 'accepted',
+      });
+    } catch (error) {
+      alert(error);
+      throw new Error('didnt send message');
+    }
+  }
+
   return {
     getSettings,
     updateFacility,
@@ -509,5 +556,6 @@ export const useFirestore = () => {
     deleteFacility,
     acceptReservation,
     deleteReservationForFacility,
+    createChat,
   };
 };
