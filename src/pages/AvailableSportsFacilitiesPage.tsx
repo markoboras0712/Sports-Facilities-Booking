@@ -9,7 +9,10 @@ import {
   Typography,
 } from '@mui/material';
 import { navigate } from '@reach/router';
-import { availableFacilities } from 'modules/facilities';
+import {
+  availableFacilities,
+  useFacilitiesRedirects,
+} from 'modules/facilities';
 import { Routes } from 'modules/routing';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
@@ -17,8 +20,9 @@ import { ImageCardsCarousel, Navigation } from 'shared/components';
 
 export const AvailableSportsFacilitiesPage: React.FC = () => {
   const facilities = useRecoilValue(availableFacilities);
+  const { loading } = useFacilitiesRedirects();
 
-  if (!facilities) {
+  if (loading || !facilities) {
     return (
       <Box sx={{ width: '100%' }}>
         <LinearProgress />

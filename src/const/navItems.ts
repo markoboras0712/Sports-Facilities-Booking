@@ -47,10 +47,6 @@ export const navItemsNotLoggedUser: NavItem[] = [
     link: '/',
   },
   {
-    item: 'Available Facilities',
-    link: '/available-facilities',
-  },
-  {
     item: 'Login',
     link: '/login',
   },

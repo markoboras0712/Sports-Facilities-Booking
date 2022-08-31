@@ -25,7 +25,7 @@ export const PopularCards: React.FC = () => {
     facility => facility.city === settings?.city,
   );
 
-  if (!nearByFacilities) {
+  if (!nearByFacilities && settings?.firstName) {
     return (
       <Box
         sx={{
@@ -46,6 +46,25 @@ export const PopularCards: React.FC = () => {
             height={172}
           />
         ))}
+      </Box>
+    );
+  }
+
+  if (!settings?.firstName || !nearByFacilities) {
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          px: 8,
+          pb: 15,
+          pt: !mediumDeviceSize ? 5 : 20,
+          display: 'flex',
+          flexWrap: 'wrap',
+        }}
+      >
+        <Typography variant="h6" sx={{ color: '#121212', mt: 4, pl: 2 }}>
+          You aren't logged in. Please login first to see facilities near you
+        </Typography>
       </Box>
     );
   }

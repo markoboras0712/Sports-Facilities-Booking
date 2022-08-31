@@ -16,6 +16,7 @@ import {
   OnboardingData,
   settingsSelector,
 } from 'modules/authorization';
+import { useFacilitiesRedirects } from 'modules/facilities';
 import { useFirestore } from 'modules/firebase';
 import * as React from 'react';
 import { useEffect } from 'react';
@@ -26,6 +27,8 @@ import { useToast } from 'shared/hooks';
 
 export const ProfilePage: React.FC = () => {
   const settings = useRecoilValue(settingsSelector.settings);
+  const { loading } = useFacilitiesRedirects();
+
   const {
     register,
     formState: { errors },
@@ -60,7 +63,7 @@ export const ProfilePage: React.FC = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  if (user?.userUid === '' || !settings?.firstName) {
+  if (loading || user?.userUid === '') {
     return (
       <Box sx={{ width: '100%' }}>
         <LinearProgress />

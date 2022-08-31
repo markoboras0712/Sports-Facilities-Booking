@@ -14,6 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import { authSelectors } from 'modules/authentication';
+import { useFacilitiesRedirects } from 'modules/facilities';
 import { useFirestore } from 'modules/firebase';
 import { myNotifications, Notification } from 'modules/notifications';
 import React from 'react';
@@ -23,6 +24,7 @@ import { useDeviceSizes } from 'shared/hooks';
 
 export const NotificationsPage: React.FC = () => {
   const { mobile } = useDeviceSizes();
+  const { loading } = useFacilitiesRedirects();
   const notifications = useRecoilValue(myNotifications);
   const user = useRecoilValue(authSelectors.user);
   const { acceptReservation } = useFirestore();
@@ -35,9 +37,7 @@ export const NotificationsPage: React.FC = () => {
     });
   }
 
-  console.log({ notifications });
-
-  if (!notifications) {
+  if (!notifications || loading) {
     return (
       <Box sx={{ width: '100%' }}>
         <LinearProgress />

@@ -10,7 +10,10 @@ import {
 } from '@mui/material';
 import { navigate, useLocation } from '@reach/router';
 import { authSelectors } from 'modules/authentication';
-import { availableFacilities } from 'modules/facilities';
+import {
+  availableFacilities,
+  useFacilitiesRedirects,
+} from 'modules/facilities';
 import { useFirebaseFunctions } from 'modules/firebase';
 import { Routes } from 'modules/routing';
 import React, { useEffect } from 'react';
@@ -21,6 +24,8 @@ import { isQuickSearchTypeGuard, isSearchTypeGuard } from 'shared/utils';
 export const QuickSearchPage: React.FC = () => {
   const user = useRecoilValue(authSelectors.user);
   const facilities = useRecoilValue(availableFacilities);
+  const { loading } = useFacilitiesRedirects();
+
   const { getFacilities } = useFirebaseFunctions();
 
   const location = useLocation();
@@ -38,15 +43,13 @@ export const QuickSearchPage: React.FC = () => {
       facility.sportType.includes(searchInputValue),
   );
 
-  console.log(name, searchInputValue);
-
   useEffect(() => {
     if (!user?.userUid) return;
 
     getFacilities();
   }, [user]);
 
-  if (!selectedFacilities) {
+  if (!selectedFacilities || loading) {
     return (
       <Box sx={{ width: '100%' }}>
         <LinearProgress />

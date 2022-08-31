@@ -9,6 +9,7 @@ import {
   Typography,
 } from '@mui/material';
 import { authSelectors } from 'modules/authentication';
+import { useFacilitiesRedirects } from 'modules/facilities';
 import { useFirestore } from 'modules/firebase';
 import { myReservations, Reservation } from 'modules/reservations';
 import React, { useState } from 'react';
@@ -20,6 +21,7 @@ export const MyReservationsPage: React.FC = () => {
   const [open, setOpen] = useState(false);
   const { mobile } = useDeviceSizes();
   const [loading, setLoading] = useState(false);
+  const { loading: userLoading } = useFacilitiesRedirects();
   const { deleteReservation, deleteNotification } = useFirestore();
   const { errorToast, successToast } = useToast();
   const user = useRecoilValue(authSelectors.user);
@@ -40,7 +42,7 @@ export const MyReservationsPage: React.FC = () => {
     }
   }
 
-  if (!reservations) {
+  if (!reservations || userLoading) {
     return (
       <Box sx={{ width: '100%' }}>
         <LinearProgress />

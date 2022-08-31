@@ -378,7 +378,6 @@ export const useFirestore = () => {
 
   const deleteNotification = async (reservationData: Reservation) => {
     try {
-      console.log(reservationData);
       if (!reservationData.notificationId) return;
       removeEmptyProperties(reservationData);
       const notificationDocRef = doc(
@@ -388,7 +387,6 @@ export const useFirestore = () => {
         'entities',
         reservationData.notificationId,
       );
-      console.log(notificationDocRef.path);
       await deleteDoc(notificationDocRef);
     } catch (error) {
       console.log(error);
@@ -436,7 +434,6 @@ export const useFirestore = () => {
     try {
       if (!notificationData.facilityId || !notificationData.id) return;
       removeEmptyProperties(notificationData);
-      console.log(notificationData);
 
       //update notification document
       const notificationDocumentReference = doc(
@@ -454,7 +451,6 @@ export const useFirestore = () => {
       const selectedReservation = selectedFacilityReservedTimes?.find(
         reservation => reservation.facilityId === notificationData.facilityId,
       );
-      console.log(selectedReservation);
 
       const facilityDocumentReference = doc(
         db,

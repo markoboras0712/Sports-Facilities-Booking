@@ -22,7 +22,11 @@ import { DateTimeValidationError } from '@mui/x-date-pickers/internals/hooks/val
 import { navigate, useLocation } from '@reach/router';
 import { authSelectors } from 'modules/authentication';
 import { settingsSelector } from 'modules/authorization';
-import { Facility, selectedFacility } from 'modules/facilities';
+import {
+  Facility,
+  selectedFacility,
+  useFacilitiesRedirects,
+} from 'modules/facilities';
 import { useFirestore } from 'modules/firebase';
 import { Reservation } from 'modules/reservations';
 import { Routes } from 'modules/routing';
@@ -53,6 +57,7 @@ export const MakeReservationPage: React.FC = () => {
   const facility = useRecoilValue(selectedFacility);
   const { successToast, errorToast } = useToast();
   const { getFacility, createNotification, createReservation } = useFirestore();
+  const { loading: userLoading } = useFacilitiesRedirects();
 
   async function handleReservation(facility: Facility) {
     if (!user?.userUid) return;
@@ -96,7 +101,7 @@ export const MakeReservationPage: React.FC = () => {
     getFacility(userUid, facilityId);
   }, [facilityId, userUid]);
 
-  if (!facility) {
+  if (!facility || userLoading) {
     return (
       <Box sx={{ width: '100%' }}>
         <LinearProgress />

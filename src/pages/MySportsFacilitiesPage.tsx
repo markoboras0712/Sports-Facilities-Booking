@@ -10,7 +10,11 @@ import {
 } from '@mui/material';
 import { navigate } from '@reach/router';
 import { authSelectors } from 'modules/authentication';
-import { Facility, myFacilities } from 'modules/facilities';
+import {
+  Facility,
+  myFacilities,
+  useFacilitiesRedirects,
+} from 'modules/facilities';
 import { useFirestore } from 'modules/firebase';
 import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
@@ -22,6 +26,7 @@ export const MySportsFacilitiesPage: React.FC = () => {
   const user = useRecoilValue(authSelectors.user);
   const { deleteNotification, deleteReservationForFacility, deleteFacility } =
     useFirestore();
+  const { loading: userLoading } = useFacilitiesRedirects();
   const { mobile } = useDeviceSizes();
   const { successToast, errorToast } = useToast();
   const [loading, setLoading] = useState(false);
@@ -50,7 +55,7 @@ export const MySportsFacilitiesPage: React.FC = () => {
     }
   }
 
-  if (!facilities) {
+  if (!facilities || userLoading) {
     return (
       <Box sx={{ width: '100%' }}>
         <LinearProgress />

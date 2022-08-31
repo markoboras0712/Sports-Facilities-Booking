@@ -18,7 +18,12 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { navigate, useParams } from '@reach/router';
 import { countries } from 'const';
 import { authSelectors } from 'modules/authentication';
-import { availableSports, Facility, myFacilities } from 'modules/facilities';
+import {
+  availableSports,
+  Facility,
+  myFacilities,
+  useFacilitiesRedirects,
+} from 'modules/facilities';
 import { useFirebaseStorage, useFirestore } from 'modules/firebase';
 import { Routes } from 'modules/routing';
 import { MuiTelInput } from 'mui-tel-input';
@@ -32,6 +37,7 @@ import { useToast } from 'shared/hooks';
 export const EditFacilityPage: React.FC = () => {
   const { updateFacility } = useFirestore();
   const { uploadBlobOrFile } = useFirebaseStorage();
+  const { loading } = useFacilitiesRedirects();
   const user = useRecoilValue(authSelectors.user);
   const facilities = useRecoilValue(myFacilities);
   const params = useParams();
@@ -103,7 +109,7 @@ export const EditFacilityPage: React.FC = () => {
     }
   }, [selectedFacility]);
 
-  if (!facilities || !selectedFacility) {
+  if (!facilities || !selectedFacility || loading) {
     return (
       <Box sx={{ width: '100%' }}>
         <LinearProgress />

@@ -1,7 +1,8 @@
 import { BigHead } from '@bigheads/core';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+import NotificationImportantTwoToneIcon from '@mui/icons-material/NotificationImportantTwoTone';
+import NotificationsPausedTwoToneIcon from '@mui/icons-material/NotificationsPausedTwoTone';
 import {
   Box,
   Divider,
@@ -136,7 +137,11 @@ export const NotificationsMenu: React.FC = () => {
       </Menu>
       <Tooltip title="Open notifications page">
         <IconButton onClick={handleOpenUserMenu}>
-          <NotificationsNoneIcon />
+          {notifications?.length ? (
+            <NotificationImportantTwoToneIcon sx={{ color: 'red' }} />
+          ) : (
+            <NotificationsPausedTwoToneIcon />
+          )}
         </IconButton>
       </Tooltip>
     </>
