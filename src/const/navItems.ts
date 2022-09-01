@@ -25,6 +25,10 @@ export const navItemsLoggedUser: NavItem[] = [
     link: '/sport-facilities',
   },
   {
+    item: 'My Reserved Facilities',
+    link: '/my-reserved-facilities',
+  },
+  {
     item: 'Notifications',
     link: '/notifications',
   },

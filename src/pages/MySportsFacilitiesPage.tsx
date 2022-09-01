@@ -23,6 +23,7 @@ import { useDeviceSizes, useToast } from 'shared/hooks';
 
 export const MySportsFacilitiesPage: React.FC = () => {
   const facilities = useRecoilValue(myFacilities);
+
   const user = useRecoilValue(authSelectors.user);
   const { deleteReservationForFacility, deleteFacility } = useFirestore();
   const { loading: userLoading } = useFacilitiesRedirects();

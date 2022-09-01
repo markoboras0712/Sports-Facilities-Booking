@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { navigate } from '@reach/router';
 import { User } from 'firebase/auth';
@@ -17,15 +18,15 @@ import {
 } from 'firebase/firestore';
 import { OnboardingData, settingsSelector } from 'modules/authorization';
 import { Facility, myFacilities, selectedFacility } from 'modules/facilities';
-import { myReservations, Reservation } from 'modules/reservations';
+import { Message, myMessages } from 'modules/messages';
 import { myNotifications, Notification } from 'modules/notifications';
+import { myReservations, Reservation } from 'modules/reservations';
 import { Routes } from 'modules/routing';
 import { useMemo } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { removeEmptyProperties } from 'shared/utils';
 import { createFirebaseApp } from '../initFirebase';
 import { useFirestoreUtilities } from './useFirestoreUtilities';
-import { Message, myMessages } from 'modules/messages';
 
 export const useFirestore = () => {
   const db = useMemo(() => getFirestore(createFirebaseApp()), []);
@@ -188,11 +189,23 @@ export const useFirestore = () => {
       const q = query(facilitiesRef, orderBy('createdAt', 'asc'));
       const unsubscribe = onSnapshot(q, snapshot => {
         const facilities = snapshot.docs.map(doc => {
+          const reservedTimes = doc
+            .data()
+            .reservedTimes.map((reservation: any) => {
+              return {
+                ...reservation,
+                createdAt: reservation.createdAt.toDate(),
+                startTime: reservation.startTime.toDate(),
+                endTime: reservation.endTime.toDate(),
+              };
+            });
+
           return {
             ...doc.data(),
             startWorkingHour: doc.data().startWorkingHour.toDate(),
             endWorkingHour: doc.data().endWorkingHour.toDate(),
             createdAt: doc.data().createdAt.toDate(),
+            reservedTimes,
           };
         });
 

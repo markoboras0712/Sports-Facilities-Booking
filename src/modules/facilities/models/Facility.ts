@@ -44,7 +44,7 @@ export interface Facility {
   /**
    * Reserved times of the facility
    */
-  reservedTimes: Reservation[] | null;
+  reservedTimes: Reservation[];
   /**
    * Capacity of the facility
    */

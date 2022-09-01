@@ -8,6 +8,7 @@ export enum Routes {
   MySportFacilities = '/sport-facilities',
   EditFacility = '/facility/:id',
   MyReservations = '/my-reservations',
+  MyReservedFacilities = '/my-reserved-facilities',
   AvailableFacilities = '/available-facilities',
   QuickSearch = '/quick-search',
   MakeReservation = '/create-reservation',
