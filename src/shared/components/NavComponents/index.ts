@@ -5,3 +5,4 @@ export * from './UserMenu';
 export * from './BookingsMenu';
 export * from './NavigationBuilder';
 export * from './NotificationsMenu';
+export * from './InboxMenu';

@@ -13,6 +13,10 @@ export const navItemsLoggedUser: NavItem[] = [
     link: '/available-facilities',
   },
   {
+    item: 'My Reservations',
+    link: '/my-reservations',
+  },
+  {
     item: 'Host Facility',
     link: '/create-sport-facility',
   },
@@ -21,20 +25,8 @@ export const navItemsLoggedUser: NavItem[] = [
     link: '/sport-facilities',
   },
   {
-    item: 'My Reservations',
-    link: '/my-reservations',
-  },
-  {
     item: 'Notifications',
     link: '/notifications',
-  },
-  {
-    item: 'Inbox',
-    link: '/inbox',
-  },
-  {
-    item: 'Profile',
-    link: '/profile',
   },
   {
     item: 'Logout',
