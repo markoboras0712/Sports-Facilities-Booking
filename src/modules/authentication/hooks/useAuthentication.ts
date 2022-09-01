@@ -3,6 +3,7 @@ import { FirebaseError } from 'firebase/app';
 import { navigate } from '@reach/router';
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
   FacebookAuthProvider,
   getAuth,
   GoogleAuthProvider,
@@ -141,6 +142,25 @@ export function useAuthentication() {
   }
 
   /**
+   * Delete account for currently logged user
+   * @name deleteAccount
+   * @description Function that deleted firebase account.
+   */
+
+  async function deleteAccount() {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+      if (!user) return;
+
+      await deleteUser(user);
+      successToast('User is successfully deleted!');
+    } catch (error) {
+      if (error instanceof FirebaseError) errorToast(error.message);
+    }
+  }
+
+  /**
    * Function that is used as a callback for Firebase Auth onAuthStateChanged event.
    * @name onUserAuthStateChange
    * @description Function that is used as a callback inside of onAuthStateChanged to subscribe and get if user is logged in or not.
@@ -184,5 +204,6 @@ export function useAuthentication() {
     resetPassword,
     loginWithGoogle,
     loginWithFacebook,
+    deleteAccount,
   };
 }

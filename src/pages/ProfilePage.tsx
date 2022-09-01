@@ -10,7 +10,7 @@ import {
   TextField,
 } from '@mui/material';
 import { countries } from 'const';
-import { authSelectors } from 'modules/authentication';
+import { authSelectors, useAuthentication } from 'modules/authentication';
 import {
   getRandomOptions,
   OnboardingData,
@@ -27,7 +27,8 @@ import { useToast } from 'shared/hooks';
 
 export const ProfilePage: React.FC = () => {
   const settings = useRecoilValue(settingsSelector.settings);
-  const { loading } = useFacilitiesRedirects();
+  const user = useRecoilValue(authSelectors.user);
+  const setSettings = useSetRecoilState(settingsSelector.settings);
 
   const {
     register,
@@ -35,9 +36,9 @@ export const ProfilePage: React.FC = () => {
     handleSubmit,
   } = useForm<OnboardingData>();
 
-  const user = useRecoilValue(authSelectors.user);
-  const setSettings = useSetRecoilState(settingsSelector.settings);
   const { updateUser } = useFirestore();
+  const { loading } = useFacilitiesRedirects();
+  const { deleteAccount } = useAuthentication();
   const { successToast } = useToast();
 
   const handleNewAvatar = () => {
@@ -207,6 +208,15 @@ export const ProfilePage: React.FC = () => {
             sx={{ mt: 3, mb: 2 }}
           >
             Save
+          </Button>
+          <Button
+            type="submit"
+            fullWidth
+            variant="outlined"
+            color="error"
+            onClick={() => deleteAccount()}
+          >
+            Delete account
           </Button>
         </Box>
       </Grid>
