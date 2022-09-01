@@ -524,6 +524,79 @@ export const useFirestore = () => {
     return;
   };
 
+  const rejectReservation = async (
+    userUid: string,
+    notificationData: Notification,
+  ) => {
+    try {
+      if (!notificationData.facilityId || !notificationData.id) return;
+      removeEmptyProperties(notificationData);
+
+      //update notification document
+      const notificationDocumentReference = doc(
+        db,
+        userUid,
+        `notifications/entities/${notificationData.id}`,
+      );
+      await setDocument(notificationDocumentReference, notificationData, true);
+
+      //update facility document
+      const selectedFacilityReservedTimes = facilities?.find(
+        facility => facility.id === notificationData.facilityId,
+      )?.reservedTimes;
+      console.log(selectedFacilityReservedTimes);
+
+      const selectedReservation = selectedFacilityReservedTimes?.find(
+        reservation => reservation.facilityId === notificationData.facilityId,
+      );
+
+      const oldReservation = selectedFacilityReservedTimes?.find(
+        reservation =>
+          reservation.reservationCreatorId === notificationData.creatorId &&
+          reservation.facilityId === notificationData.facilityId &&
+          reservation.createdAt === notificationData.createdAt,
+      );
+
+      const facilityDocumentReference = doc(
+        db,
+        userUid,
+        `facilities/entities/${notificationData.facilityId}`,
+      );
+
+      await updateDoc(facilityDocumentReference, {
+        reservedTimes: arrayRemove({
+          ...selectedReservation,
+        }),
+      });
+      await updateDoc(facilityDocumentReference, {
+        reservedTimes: arrayUnion({
+          ...selectedReservation,
+          type: 'rejected',
+        }),
+      });
+
+      //other user reservation document
+
+      const reservationDocumentReference = doc(
+        db,
+        notificationData.creatorId,
+        `reservations/entities/${selectedReservation?.reservationId}`,
+      );
+      await deleteDoc(reservationDocumentReference);
+
+      const oldReservationDocumentReference = doc(
+        db,
+        notificationData.creatorId,
+        `reservations/entities/${oldReservation?.reservationId}`,
+      );
+      await deleteDoc(oldReservationDocumentReference);
+    } catch (error) {
+      console.log(error);
+    }
+
+    return;
+  };
+
   //messages collection
 
   async function createChat(notification: Notification, userUid: string) {
@@ -630,5 +703,6 @@ export const useFirestore = () => {
     createChat,
     getMessagesForChat,
     sendMessage,
+    rejectReservation,
   };
 };

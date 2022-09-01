@@ -26,17 +26,25 @@ export const NotificationsPage: React.FC = () => {
   const { mobile } = useDeviceSizes();
   const { loading } = useFacilitiesRedirects();
   const notifications = useRecoilValue(myNotifications);
+
   const user = useRecoilValue(authSelectors.user);
-  const { acceptReservation, createChat } = useFirestore();
+  const { acceptReservation, createChat, rejectReservation } = useFirestore();
 
   async function handleAcceptReservation(notification: Notification) {
-    console.log(notification);
     if (!user?.userUid) return;
     await acceptReservation(user.userUid, {
       ...notification,
       type: 'accepted',
     });
     await createChat(notification, user.userUid);
+  }
+
+  async function handleRejectReservation(notification: Notification) {
+    if (!user?.userUid) return;
+    await rejectReservation(user.userUid, {
+      ...notification,
+      type: 'rejected',
+    });
   }
 
   if (!notifications || loading) {
@@ -97,6 +105,9 @@ export const NotificationsPage: React.FC = () => {
                             sx={{ color: 'red' }}
                             edge="end"
                             aria-label="delete"
+                            onClick={() =>
+                              handleRejectReservation(notification)
+                            }
                           >
                             <ClearIcon />
                           </IconButton>

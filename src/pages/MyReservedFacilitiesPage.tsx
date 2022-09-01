@@ -96,7 +96,11 @@ export const MyReservedFacilitiesPage: React.FC = () => {
                           <Typography
                             key={reservation.reservationId}
                             variant="h6"
-                            color="text.secondary"
+                            color={
+                              (reservation.type === 'rejected' && 'red') ||
+                              (reservation.type === 'accepted' && 'green') ||
+                              'text.secondary'
+                            }
                             gutterBottom
                           >
                             Reservation time:{' '}
@@ -107,8 +111,10 @@ export const MyReservedFacilitiesPage: React.FC = () => {
                             - {reservation.endTime?.getHours()}
                             {reservation.endTime?.getMinutes() === 0
                               ? ''
-                              : `:${reservation.endTime?.getMinutes()}`}
-                            {'  '}
+                              : `:${reservation.endTime?.getMinutes()}`}{' '}
+                            {reservation.type === 'rejected' && `rejected`}
+                            {reservation.type === 'accepted' && `accepted`}
+                            {reservation.type === 'pending' && `pending`}
                           </Typography>
                         ))}
                     </CardContent>
