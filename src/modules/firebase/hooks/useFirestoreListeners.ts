@@ -8,7 +8,7 @@ export const useFirestoreListeners = () => {
   const user = useRecoilValue(authSelectors.user);
   const { getMyNotifications, getMyFacilities, getMyReservations } =
     useFirestore();
-  const { getFacilities } = useFirebaseFunctions();
+  const { getFacilities, getChats } = useFirebaseFunctions();
 
   useEffect(() => {
     if (!user?.userUid) return;
@@ -17,5 +17,6 @@ export const useFirestoreListeners = () => {
     getMyReservations(user.userUid);
     getMyFacilities(user.userUid);
     getFacilities();
+    getChats();
   }, [user]);
 };

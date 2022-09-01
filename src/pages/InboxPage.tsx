@@ -1,11 +1,8 @@
 import { BigHead } from '@bigheads/core';
-import CheckIcon from '@mui/icons-material/Check';
-import ClearIcon from '@mui/icons-material/Clear';
 import {
   Box,
   Divider,
   Grid,
-  IconButton,
   LinearProgress,
   List,
   ListItem,
@@ -13,10 +10,11 @@ import {
   ListItemText,
   Typography,
 } from '@mui/material';
-import { authSelectors } from 'modules/authentication';
+import { navigate } from '@reach/router';
 import { useFacilitiesRedirects } from 'modules/facilities';
-import { useFirestore } from 'modules/firebase';
-import { myNotifications, Notification } from 'modules/notifications';
+import { myChats } from 'modules/messages';
+import { myNotifications } from 'modules/notifications';
+import { Routes } from 'modules/routing';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { Navigation } from 'shared/components';
@@ -26,23 +24,23 @@ export const InboxPage: React.FC = () => {
   const { mobile } = useDeviceSizes();
   const { loading } = useFacilitiesRedirects();
   const notifications = useRecoilValue(myNotifications);
-
-  console.log({ notifications });
-
-  const user = useRecoilValue(authSelectors.user);
-  const { acceptReservation, createChat } = useFirestore();
-
-  async function handleAcceptReservation(notification: Notification) {
-    console.log(notification);
-    if (!user?.userUid) return;
-    await acceptReservation(user.userUid, {
-      ...notification,
-      type: 'accepted',
+  const chats = useRecoilValue(myChats);
+  const chatsAndNotifications =
+    chats &&
+    notifications &&
+    chats.map((chat, index) => {
+      const otherData = {
+        facilityId: notifications[index].facilityId,
+        facilityName: notifications[index].facilityName,
+        createdAt: notifications[index].createdAt,
+        startTime: notifications[index].startTime,
+        endTime: notifications[index].endTime,
+      };
+      return { ...chat, ...otherData };
     });
-    await createChat(notification, user.userUid);
-  }
+  console.log({ chatsAndNotifications });
 
-  if (!notifications || loading) {
+  if (!chatsAndNotifications || loading) {
     return (
       <Box sx={{ width: '100%' }}>
         <LinearProgress />
@@ -79,35 +77,12 @@ export const InboxPage: React.FC = () => {
               bgcolor: 'background.paper',
             }}
           >
-            {notifications.length ? (
-              notifications?.map((notification, index) => (
-                <Box key={index}>
+            {chatsAndNotifications.length ? (
+              chatsAndNotifications?.map((item, index) => (
+                <Box key={item.id || index}>
                   <ListItem
-                    secondaryAction={
-                      notification.type === 'pending' ? (
-                        <>
-                          <IconButton
-                            sx={{ color: 'green' }}
-                            edge="end"
-                            onClick={() =>
-                              handleAcceptReservation(notification)
-                            }
-                            aria-label="confirm"
-                          >
-                            <CheckIcon />
-                          </IconButton>
-                          <IconButton
-                            sx={{ color: 'red' }}
-                            edge="end"
-                            aria-label="delete"
-                          >
-                            <ClearIcon />
-                          </IconButton>
-                        </>
-                      ) : (
-                        <></>
-                      )
-                    }
+                    onClick={() => navigate(`${Routes.Chat}/${item.id}`)}
+                    sx={{ cursor: 'pointer' }}
                     alignItems="flex-start"
                   >
                     <ListItemAvatar sx={{ mr: mobile ? 0 : 4 }}>
@@ -116,7 +91,7 @@ export const InboxPage: React.FC = () => {
                         height={mobile ? 40 : 80}
                         width={mobile ? 40 : 80}
                       >
-                        <BigHead {...(notification?.avatar as any)} />
+                        <BigHead {...(item?.avatar as any)} />
                       </Box>
                     </ListItemAvatar>
                     <ListItemText
@@ -127,7 +102,7 @@ export const InboxPage: React.FC = () => {
                             variant={mobile ? `body2` : `h5`}
                             color="text.primary"
                           >
-                            {notification.facilityName}
+                            {item.facilityName}
                           </Typography>
                         </>
                       }
@@ -139,15 +114,23 @@ export const InboxPage: React.FC = () => {
                             variant={mobile ? `body2` : `h6`}
                             color="text.primary"
                           >
-                            Reservation time:{' '}
-                            {notification.startTime?.getHours()}
-                            {notification.startTime?.getMinutes() === 0
+                            Reservation time: {item.startTime?.getHours()}
+                            {item.startTime?.getMinutes() === 0
                               ? ''
-                              : `:${notification.startTime?.getMinutes()}`}{' '}
-                            - {notification.endTime?.getHours()}
-                            {notification.endTime?.getMinutes() === 0
+                              : `:${item.startTime?.getMinutes()}`}{' '}
+                            - {item.endTime?.getHours()}
+                            {item.endTime?.getMinutes() === 0
                               ? ''
-                              : `:${notification.endTime?.getMinutes()}`}
+                              : `:${item.endTime?.getMinutes()}`}
+                          </Typography>
+                          <br />
+                          <Typography
+                            sx={{ display: 'inline' }}
+                            component="span"
+                            variant={mobile ? `body2` : `h6`}
+                            color="text.primary"
+                          >
+                            {item.userName}
                           </Typography>
                         </React.Fragment>
                       }
@@ -158,7 +141,7 @@ export const InboxPage: React.FC = () => {
               ))
             ) : (
               <Typography variant="h6" sx={{ color: '#121212', mt: 4, pl: 4 }}>
-                You don't have any notification yet. You can also check your
+                You don't have any chat yet. You can also check your
                 notifications in upper right corner of navigation.
               </Typography>
             )}

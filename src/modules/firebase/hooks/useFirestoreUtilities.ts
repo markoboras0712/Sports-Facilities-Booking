@@ -10,6 +10,7 @@ import {
 } from 'firebase/firestore';
 import { OnboardingData } from 'modules/authorization';
 import { Facility } from 'modules/facilities';
+import { Chat } from 'modules/messages';
 import { Notification } from 'modules/notifications';
 import { Reservation } from 'modules/reservations';
 import { useMemo } from 'react';
@@ -74,6 +75,11 @@ export const useFirestoreUtilities = <T>() => {
     return (data as Notification[])[0].facilityId !== undefined;
   };
 
+  const isChatArrayData = (data?: DocumentData[]): data is Chat[] => {
+    if (!data?.length) return false;
+    return (data as Chat[])[0].creatorId !== undefined;
+  };
+
   return {
     getCollectionReference,
     getDocumentReference,
@@ -86,5 +92,6 @@ export const useFirestoreUtilities = <T>() => {
     isFacilityArrayData,
     isReservationArrayData,
     isNotificationArrayData,
+    isChatArrayData,
   };
 };

@@ -17,6 +17,7 @@ import {
   QuickSearchPage,
   RegisterPage,
 } from 'pages';
+import ChatPage from 'pages/ChatPage';
 import * as React from 'react';
 import { Routes } from '../routes';
 
@@ -69,6 +70,8 @@ export const Routing: React.FC = () => {
         pageComponent={<QuickSearchPage />}
       />
       <RouterPage path={Routes.Inbox} pageComponent={<InboxPage />} />
+      <RouterPage path={Routes.Chat} pageComponent={<ChatPage />} />
+
       <RouterPage path={Routes.NotFound} pageComponent={<ErrorPage />} />
     </Router>
   );
