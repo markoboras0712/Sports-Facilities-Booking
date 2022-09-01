@@ -1,15 +1,19 @@
 export enum Routes {
-  Landing = '/',
-  Onboarding = '/onboarding',
-  Login = '/login',
+  Register = '/register',
   ForgotPassword = '/forgot-password',
-  SignUp = '/sign-up',
+  Login = '/login',
+  Onboarding = '/onboarding',
+  Landing = '/',
   Profile = '/profile',
-  MyObjects = '/my-objects',
-  AvailableObjects = '/dashboard',
-  Builder = '/facility/:id',
-  Notifications = '/notifications',
-  Chat = '/messages/:id',
-  Inbox = '/inbox',
+  MySportFacilities = '/sport-facilities',
+  EditFacility = '/facility/:id',
+  MyReservations = '/my-reservations',
+  AvailableFacilities = '/available-facilities',
+  QuickSearch = '/quick-search',
+  MakeReservation = '/create-reservation',
+  FacilityBuilder = '/create-sport-facility',
+  Notifications = '/notifications', // TODO
+  Chat = '/messages/:id', // TODO
+  Inbox = '/inbox', // TODO
   NotFound = '*',
 }

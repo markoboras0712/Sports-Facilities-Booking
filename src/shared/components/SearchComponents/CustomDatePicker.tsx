@@ -5,11 +5,15 @@ import {
   DesktopDatePicker,
 } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import * as React from 'react';
 import { useDeviceSizes } from 'shared/hooks';
+import { useSetRecoilState } from 'recoil';
+import { searchDateInput } from 'modules/facilities';
 
 export const CustomDatePicker: React.FC = () => {
   const [value, setValue] = useState<Date | null>(new Date());
+  const setSearchDate = useSetRecoilState(searchDateInput);
   const { mediumDeviceSize } = useDeviceSizes();
 
   return (
@@ -32,7 +36,8 @@ export const CustomDatePicker: React.FC = () => {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DesktopDatePicker
             value={value}
-            disableFuture
+            disablePast
+            disableHighlightToday
             InputProps={{
               disableUnderline: true,
             }}
@@ -41,6 +46,7 @@ export const CustomDatePicker: React.FC = () => {
             InputAdornmentProps={{ position: 'start' }}
             onChange={newValue => {
               setValue(newValue);
+              setSearchDate(newValue);
             }}
             renderInput={params => <TextField variant="standard" {...params} />}
           />

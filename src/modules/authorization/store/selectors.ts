@@ -1,15 +1,18 @@
 import { DefaultValue, selector } from 'recoil';
 import { OnboardingData } from '../models';
-import {
+import { settingsAtoms } from './atoms';
+
+const {
   addressAtom,
   avatarAtom,
   cityAtom,
   countryAtom,
   firstNameAtom,
+  isOnboardingInProgressAtom,
   lastNameAtom,
   postalCodeAtom,
-  isOnboardingInProgressAtom,
-} from './atoms';
+  activeChatsAtom,
+} = settingsAtoms;
 
 const settings = selector<OnboardingData | null>({
   key: 'authorization.user',
@@ -23,6 +26,7 @@ const settings = selector<OnboardingData | null>({
       city: get(cityAtom),
       postalCode: get(postalCodeAtom),
       isOnboardingInProgress: get(isOnboardingInProgressAtom),
+      activeChats: get(activeChatsAtom),
     };
     return settings;
   },
@@ -36,12 +40,13 @@ const settings = selector<OnboardingData | null>({
       set(cityAtom, onboardingData.city);
       set(postalCodeAtom, onboardingData.postalCode);
       set(isOnboardingInProgressAtom, onboardingData.isOnboardingInProgress);
+      set(activeChatsAtom, onboardingData.activeChats);
     }
   },
 });
 
 const settingsCleanup = selector({
-  key: 'authentication.cleanup',
+  key: 'authorization.cleanup',
   get: () => null,
   set: ({ reset }) => {
     reset(firstNameAtom);
@@ -52,6 +57,7 @@ const settingsCleanup = selector({
     reset(cityAtom);
     reset(postalCodeAtom);
     reset(isOnboardingInProgressAtom);
+    reset(activeChatsAtom);
   },
 });
 

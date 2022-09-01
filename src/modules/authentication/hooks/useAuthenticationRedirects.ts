@@ -3,11 +3,17 @@ import { settingsSelector } from 'modules/authorization';
 import { Routes } from 'modules/routing';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { userSelectors } from '../store';
+import { authSelectors } from '../store';
+
+/**
+ * Use Authentication Redirects Hook
+ * @name useAuthenticationRedirects
+ * @description Hook that is used to redirect to the auth page if the user is not authenticated.
+ */
 
 export const useAuthenticationRedirects = () => {
   const [loading, setLoading] = useState(true);
-  const user = useRecoilValue(userSelectors.user);
+  const user = useRecoilValue(authSelectors.user);
   const settings = useRecoilValue(settingsSelector.settings);
   const { pathname } = useLocation();
 
@@ -19,7 +25,7 @@ export const useAuthenticationRedirects = () => {
 
     if (user?.userUid && !settings?.isOnboardingInProgress) {
       setLoading(false);
-      navigate(Routes.AvailableObjects);
+      navigate(Routes.Landing);
     }
 
     if (user?.userUid && settings?.isOnboardingInProgress) {

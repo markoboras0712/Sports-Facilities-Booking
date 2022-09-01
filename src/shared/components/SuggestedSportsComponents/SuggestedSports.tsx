@@ -1,6 +1,6 @@
 import { Box, Grid, Stack } from '@mui/material';
 import { suggestedSports } from 'const';
-import React from 'react';
+import * as React from 'react';
 import { useDeviceSizes } from 'shared/hooks';
 import { SuggestedSport } from './SuggestedSport';
 

@@ -15,13 +15,11 @@ import {
   AuthenticationLayout,
   useAuthentication,
   useAuthenticationRedirects,
-  userSelectors,
 } from 'modules/authentication';
 import { Routes } from 'modules/routing';
-import React from 'react';
+import * as React from 'react';
 import { useForm } from 'react-hook-form';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { Copyright, CustomizedSnackbars } from 'shared/components';
+import { Copyright } from 'shared/components';
 
 export const ForgotPasswordPage: React.FC = () => {
   const {
@@ -31,10 +29,6 @@ export const ForgotPasswordPage: React.FC = () => {
   } = useForm<{ email: string }>();
   const { loading } = useAuthenticationRedirects();
   const { resetPassword } = useAuthentication();
-  const forgotPasswordError = useRecoilValue(userSelectors.forgotPasswordError);
-  const errorCleanup = useSetRecoilState(
-    userSelectors.forgotPasswordErrorCleanup,
-  );
 
   const onSubmit = handleSubmit(({ email }) => {
     resetPassword(email);
@@ -102,7 +96,7 @@ export const ForgotPasswordPage: React.FC = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Reset password
             </Button>
             <Grid container>
               <Grid item>
@@ -112,11 +106,6 @@ export const ForgotPasswordPage: React.FC = () => {
           </Box>
         </Box>
         <Copyright mt={8} />
-        <CustomizedSnackbars
-          errorCleanup={errorCleanup}
-          snackbarMessage={forgotPasswordError}
-          snackbarOpen={Boolean(forgotPasswordError)}
-        />
       </Grid>
     </AuthenticationLayout>
   );

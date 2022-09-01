@@ -1,12 +1,16 @@
 import { Box, Button, Divider, Grid, Paper } from '@mui/material';
-import React from 'react';
+import { navigate } from '@reach/router';
+import { searchFacilityInput } from 'modules/facilities';
+import { Routes } from 'modules/routing';
+import * as React from 'react';
+import { useRecoilValue } from 'recoil';
 import { useDeviceSizes } from 'shared/hooks';
 import { CustomDatePicker } from './CustomDatePicker';
-import { FindMyLocation } from './FindMyLocation';
 import { SearchSport } from './SearchSport';
 
 export const SearchTools: React.FC = () => {
   const { mediumDeviceSize } = useDeviceSizes();
+  const searchFacilityInputValue = useRecoilValue(searchFacilityInput);
 
   return (
     <Grid item>
@@ -38,11 +42,6 @@ export const SearchTools: React.FC = () => {
             px: !mediumDeviceSize ? 0 : 2,
           }}
         >
-          <FindMyLocation />
-          <Divider
-            sx={{ display: { xs: 'none', md: 'block' } }}
-            orientation="vertical"
-          />
           <SearchSport />
           <Divider
             sx={{ display: { xs: 'none', md: 'block' }, p: 0 }}
@@ -56,6 +55,13 @@ export const SearchTools: React.FC = () => {
                 size="medium"
                 fullWidth
                 variant="contained"
+                onClick={() =>
+                  navigate(Routes.QuickSearch, {
+                    state: {
+                      searchFacilityInputValue,
+                    },
+                  })
+                }
               >
                 Search
               </Button>
@@ -66,6 +72,13 @@ export const SearchTools: React.FC = () => {
           <Button
             sx={{ px: 5, py: 1.5, textTransform: 'none', borderRadius: 1 }}
             size="medium"
+            onClick={() =>
+              navigate(Routes.QuickSearch, {
+                state: {
+                  searchFacilityInputValue,
+                },
+              })
+            }
             variant="contained"
           >
             Search

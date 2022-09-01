@@ -1,5 +1,5 @@
 import { createTheme, CssBaseline, Grid, ThemeProvider } from '@mui/material';
-import React from 'react';
+import * as React from 'react';
 
 const theme = createTheme();
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import { Button } from '@mui/material';

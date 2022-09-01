@@ -9,7 +9,8 @@ import {
 } from '@mui/material';
 import { Link, useLocation } from '@reach/router';
 import { Routes } from 'modules/routing';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Authentication,
@@ -23,32 +24,31 @@ interface Props {
   authenticationTitle: string;
   forgotPassword?: boolean;
   backToLogin?: boolean;
-  backToSignup?: boolean;
+  backToRegister?: boolean;
 }
 
 export const AuthenticationForm: React.FC<Props> = ({
   authenticationTitle,
   forgotPassword,
   backToLogin,
-  backToSignup,
+  backToRegister,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const { login, register } = useAuthentication();
   const { pathname } = useLocation();
 
   const {
-    register,
+    register: registerInput,
     handleSubmit,
     formState: { errors },
   } = useForm<Authentication>();
-  const { loginWithEmailPassword, registerWithEmailPassword } =
-    useAuthentication();
 
   const onSubmit = handleSubmit((data: Authentication) => {
     const { email, password } = data;
     pathname === Routes.Login
-      ? loginWithEmailPassword(email, password)
-      : registerWithEmailPassword(email, password);
+      ? login(email, password)
+      : register(email, password);
   });
 
   return (
@@ -61,7 +61,7 @@ export const AuthenticationForm: React.FC<Props> = ({
     >
       <TextField
         margin="normal"
-        {...register('email', {
+        {...registerInput('email', {
           required: 'Email Address is required.',
           pattern: {
             value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -78,7 +78,7 @@ export const AuthenticationForm: React.FC<Props> = ({
       />
       <TextField
         margin="normal"
-        {...register('password', {
+        {...registerInput('password', {
           required: 'Password is required.',
           minLength: {
             message: 'Password must be at least 6 characters.',
@@ -125,9 +125,9 @@ export const AuthenticationForm: React.FC<Props> = ({
             {forgotPassword ? 'Forgot password?' : 'Back to login'}{' '}
           </Link>
         </Grid>
-        {backToSignup && (
+        {backToRegister && (
           <Grid item>
-            <Link to={Routes.SignUp}>{"Don't have an account? Sign Up"}</Link>
+            <Link to={Routes.Register}>{'Create account'}</Link>
           </Grid>
         )}
         {backToLogin && (

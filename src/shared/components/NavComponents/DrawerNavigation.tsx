@@ -1,8 +1,11 @@
 import MenuIcon from '@mui/icons-material/Menu';
-import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import { Box, Drawer, IconButton, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { navigate } from '@reach/router';
+import { Routes } from 'modules/routing';
+import * as React from 'react';
+import { useState } from 'react';
 import { useDeviceSizes } from 'shared/hooks';
+import { BookingsMenu } from './BookingsMenu';
 import { CustomDrawer } from './CustomDrawer';
 
 export const DrawerNavigation: React.FC = () => {
@@ -38,19 +41,12 @@ export const DrawerNavigation: React.FC = () => {
       >
         <MenuIcon />
       </IconButton>
+      <BookingsMenu />
       <Typography
         sx={{
-          mr: mobile ? 1 : 4,
-          display: { xs: 'none', sm: 'block' },
-          alignContent: 'center',
+          display: { xs: 'none', sm: 'block', cursor: 'pointer' },
         }}
-      >
-        <SportsSoccerIcon />
-      </Typography>
-      <Typography
-        sx={{
-          display: { xs: 'none', sm: 'block' },
-        }}
+        onClick={() => navigate(Routes.Landing)}
       >
         Bookings
       </Typography>
