@@ -20,6 +20,12 @@
 }
 
 .footer__send {
+    cursor: pointer;
+    border: none;
+    background-color: white;
+}
+
+.footer__not__allowed {
     cursor: not-allowed;
     border: none;
     background-color: white;

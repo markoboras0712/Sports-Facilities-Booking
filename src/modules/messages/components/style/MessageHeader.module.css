@@ -54,6 +54,7 @@
 
 .header__dots {
     margin-left: auto;
+    cursor: not-allowed;
     border: none;
     background-color: white;
 }

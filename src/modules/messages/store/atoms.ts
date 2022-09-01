@@ -12,3 +12,9 @@ export const myMessages = atom<Message[] | undefined>({
   default: undefined,
   dangerouslyAllowMutability: true,
 });
+
+export const selectedChat = atom<Chat | undefined>({
+  key: 'selectedChat',
+  default: undefined,
+  dangerouslyAllowMutability: true,
+});

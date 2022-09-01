@@ -12,10 +12,10 @@ import {
 } from '@mui/material';
 import { navigate } from '@reach/router';
 import { useFacilitiesRedirects } from 'modules/facilities';
-import { myChats } from 'modules/messages';
+import { myChats, selectedChat } from 'modules/messages';
 import { myNotifications } from 'modules/notifications';
 import React from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { Navigation } from 'shared/components';
 import { useDeviceSizes } from 'shared/hooks';
 
@@ -24,6 +24,8 @@ export const InboxPage: React.FC = () => {
   const { loading } = useFacilitiesRedirects();
   const notifications = useRecoilValue(myNotifications);
   const chats = useRecoilValue(myChats);
+  const setSelectedChat = useSetRecoilState(selectedChat);
+
   const chatsAndNotifications =
     chats &&
     notifications &&
@@ -79,7 +81,10 @@ export const InboxPage: React.FC = () => {
               chatsAndNotifications?.map((item, index) => (
                 <Box key={item.id || index}>
                   <ListItem
-                    onClick={() => navigate(`messages/${item.id}`)}
+                    onClick={() => {
+                      setSelectedChat(item);
+                      navigate(`messages/${item.id}`);
+                    }}
                     sx={{ cursor: 'pointer' }}
                     alignItems="flex-start"
                   >

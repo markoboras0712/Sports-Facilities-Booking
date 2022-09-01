@@ -4,13 +4,15 @@ import { ReactComponent as Dots } from 'assets/dots.svg';
 import { navigate } from '@reach/router';
 import React from 'react';
 import { Routes } from 'modules/routing';
+import { BigHead } from '@bigheads/core';
+import { AvatarData } from 'modules/authorization';
 
 interface Props {
   userName: string;
-  userPhoto: string;
+  avatarPhoto?: AvatarData;
 }
 
-export const MessageHeader: React.FC<Props> = ({ userName, userPhoto }) => {
+export const MessageHeader: React.FC<Props> = ({ userName, avatarPhoto }) => {
   const firstName = userName?.split(' ')?.[0];
   const lastName = userName?.split(' ')?.[1];
 
@@ -25,10 +27,9 @@ export const MessageHeader: React.FC<Props> = ({ userName, userPhoto }) => {
         </button>
 
         <div className={classes.header__photo}>
-          <img
-            src={userPhoto}
-            alt="Avatar"
+          <BigHead
             className={classes.header__avatar}
+            {...(avatarPhoto as any)}
           />
         </div>
         <div className={classes.header__userName}>

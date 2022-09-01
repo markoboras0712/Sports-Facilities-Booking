@@ -25,7 +25,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { removeEmptyProperties } from 'shared/utils';
 import { createFirebaseApp } from '../initFirebase';
 import { useFirestoreUtilities } from './useFirestoreUtilities';
-import { myMessages } from 'modules/messages';
+import { Message, myMessages } from 'modules/messages';
 
 export const useFirestore = () => {
   const db = useMemo(() => getFirestore(createFirebaseApp()), []);
@@ -584,6 +584,19 @@ export const useFirestore = () => {
     return;
   };
 
+  const sendMessage = async (chatId: string, messageData: Message) => {
+    try {
+      removeEmptyProperties(messageData);
+
+      const subCollectionRef = collection(db, 'messages', chatId, 'messages');
+      await addDoc(subCollectionRef, messageData);
+    } catch (error) {
+      console.log(error);
+    }
+
+    return;
+  };
+
   return {
     getSettings,
     updateFacility,
@@ -603,5 +616,6 @@ export const useFirestore = () => {
     deleteReservationForFacility,
     createChat,
     getMessagesForChat,
+    sendMessage,
   };
 };
