@@ -1,6 +1,7 @@
 import { RouteComponentProps, Router } from '@reach/router';
 import {
   AvailableSportsFacilitiesPage,
+  ChatPage,
   EditFacilityPage,
   ErrorPage,
   ForgotPasswordPage,
@@ -17,7 +18,6 @@ import {
   QuickSearchPage,
   RegisterPage,
 } from 'pages';
-import ChatPage from 'pages/ChatPage';
 import * as React from 'react';
 import { Routes } from '../routes';
 

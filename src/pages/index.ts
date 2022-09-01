@@ -11,3 +11,4 @@ export * from './NotificationsPage';
 export * from './MakeReservationPage';
 export * from './QuickSearchPage';
 export * from './InboxPage';
+export * from './ChatPage';

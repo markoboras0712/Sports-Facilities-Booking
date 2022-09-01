@@ -13,7 +13,7 @@ export enum Routes {
   MakeReservation = '/create-reservation',
   FacilityBuilder = '/create-sport-facility',
   Notifications = '/notifications', // TODO
-  Chat = '/messages', // TODO
+  Chat = '/messages/:id', // TODO
   Inbox = '/inbox', // TODO
   NotFound = '*',
 }

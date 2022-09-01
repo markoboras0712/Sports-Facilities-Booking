@@ -14,7 +14,6 @@ import { navigate } from '@reach/router';
 import { useFacilitiesRedirects } from 'modules/facilities';
 import { myChats } from 'modules/messages';
 import { myNotifications } from 'modules/notifications';
-import { Routes } from 'modules/routing';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { Navigation } from 'shared/components';
@@ -38,7 +37,6 @@ export const InboxPage: React.FC = () => {
       };
       return { ...chat, ...otherData };
     });
-  console.log({ chatsAndNotifications });
 
   if (!chatsAndNotifications || loading) {
     return (
@@ -81,7 +79,7 @@ export const InboxPage: React.FC = () => {
               chatsAndNotifications?.map((item, index) => (
                 <Box key={item.id || index}>
                   <ListItem
-                    onClick={() => navigate(`${Routes.Chat}/${item.id}`)}
+                    onClick={() => navigate(`messages/${item.id}`)}
                     sx={{ cursor: 'pointer' }}
                     alignItems="flex-start"
                   >

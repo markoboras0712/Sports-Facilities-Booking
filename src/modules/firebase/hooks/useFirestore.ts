@@ -25,6 +25,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { removeEmptyProperties } from 'shared/utils';
 import { createFirebaseApp } from '../initFirebase';
 import { useFirestoreUtilities } from './useFirestoreUtilities';
+import { myMessages } from 'modules/messages';
 
 export const useFirestore = () => {
   const db = useMemo(() => getFirestore(createFirebaseApp()), []);
@@ -32,6 +33,8 @@ export const useFirestore = () => {
   const setMyReservations = useSetRecoilState(myReservations);
   const setMyNotifications = useSetRecoilState(myNotifications);
   const setSelectedFacility = useSetRecoilState(selectedFacility);
+  const setMyMessages = useSetRecoilState(myMessages);
+
   const settings = useRecoilValue(settingsSelector.settings);
   const facilities = useRecoilValue(myFacilities);
 
@@ -46,6 +49,7 @@ export const useFirestore = () => {
     isFacilityArrayData,
     isReservationArrayData,
     isNotificationArrayData,
+    isMessageArrayData,
   } = useFirestoreUtilities();
 
   //SETTINGS collection
@@ -554,6 +558,32 @@ export const useFirestore = () => {
     }
   }
 
+  //MESSAGES COLLECTION
+
+  const getMessagesForChat = (chatId: string) => {
+    try {
+      const facilitiesRef = collection(db, 'messages', chatId, 'messages');
+
+      const q = query(facilitiesRef, orderBy('createdAt', 'asc'));
+      const unsubscribe = onSnapshot(q, snapshot => {
+        const messages = snapshot.docs.map(doc => {
+          return {
+            ...doc.data(),
+            createdAt: doc.data().createdAt.toDate(),
+          };
+        });
+
+        isMessageArrayData(messages)
+          ? setMyMessages(messages)
+          : setMyMessages([]);
+      });
+      return unsubscribe;
+    } catch (error) {
+      console.error(error);
+    }
+    return;
+  };
+
   return {
     getSettings,
     updateFacility,
@@ -572,5 +602,6 @@ export const useFirestore = () => {
     acceptReservation,
     deleteReservationForFacility,
     createChat,
+    getMessagesForChat,
   };
 };
